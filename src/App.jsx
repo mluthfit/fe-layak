@@ -1,11 +1,11 @@
 import React from 'react';
-import { ReactComponent as Logo } from './assets/icons/arrow-down-left.svg';
+import { ReactComponent as Atom } from './assets/icons/atom.svg';
 
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
+    <h1 className="text-3xl font-bold underline bg-tahiti-200">
       Hello world!
-      <Logo className="fill-black-500" />
+      <Atom className="w-8 h-8 fill-primary-400" />
     </h1>
   );
 }
