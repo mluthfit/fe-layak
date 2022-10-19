@@ -1,13 +1,17 @@
-import React from 'react';
-import { ReactComponent as Atom } from './assets/icons/atom.svg';
+import React from "react";
+import Dashboard from "./layouts/dashboard";
+import { Routes, Route } from "react-router-dom";
+import Overview from "./pages/overview";
 
-function App() {
+const App = () => {
   return (
-    <h1 className="text-3xl font-bold underline bg-tahiti-200">
-      Hello world!
-      <Atom className="w-8 h-8 fill-primary-400" />
-    </h1>
+    <Routes>
+      <Route path="/" element={<div>Hello World</div>} />
+      <Route path="/dashboard" element={<Dashboard />}>
+        <Route index element={<Overview />} />
+      </Route>
+    </Routes>
   );
-}
+};
 
 export default App;
