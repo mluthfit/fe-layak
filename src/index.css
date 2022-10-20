@@ -25,7 +25,8 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-button {
+button,
+a {
   cursor: pointer;
 }
 

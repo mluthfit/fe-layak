@@ -8,8 +8,13 @@ import { ReactComponent as HideIcon } from "../../assets/icons/chevrons-left.svg
 import { ReactComponent as LogoutIcon } from "../../assets/icons/logout.svg";
 
 const Sidebar = () => {
+  const hideToggle = () => {
+    const sidebarEl = document.querySelector("#sidebar");
+    sidebarEl.classList.toggle(`${style.hide}`);
+  };
+
   return (
-    <div className={style.sidebar}>
+    <div id="sidebar" className={style.sidebar}>
       <div className={style.container}>
         <ul className={`${style.menu} ${style.topMenu}`}>
           <li className={style.active}>
@@ -39,7 +44,7 @@ const Sidebar = () => {
         </ul>
         <ul className={style.menu}>
           <li>
-            <a>
+            <a onClick={hideToggle}>
               <HideIcon />
               <span>Sembunyikan</span>
             </a>

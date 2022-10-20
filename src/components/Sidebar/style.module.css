@@ -1,33 +1,32 @@
 .sidebar {
   padding: 2rem 1.7rem;
-  width: 280px;
   background-color: var(--primary-400);
+  width: auto;
 }
 
-.container {
+.sidebar .container {
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
 }
 
-.topMenu {
+.sidebar .topMenu {
   margin-top: 4rem;
 }
 
-.menu {
+.sidebar .menu {
   list-style-type: none;
 }
 
-.menu > li {
+.sidebar .menu > li {
   margin: 1rem 0;
 }
 
-.menu > li > a,
-.menu > li > button {
+.sidebar .menu > li > a {
   border: none;
   outline: none;
-  padding: 0.8rem 1.3rem;
+  padding: 0.6rem 1.2rem;
   display: flex;
   border-radius: 5px;
   color: var(--secondary-100);
@@ -35,17 +34,24 @@
   text-decoration: none;
 }
 
-.menu > li.active > a {
+.hide .menu > li > a {
+  padding: 0.6rem;
+  transition: padding 0.5s;
+}
+
+.hide .menu > li > a > span {
+  display: none;
+}
+
+.sidebar .menu > li.active > a,
+.sidebar .menu > li:hover > a {
   background-color: var(--secondary-100);
   color: var(--primary-400);
   fill: var(--primary-400);
   font-weight: bolder;
+  box-shadow: 1px 2px 3px var(--box-shadow);
 }
 
-.menu > li > a > span {
+.sidebar .menu > li > a > span {
   margin-left: 1.9rem;
-}
-
-.menu > li:hover > a {
-  background-color: var(--primary-300);
 }

@@ -5,7 +5,9 @@ const Topbar = () => {
   return (
     <div className={style.topbar}>
       <h1>Dashboard</h1>
-      <button className={style.adminDashboard}>Admin Dashboard</button>
+      <a className={style.adminDashboard} href="/admin">
+        Admin Dashboard
+      </a>
     </div>
   );
 };
