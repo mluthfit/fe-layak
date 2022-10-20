@@ -1,7 +1,8 @@
 import React from "react";
-import Dashboard from "./layouts/dashboard";
 import { Routes, Route } from "react-router-dom";
-import Overview from "./pages/overview";
+import Dashboard from "./layouts/Dashboard";
+import Overview from "./pages/Overview";
+import Sidebar from "./components/Sidebar";
 
 const App = () => {
   return (

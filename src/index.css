@@ -12,6 +12,7 @@
   --success-200: #11d400;
   --request-100: #ececec;
   --request-200: #6a6a6a;
+  --box-shadow: rgba(0, 0, 0, 0.25);
 }
 
 * {
@@ -22,4 +23,12 @@
 
 body {
   font-family: "Poppins", sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
