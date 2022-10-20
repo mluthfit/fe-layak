@@ -1,3 +1,25 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+  --primary-100: #e8f9fd;
+  --primary-200: #79dae8;
+  --primary-300: #0aa1dd;
+  --primary-400: #2155cd;
+  --secondary-100: #fcfeff;
+  --secondary-200: #ececec;
+  --secondary-300: #9e9e9e;
+  --danger-100: #ffe5e5;
+  --danger-200: #d40000;
+  --success-100: #d8ffda;
+  --success-200: #11d400;
+  --request-100: #ececec;
+  --request-200: #6a6a6a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
