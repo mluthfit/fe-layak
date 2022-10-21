@@ -10,6 +10,7 @@
   padding: 0 2rem;
   overflow-y: auto;
   display: flex;
+  position: relative;
   flex-direction: column;
 }
 

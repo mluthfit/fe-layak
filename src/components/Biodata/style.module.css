@@ -1,6 +1,6 @@
 .biodata {
   background-color: var(--secondary-100);
-  padding: 2rem 1rem;
+  padding: 2rem;
   border-radius: 10px;
   box-shadow: 1px 1px 3px var(--blank-100);
   display: flex;

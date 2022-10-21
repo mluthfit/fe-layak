@@ -1,0 +1,74 @@
+.formUpdatePassword {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 15;
+  background-color: var(--secondary-100);
+  padding: 3rem;
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+  box-shadow: 2px 2px 3px var(--blank-100);
+}
+
+.formUpdatePassword h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.formGroup {
+  margin: 1.5rem 0;
+}
+
+.formGroup label {
+  display: block;
+  color: var(--secondary-300);
+  margin-bottom: 0.3rem;
+}
+
+.formGroup input {
+  border: none;
+  outline: none;
+  width: 350px;
+  padding: 0.7rem;
+  border-radius: 5px;
+  border: 2px solid var(--secondary-300);
+}
+
+.formGroup input:focus {
+  border: 2px solid var(--primary-300);
+  background-color: var(--primary-100);
+}
+
+.buttons {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.buttons .save,
+.buttons .back {
+  border: none;
+  outline: none;
+  padding: 0.7rem 1.4rem;
+  margin: 0 0.3rem;
+  border-radius: 5px;
+  font-weight: bolder;
+  font-size: 1rem;
+}
+
+.buttons .save {
+  background-color: var(--primary-300);
+  color: var(--secondary-100);
+}
+
+.buttons .save:hover {
+  box-shadow: 1px 1px 10px var(--primary-300);
+}
+
+.buttons .back {
+  background-color: var(--request-100);
+  color: var(--request-200);
+}
+
+.buttons .back:hover {
+  box-shadow: 1px 1px 10px var(--request-100);
+}

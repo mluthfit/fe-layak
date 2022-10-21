@@ -1,0 +1,72 @@
+.cutiOverview {
+  background-color: var(--secondary-100);
+  padding: 2rem 2.5rem;
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px var(--blank-100);
+}
+
+.cutiOverview .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cutiOverview .anchorIcon {
+  background-color: var(--primary-300);
+  border-radius: 5px;
+  display: flex;
+  padding: 0.5rem;
+  fill: var(--secondary-200);
+}
+
+.cutiOverview .anchorIcon:hover {
+  box-shadow: 1px 1px 10px var(--primary-300);
+}
+
+.cutiOverview .sisaCuti {
+  margin-top: 1rem;
+}
+
+.sisaCuti .label {
+  color: var(--secondary-300);
+  font-size: 1.1rem;
+}
+
+.sisaCuti .value {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-300);
+  color: var(--secondary-100);
+  margin-left: 2rem;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 1.1rem;
+}
+
+.listBar {
+  margin-top: 2rem;
+}
+
+.listBar > span {
+  color: var(--secondary-300);
+}
+
+.icon {
+  display: flex;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.approved {
+  fill: var(--success-200);
+  background-color: var(--success-100);
+}
+
+.declined {
+  fill: var(--danger-200);
+  background-color: var(--danger-100);
+}
+
+.requested {
+  fill: var(--request-200);
+  background-color: var(--request-100);
+}

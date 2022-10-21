@@ -24,6 +24,7 @@
 
 .bar .icons {
   display: flex;
+  margin-left: 2rem;
 }
 
 .bar .icons > span {
