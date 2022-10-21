@@ -1,0 +1,22 @@
+.companyProfile {
+  padding: 1rem 1.5rem;
+  background-color: var(--primary-300);
+  color: var(--secondary-100);
+  border-radius: 10px;
+}
+
+.companyProfile .details {
+  margin-top: 1rem;
+}
+
+.details > div {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  fill: var(--secondary-200);
+  color: var(--secondary-200);
+}
+
+.details > div > span {
+  margin-left: 1.5rem;
+}

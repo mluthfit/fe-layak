@@ -1,5 +1,22 @@
+.overview {
+  display: flex;
+}
+
 .center {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.leftSide {
+  width: 350px;
+  margin-right: 2rem;
+}
+
+.rightSide {
+  width: 700px;
+}
+
+.space {
+  margin-top: 1rem;
 }
