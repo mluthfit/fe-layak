@@ -14,6 +14,8 @@
   border-radius: 5px;
   box-shadow: 1px 2px 3px var(--blank-100);
   text-decoration: none;
+  margin-left: 2rem;
+  text-align: center;
 }
 
 .topbar .adminDashboard:hover {
