@@ -1,11 +1,12 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import style from "./style.module.css";
 import { ReactComponent as OverviewIcon } from "../../assets/icons/square.svg";
 import { ReactComponent as AbsensiIcon } from "../../assets/icons/camera.svg";
 import { ReactComponent as CutiIcon } from "../../assets/icons/calendar-dates.svg";
 import { ReactComponent as ReimburseIcon } from "../../assets/icons/calculator.svg";
 import { ReactComponent as HideIcon } from "../../assets/icons/chevrons-left.svg";
 import { ReactComponent as LogoutIcon } from "../../assets/icons/logout.svg";
+import style from "./style.module.css";
 
 const Sidebar = () => {
   const hideToggle = () => {

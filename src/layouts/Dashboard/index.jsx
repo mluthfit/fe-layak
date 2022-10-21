@@ -1,8 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import style from "./style.module.css";
 import Sidebar from "../../components/Sidebar";
 import Topbar from "../../components/Topbar";
+import style from "./style.module.css";
 
 const Dashboard = () => {
   return (
