@@ -1,0 +1,15 @@
+.Login {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--primary-400);
+}
+
+.formLogin {
+    flex: 65%;
+}
+.SideLogo {
+    flex: 35%;
+    background: var(--primary-100);
+}

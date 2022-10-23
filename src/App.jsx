@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./layouts/Dashboard";
+import Login from "./layouts/Login";
 import Overview from "./pages/Overview";
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
       <Route path="/dashboard" element={<Dashboard />}>
         <Route index element={<Overview />} />
       </Route>
+      <Route path="/login" element={<Login />}></Route>
     </Routes>
   );
 };
