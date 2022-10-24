@@ -31,11 +31,11 @@
   width: 350px;
   padding: 0.7rem;
   border-radius: 5px;
-  border: 2px solid var(--secondary-300);
+  border: 1px solid var(--secondary-300);
 }
 
 .formGroup input:focus {
-  border: 2px solid var(--primary-300);
+  border: 1px solid var(--primary-300);
   background-color: var(--primary-100);
 }
 

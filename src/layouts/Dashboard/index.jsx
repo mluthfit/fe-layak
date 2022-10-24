@@ -8,7 +8,7 @@ const Dashboard = () => {
   return (
     <div className={style.dashboard}>
       <Sidebar />
-      <div className={style.mainbar}>
+      <div id="mainbar" className={style.mainbar}>
         <Topbar />
         <div className={style.content}>
           <Outlet />

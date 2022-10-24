@@ -16,18 +16,31 @@ const Biodata = () => {
       return;
     }
 
+    const mainbar = document.querySelector("#mainbar");
+    mainbar.scrollTo({ top: 0, behavior: "smooth" });
     backgroundPopup.style.display = "block";
     setShowPopup(true);
+  };
+
+  const openChangeImage = (e) => {
+    const fileInput = e.target.parentNode.querySelector("#fileInput");
+    fileInput.click();
   };
 
   return (
     <>
       <div className={style.biodata}>
         <div className={style.mainDetails}>
-          <div className={style.avatar}>
+          <div className={style.avatar} onClick={openChangeImage}>
             <img
               src="https://talentclick.com/wp-content/uploads/2021/08/placeholder-image.png"
               alt=""
+            />
+            <input
+              type="file"
+              id="fileInput"
+              accept=".jpg, .jpeg, .png"
+              className={style.changePhotoProfile}
             />
             <div className={style.blank}></div>
           </div>

@@ -94,3 +94,7 @@
 .changePassword span {
   margin-left: 0.7rem;
 }
+
+.changePhotoProfile {
+  display: none;
+}
