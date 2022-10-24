@@ -1,71 +1,72 @@
 .mainForm {
-    width: 40%;
-    margin : 18em 20em;
-    padding : 3em;
+  width: 40%;
+  margin: 18em 20em;
+  padding: 3em;
 }
+
 .mainForm h2 {
-    text-align: center;
-    font-size: 28px;
-    padding-bottom: 1em;
-    color: var(--primary-100)
+  text-align: center;
+  font-size: 28px;
+  padding-bottom: 1em;
+  color: var(--primary-100);
 }
 
-p, a, .formGroup label, .buttons .loginButton {
-    color: var(--primary-100);
-    font-weight: 600;
-    font-size: 14px;
+.mainForm p,
+.mainForm a,
+.formGroup label,
+.buttons .loginButton {
+  color: var(--primary-100);
+  font-weight: 600;
+  font-size: 14px;
 }
 
-p {
-    text-align: right;
-    margin: 1em 0em;
+.mainForm p {
+  text-align: right;
+  margin: 1em 0em;
 }
 
-a {
-    text-decoration: none;
+.mainForm a {
+  text-decoration: none;
 }
 
 .formGroup {
-    margin: 1em 0;
-    text-align: center;
+  margin: 1em 0;
+  text-align: center;
 }
 
 .formGroup label {
-    text-align: left;
-    display: block;
+  text-align: left;
+  display: block;
 }
 
 .formGroup input {
-    border: none;
-    outline: none;
-    width: 100%;
-    padding: 0.7em 1em ;
-    border-radius: 5px;
-    border: 1px solid var(--primary-400);
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 0.7em 1em;
+  border-radius: 5px;
+  border: 1px solid var(--primary-400);
 }
 
-.formGroup input:focus {
-    border: 1px solid var(--primary-200);
-    background-color: var(--primary-100);
+.mainForm .formGroup input:focus {
+  border: 1px solid var(--primary-200);
+  background-color: var(--primary-100);
 }
 
-::placeholder {
-    font-family: "Poppins", sans-serif;
+.mainForm::placeholder {
+  font-family: "Poppins", sans-serif;
 }
-
-
 
 .buttons {
-    text-align: center;
+  text-align: center;
 }
 
 .buttons .loginButton {
-    font-family: "Poppins", sans-serif;
-    border: none;
-    border-radius: 20px;
-    width: 100%;
-    padding: 0.5em;
-    background-color: var(--primary-300);
-    text-align: center;
+  font-family: "Poppins", sans-serif;
+  border: none;
+  border-radius: 20px;
+  width: 100%;
+  padding: 0.5em;
+  background-color: var(--primary-300);
+  text-align: center;
 }
-

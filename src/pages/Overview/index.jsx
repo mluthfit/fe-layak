@@ -22,16 +22,16 @@ const Overview = () => {
         <Spinner size={48} borderSize={5} />
       ) : (
         <>
-          <div className={`${style.leftSide}`}>
+          <div className={style.leftSide}>
             <Biodata />
-            <div className={`${style.space}`}></div>
+            <div className={style.space}></div>
             <CompanyProfile />
           </div>
-          <div className={`${style.rightSide}`}>
+          <div className={style.rightSide}>
             <AbsensiOverview />
-            <div className={`${style.space}`}></div>
+            <div className={style.space}></div>
             <CutiOverview />
-            <div className={`${style.space}`}></div>
+            <div className={style.space}></div>
             <ReimburseOverview />
           </div>
         </>
