@@ -2,7 +2,14 @@ import React from "react";
 import Bar from "../Bar";
 import style from "./style.module.css";
 
-const ListOverview = ({ title, href, Icon, listBar, additionalContent }) => {
+const ListOverview = ({
+  title,
+  blank,
+  href,
+  Icon,
+  listBar,
+  additionalContent,
+}) => {
   return (
     <div className={style.listOverview}>
       <div className={style.header}>
@@ -13,7 +20,8 @@ const ListOverview = ({ title, href, Icon, listBar, additionalContent }) => {
       </div>
       {additionalContent}
       <div className={style.listBar}>
-        {listBar.map((bar, index) => (
+        {!listBar?.length && <div className={style.blank}>{blank}</div>}
+        {listBar?.map((bar, index) => (
           <Bar
             key={index}
             link={bar.link}

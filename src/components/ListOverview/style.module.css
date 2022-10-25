@@ -26,3 +26,10 @@
 .listBar {
   margin-top: 2rem;
 }
+
+.listBar .blank {
+  background-color: var(--secondary-200);
+  padding: 0.8rem 1rem;
+  text-align: center;
+  border-radius: 5px;
+}

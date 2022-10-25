@@ -1,0 +1,35 @@
+.listRequest {
+  padding: 2rem 2.5rem;
+  border-radius: 10px;
+  background-color: var(--secondary-100);
+  box-shadow: 1px 1px 3px var(--blank-100);
+}
+
+.listRequest h3 {
+  text-transform: uppercase;
+}
+
+.listRequest > div {
+  margin-top: 1rem;
+}
+
+.listRequest > div > span {
+  font-weight: bolder;
+  text-transform: uppercase;
+  color: var(--secondary-300);
+}
+
+.listRequest .listBar {
+  margin-top: 1rem;
+}
+
+.listRequest .history {
+  margin-top: 3rem;
+}
+
+.listRequest .listBar .blank {
+  background-color: var(--secondary-200);
+  padding: 0.8rem 1rem;
+  text-align: center;
+  border-radius: 5px;
+}

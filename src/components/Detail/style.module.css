@@ -1,0 +1,45 @@
+.detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem 5rem;
+}
+
+.detail .item {
+  flex: 45%;
+}
+
+.item .title {
+  display: block;
+  color: var(--secondary-300);
+  margin-bottom: 0.5rem;
+}
+
+.item .value {
+  display: block;
+  font-size: 1.2rem;
+}
+
+.item .smallFont {
+  font-size: 1rem;
+}
+
+.item .link {
+  display: inline-block;
+  text-decoration: none;
+  background-color: var(--primary-400);
+  color: var(--secondary-100);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.item .link:hover {
+  box-shadow: 1px 1px 10px var(--primary-400);
+}
+
+.success {
+  color: var(--success-200);
+}
+
+.danger {
+  color: var(--danger-200);
+}
