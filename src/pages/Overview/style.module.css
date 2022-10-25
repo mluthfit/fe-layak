@@ -8,14 +8,14 @@
   align-items: center;
 }
 
-.left,
-.right {
+.overview .left,
+.overview .right {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.left {
+.overview .left {
   width: 350px;
   margin-right: 2rem;
 }
@@ -29,7 +29,7 @@
   flex-direction: column;
 }
 
-.mainDetails .avatar {
+.biodata .mainDetails .avatar {
   width: 150px;
   height: 150px;
   background-color: var(--secondary-200);
@@ -40,14 +40,14 @@
   cursor: pointer;
 }
 
-.mainDetails .avatar img {
+.biodata .mainDetails .avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
 }
 
-.mainDetails .blank {
+.biodata .mainDetails .blank {
   width: 100%;
   height: 100%;
   background-color: var(--blank-200);
@@ -56,39 +56,39 @@
   display: none;
 }
 
-.mainDetails .avatar:hover > .blank {
+.biodata .mainDetails .avatar:hover > .blank {
   display: block;
 }
 
-.mainDetails span {
+.biodata .mainDetails span {
   display: block;
   text-align: center;
   font-weight: bolder;
 }
 
-.mainDetails .name {
+.biodata .mainDetails .name {
   text-transform: uppercase;
   font-size: 1.3rem;
 }
 
-.mainDetails .position {
+.biodata .mainDetails .position {
   color: var(--secondary-300);
 }
 
-.secondaryDetails {
+.biodata .secondaryDetails {
   margin: 2.5rem auto;
 }
 
-.secondaryDetails > div {
+.biodata .secondaryDetails > div {
   display: flex;
   align-items: center;
 }
 
-.secondaryDetails > div > svg {
+.biodata .secondaryDetails > div > svg {
   fill: var(--secondary-300);
 }
 
-.secondaryDetails > div > span {
+.biodata .secondaryDetails > div > span {
   margin: 0.3rem 0 0.3rem 1.5rem;
   font-size: 0.9rem;
 }
@@ -113,19 +113,96 @@
   box-shadow: 1px 1px 10px var(--primary-300);
 }
 
-.changePassword span {
+.biodata .changePassword span {
   margin-left: 0.7rem;
 }
 
-.changePhotoProfile {
+.biodata .changePhotoProfile {
   display: none;
 }
 
-.right {
+.companyProfile {
+  padding: 2rem;
+  background-color: var(--primary-300);
+  color: var(--secondary-100);
+  border-radius: 10px;
+}
+
+.companyProfile .details {
+  margin-top: 1rem;
+}
+
+.companyProfile .details > div {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  fill: var(--secondary-200);
+  color: var(--secondary-200);
+}
+
+.companyProfile .details > div > span {
+  margin-left: 1.5rem;
+}
+
+.overview .right {
   width: 90%;
   max-width: 800px;
 }
 
-.space {
+.right .statusToday {
   margin-top: 1rem;
+}
+
+.right .statusToday > div {
+  display: flex;
+  margin: 0.5rem 0;
+  align-items: center;
+}
+
+.right .statusToday > div > .time {
+  margin-left: 2rem;
+}
+
+.sisaCuti {
+  margin-top: 1rem;
+}
+
+.sisaCuti .label {
+  color: var(--secondary-300);
+  font-size: 1.1rem;
+}
+
+.sisaCuti .value {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-300);
+  color: var(--secondary-100);
+  margin-left: 2rem;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 1.1rem;
+}
+
+.icon {
+  display: flex;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.success {
+  fill: var(--success-200);
+  background-color: var(--success-100);
+}
+
+.danger {
+  fill: var(--danger-200);
+  background-color: var(--danger-100);
+}
+
+.requested {
+  fill: var(--request-200);
+  background-color: var(--request-100);
+}
+
+.gray {
+  color: var(--secondary-300);
 }

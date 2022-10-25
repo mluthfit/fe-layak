@@ -2,7 +2,7 @@
   display: flex;
   margin-top: 0.5rem;
   background-color: var(--primary-100);
-  padding: 0.9rem 1.5rem;
+  padding: 0.7rem 1.5rem;
   border-radius: 5px;
   justify-content: space-between;
   align-items: center;
@@ -29,4 +29,7 @@
 
 .bar .icons > span {
   margin: 0 0.2rem;
+  display: flex;
+  padding: 0.5rem;
+  border-radius: 5px;
 }

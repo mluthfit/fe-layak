@@ -1,0 +1,28 @@
+.listOverview {
+  background-color: var(--secondary-100);
+  padding: 2rem 2.5rem;
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px var(--blank-100);
+}
+
+.listOverview .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.listOverview .anchorIcon {
+  background-color: var(--primary-300);
+  border-radius: 5px;
+  display: flex;
+  padding: 0.5rem;
+  fill: var(--secondary-200);
+}
+
+.listOverview .anchorIcon:hover {
+  box-shadow: 1px 1px 10px var(--primary-300);
+}
+
+.listBar {
+  margin-top: 2rem;
+}

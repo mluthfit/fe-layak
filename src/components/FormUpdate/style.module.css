@@ -23,6 +23,7 @@
   display: block;
   color: var(--secondary-300);
   margin-bottom: 0.3rem;
+  font-size: 0.9rem;
 }
 
 .formGroup input {
