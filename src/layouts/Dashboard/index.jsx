@@ -13,7 +13,7 @@ const Dashboard = ({ type, role }) => {
   const location = useLocation();
   const page = location.pathname.split("/")[2] ?? "overview";
 
-  const hideSidebar = () => {
+  const toggleSidebar = () => {
     const sidebarEl = document.querySelector("#sidebar");
     sidebarEl.classList.toggle(`${style.hide}`);
   };
@@ -69,7 +69,7 @@ const Dashboard = ({ type, role }) => {
           </ul>
           <ul className={style.menu}>
             <li>
-              <a onClick={hideSidebar}>
+              <a onClick={toggleSidebar}>
                 <HideIcon />
                 <span>Sembunyikan</span>
               </a>

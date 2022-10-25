@@ -199,7 +199,11 @@ const UserCuti = () => {
                 </div>
                 <div className={style.formGroup}>
                   <label htmlFor="uploadDocument">Unggah Dokumen Cuti</label>
-                  <input type="file" id="uploadDocument" />
+                  <input
+                    type="file"
+                    id="uploadDocument"
+                    className={style.uploadDocument}
+                  />
                 </div>
                 <button type="submit" className={style.submitForm}>
                   Ajukan
