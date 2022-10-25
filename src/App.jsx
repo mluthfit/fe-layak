@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./layouts/Dashboard";
 import Login from "./layouts/Login";
+import DetailUserCuti from "./pages/DetailUserCuti";
 import Overview from "./pages/Overview";
 import UserCuti from "./pages/UserCuti";
 
@@ -12,6 +13,7 @@ const App = () => {
       <Route path="/dashboard" element={<Dashboard type="user" role="admin" />}>
         <Route index element={<Overview />} />
         <Route path="cuti" element={<UserCuti />} />
+        <Route path="cuti/:cutiId" element={<DetailUserCuti />} />
       </Route>
       <Route path="/login" element={<Login />}></Route>
     </Routes>

@@ -196,7 +196,7 @@ const Overview = () => {
   return (
     <div className={`${style.overview} ${loading ? `${style.center}` : ""}`}>
       {loading ? (
-        <Spinner size={48} borderSize={5} />
+        <Spinner type="user" size={48} borderSize={5} />
       ) : (
         <>
           <div className={style.left}>
@@ -277,6 +277,7 @@ const Overview = () => {
           <div className={style.right}>
             <ListOverview
               title="Absensi"
+              blank="Data absensi tidak ditemukan"
               href="/dashboard/absensi"
               Icon={AbsensiIcon}
               listBar={listBarAbsensi}
@@ -301,6 +302,7 @@ const Overview = () => {
             />
             <ListOverview
               title="Pengajuan Cuti"
+              blank="Data pengajuan cuti tidak ditemukan"
               href="/dashboard/cuti"
               Icon={CalendarIcon}
               listBar={listBarCuti}
@@ -313,6 +315,7 @@ const Overview = () => {
             />
             <ListOverview
               title="Reimbursement"
+              blank="Data pengajuan reimbursement tidak ditemukan"
               href="/dashboard/reimbursement"
               Icon={CalculatorIcon}
               listBar={listBarReimbursement}

@@ -1,7 +1,7 @@
 .spinner {
   width: var(--spinner-size);
   height: var(--spinner-size);
-  border: var(--border-size) solid var(--primary-400);
+  border: var(--border-size) solid var(--border-color);
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;

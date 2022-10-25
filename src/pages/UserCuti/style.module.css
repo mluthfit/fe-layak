@@ -4,12 +4,33 @@
   align-items: center;
 }
 
-.userCuti h2 {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
   text-transform: uppercase;
 }
 
+.header a {
+  border: none;
+  outline: none;
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-300);
+  box-shadow: 1px 2px 3px var(--blank-100);
+  color: var(--secondary-100);
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.header a:hover {
+  box-shadow: 1px 1px 10px var(--primary-300);
+}
+
 .mainCuti {
-  margin-top: 1rem;
+  margin-top: 2rem;
   display: flex;
 }
 
@@ -17,7 +38,8 @@
   margin-right: 2rem;
   padding: 2rem 2.5rem;
   border-radius: 10px;
-  flex: 0 0 500px;
+  width: 50%;
+  max-width: 600px;
   background-color: var(--secondary-100);
   box-shadow: 1px 1px 3px var(--blank-100);
 }
@@ -78,7 +100,6 @@
 
 .time {
   display: flex;
-
   justify-content: space-between;
   align-items: center;
 }
@@ -87,7 +108,7 @@
   border: none;
   outline: none;
   padding: 0.6rem 1.2rem;
-  width: 190px;
+  width: 45%;
   border: 1px solid var(--secondary-300);
   border-radius: 5px;
   font-size: 0.7rem;
@@ -132,7 +153,25 @@
   box-shadow: 1px 1px 10px var(--primary-300);
 }
 
-.userCuti .right {
-  width: 90%;
-  max-width: 800px;
+.userCuti .listCuti {
+  flex: 1;
+}
+
+.success {
+  fill: var(--success-200);
+  background-color: var(--success-100);
+}
+
+.danger {
+  fill: var(--danger-200);
+  background-color: var(--danger-100);
+}
+
+.requested {
+  fill: var(--request-200);
+  background-color: var(--request-100);
+}
+
+.gray {
+  color: var(--secondary-300);
 }
