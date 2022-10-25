@@ -1,0 +1,19 @@
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftSide {
+  width: 350px;
+  margin-right: 2rem;
+}
+
+.rightSide {
+  width: 90%;
+  max-width: 800px;
+}
+
+.space {
+  margin-top: 1rem;
+}
