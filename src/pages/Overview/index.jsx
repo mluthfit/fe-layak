@@ -39,14 +39,16 @@ const Overview = () => {
 
   const toggleUpdatePassPopup = () => {
     const backgroundPopup = document.querySelector("#backgroundPopup");
+    const mainbar = document.querySelector("#mainbar");
     if (showPopup) {
+      mainbar.style.overflowY = "auto";
       backgroundPopup.style.display = "none";
       setShowPopup(false);
       return;
     }
 
-    const mainbar = document.querySelector("#mainbar");
     mainbar.scrollTo({ top: 0, behavior: "smooth" });
+    mainbar.style.overflowY = "hidden";
     backgroundPopup.style.display = "block";
     setOldPassword("");
     setNewPassword("");
