@@ -1,7 +1,7 @@
 import React from "react";
 import style from "./style.module.css";
 
-const FormUpdatePassword = ({ handleBack }) => {
+const FormUpdatePassword = ({ backButton }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -30,7 +30,7 @@ const FormUpdatePassword = ({ handleBack }) => {
           <button type="submit" className={style.save}>
             Simpan
           </button>
-          <button type="button" className={style.back} onClick={handleBack}>
+          <button type="button" className={style.back} onClick={backButton}>
             Kembali
           </button>
         </div>

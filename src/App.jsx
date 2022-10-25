@@ -6,12 +6,10 @@ import Overview from "./pages/Overview";
 import UserCuti from "./pages/UserCuti";
 
 const App = () => {
-  const roleUser = "user";
-
   return (
     <Routes>
       <Route path="/" element={<div>Hello World</div>} />
-      <Route path="/dashboard" element={<Dashboard role={roleUser} />}>
+      <Route path="/dashboard" element={<Dashboard type="user" role="admin" />}>
         <Route index element={<Overview />} />
         <Route path="cuti" element={<UserCuti />} />
       </Route>

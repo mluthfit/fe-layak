@@ -8,12 +8,120 @@
   align-items: center;
 }
 
-.leftSide {
+.left,
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.left {
   width: 350px;
   margin-right: 2rem;
 }
 
-.rightSide {
+.biodata {
+  background-color: var(--secondary-100);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px var(--blank-100);
+  display: flex;
+  flex-direction: column;
+}
+
+.mainDetails .avatar {
+  width: 150px;
+  height: 150px;
+  background-color: var(--secondary-200);
+  margin: 0 auto 2rem auto;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.mainDetails .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.mainDetails .blank {
+  width: 100%;
+  height: 100%;
+  background-color: var(--blank-200);
+  position: absolute;
+  top: 0;
+  display: none;
+}
+
+.mainDetails .avatar:hover > .blank {
+  display: block;
+}
+
+.mainDetails span {
+  display: block;
+  text-align: center;
+  font-weight: bolder;
+}
+
+.mainDetails .name {
+  text-transform: uppercase;
+  font-size: 1.3rem;
+}
+
+.mainDetails .position {
+  color: var(--secondary-300);
+}
+
+.secondaryDetails {
+  margin: 2.5rem auto;
+}
+
+.secondaryDetails > div {
+  display: flex;
+  align-items: center;
+}
+
+.secondaryDetails > div > svg {
+  fill: var(--secondary-300);
+}
+
+.secondaryDetails > div > span {
+  margin: 0.3rem 0 0.3rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.biodata .changePassword {
+  width: auto;
+  padding: 0.7rem 1.2rem;
+  margin: 0 auto;
+  outline: none;
+  border: none;
+  background-color: var(--primary-300);
+  display: flex;
+  align-items: center;
+  color: var(--secondary-100);
+  fill: var(--secondary-100);
+  font-weight: bolder;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+.biodata .changePassword:hover {
+  box-shadow: 1px 1px 10px var(--primary-300);
+}
+
+.changePassword span {
+  margin-left: 0.7rem;
+}
+
+.changePhotoProfile {
+  display: none;
+}
+
+.right {
   width: 90%;
   max-width: 800px;
 }

@@ -9,7 +9,7 @@ import { ReactComponent as HideIcon } from "../../assets/icons/chevrons-left.svg
 import { ReactComponent as LogoutIcon } from "../../assets/icons/logout.svg";
 import style from "./style.module.css";
 
-const Dashboard = ({ role }) => {
+const Dashboard = ({ type, role }) => {
   const location = useLocation();
   const page = location.pathname.split("/")[2] ?? "overview";
 
@@ -26,7 +26,7 @@ const Dashboard = ({ role }) => {
     let titleColor = rootCS.getPropertyValue("black");
     let primaryColor = rootCS.getPropertyValue("--primary-400");
 
-    if (["admin", "super_admin"].includes(role)) {
+    if (type === "admin") {
       background = rootCS.getPropertyValue("--primary-100");
       titleColor = rootCS.getPropertyValue("--primary-400");
       primaryColor = rootCS.getPropertyValue("--secondary-300");
@@ -86,9 +86,14 @@ const Dashboard = ({ role }) => {
       <div id="mainbar" className={style.mainbar}>
         <div className={style.topbar}>
           <h1>Dashboard</h1>
-          <a className={style.changeButton} href="/admin">
-            Admin Dashboard
-          </a>
+          {role === "admin" && (
+            <a
+              className={style.changeButton}
+              href={type === "user" ? "/admin" : "/dashboard"}
+            >
+              {type === "user" ? "Admin Dashboard" : "User Dashboard"}
+            </a>
+          )}
         </div>
         <div className={style.content}>
           <Outlet />
