@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import style from "./style.module.css";
 
-const FormLogin = (handleBack) => {
+const Login = (handleBack) => {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -30,7 +31,7 @@ const FormLogin = (handleBack) => {
           />
         </div>
         <p>
-          <a href="/forgot-password">Lupa Password?</a>
+          <Link to ='/auth/forgot-password'>Lupa Password?</Link>
         </p>
         <div className={style.buttons}>
           <button type="submit" className={style.loginButton}>
@@ -42,4 +43,4 @@ const FormLogin = (handleBack) => {
   );
 };
 
-export default FormLogin;
+export default Login;

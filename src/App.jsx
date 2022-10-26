@@ -1,7 +1,10 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./layouts/Dashboard";
-import Login from "./layouts/Login";
+import Auth from "./layouts/Auth";
+import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import DetailUserCuti from "./pages/DetailUserCuti";
 import DetailUserReimburse from "./pages/DetailUserReimburse";
 import Overview from "./pages/Overview";
@@ -22,7 +25,12 @@ const App = () => {
           element={<DetailUserReimburse />}
         />
       </Route>
-      <Route path="/login" element={<Login />}></Route>
+      <Route path="/auth" element={<Auth />}>
+        <Route index element={<Navigate replace to="login" />}/>
+        <Route path="login" element={<Login />} />
+        <Route path="forgot-password" element={<ForgotPassword />}></Route>
+        <Route path="reset-password" element={<ResetPassword />}></Route>
+      </Route>
     </Routes>
   );
 };

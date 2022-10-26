@@ -1,13 +1,13 @@
 import React from "react";
-import FormLogin from "../../components/FormLogin";
+import { Outlet } from "react-router-dom";
 import SideLogo from "../../components/SideLogo";
 import style from "./style.module.css";
 
-const Login = () => {
+const Auth = () => {
   return (
     <div className={style.Login}>
-      <div className={style.formLogin}>
-        <FormLogin />
+      <div className={style.content}>
+        <Outlet />
       </div>
       <div className={style.SideLogo}>
         <SideLogo />
@@ -16,4 +16,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Auth;
