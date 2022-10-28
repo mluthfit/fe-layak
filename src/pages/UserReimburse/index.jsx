@@ -92,9 +92,7 @@ const UserReimburse = () => {
   ];
 
   return (
-    <div
-      className={`${style.userReimburse} ${loading ? `${style.center}` : ""}`}
-    >
+    <div className={`${style.userReimburse} ${loading ? "center" : ""}`}>
       {loading ? (
         <Spinner type="user" size={48} borderSize={5} />
       ) : (

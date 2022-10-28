@@ -44,3 +44,9 @@ button:disabled {
   display: none;
   background-color: var(--blank-200);
 }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

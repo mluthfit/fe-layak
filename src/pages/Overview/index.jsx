@@ -194,7 +194,7 @@ const Overview = () => {
   ];
 
   return (
-    <div className={`${style.overview} ${loading ? `${style.center}` : ""}`}>
+    <div className={`${style.overview} ${loading ? "center" : ""}`}>
       {loading ? (
         <Spinner type="user" size={48} borderSize={5} />
       ) : (
