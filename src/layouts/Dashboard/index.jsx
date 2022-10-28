@@ -12,6 +12,7 @@ import { ReactComponent as CompanyIcon } from "../../assets/icons/organization.s
 import { ReactComponent as AdminIcon } from "../../assets/icons/person-add.svg";
 import TypeRole from "../../scripts/role";
 import style from "./style.module.css";
+import { getStyle, setStyle } from "../../scripts/rootStyle";
 
 const Dashboard = ({ type, role }) => {
   const location = useLocation();
@@ -25,22 +26,19 @@ const Dashboard = ({ type, role }) => {
   const relativePath = type === "user" ? "dashboard" : "admin";
 
   (() => {
-    const root = document.querySelector(":root");
-    const rootCS = getComputedStyle(root);
-
-    let background = rootCS.getPropertyValue("--secondary-200");
-    let titleColor = rootCS.getPropertyValue("black");
-    let primaryColor = rootCS.getPropertyValue("--primary-400");
+    let background = getStyle("--secondary-200");
+    let titleColor = getStyle("black");
+    let primaryColor = getStyle("--primary-400");
 
     if (type === "admin") {
-      background = rootCS.getPropertyValue("--primary-100");
-      titleColor = rootCS.getPropertyValue("--primary-400");
-      primaryColor = rootCS.getPropertyValue("--secondary-300");
+      background = getStyle("--primary-100");
+      titleColor = getStyle("--primary-400");
+      primaryColor = getStyle("--secondary-300");
     }
 
-    root.style.setProperty("--background", background);
-    root.style.setProperty("--primary-color", primaryColor);
-    root.style.setProperty("--title-color", titleColor);
+    setStyle("--background", background);
+    setStyle("--primary-color", primaryColor);
+    setStyle("--title-color", titleColor);
   })();
 
   return (

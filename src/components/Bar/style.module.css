@@ -1,7 +1,7 @@
 .bar {
   display: flex;
   margin-top: 0.5rem;
-  background-color: var(--primary-100);
+  background-color: var(--bar-color);
   padding: 0.7rem 1.5rem;
   border-radius: 5px;
   justify-content: space-between;

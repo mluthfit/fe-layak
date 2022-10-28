@@ -1,19 +1,14 @@
 import React from "react";
+import { getStyle, setStyle } from "../../scripts/rootStyle";
 import style from "./style.module.css";
 
 const Spinner = ({ type, size, borderSize }) => {
-  const root = document.querySelector(":root");
-  const rootCS = getComputedStyle(root);
+  const borderColor =
+    type === "admin" ? getStyle("--secondary-300") : getStyle("--primary-400");
 
-  let borderColor = rootCS.getPropertyValue("--primary-400");
-
-  if (type === "admin") {
-    borderColor = rootCS.getPropertyValue("--secondary-300");
-  }
-
-  root.style.setProperty("--spinner-size", `${size}px`);
-  root.style.setProperty("--border-color", borderColor);
-  root.style.setProperty("--border-size", `${borderSize}px`);
+  setStyle("--spinner-size", `${size}px`);
+  setStyle("--border-color", borderColor);
+  setStyle("--border-size", `${borderSize}px`);
 
   return <span className={style.spinner}></span>;
 };

@@ -4,6 +4,7 @@ import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-right.svg"
 import { ReactComponent as RequestedIcon } from "../../assets/icons/check-mark.svg";
 import { ReactComponent as ApprovedIcon } from "../../assets/icons/check-marks.svg";
 import { ReactComponent as DeclinedIcon } from "../../assets/icons/cross.svg";
+import { getStyle } from "../../scripts/rootStyle";
 import Spinner from "../../components/Spinner";
 import style from "./style.module.css";
 
@@ -16,9 +17,8 @@ const UserCuti = () => {
     }, 1000);
   });
 
-  const rootCS = getComputedStyle(document.querySelector(":root"));
-  const checkedColor = rootCS.getPropertyValue("--primary-300");
-  const notCheckedColor = rootCS.getPropertyValue("--secondary-300");
+  const checkedColor = getStyle("--primary-300");
+  const notCheckedColor = getStyle("--secondary-300");
 
   const radioContainerHandle = (e) => {
     let el = e.target;
