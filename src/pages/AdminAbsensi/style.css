@@ -2,7 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+}
+
+.adminAbsensi {
+  width: 100%;
 }
 
 .adminAbsensi > h2,
@@ -23,6 +26,6 @@
   border-radius: 5px;
 }
 
-.history {
-  margin-top: 3rem;
+.adminAbsensi .history {
+  margin-top: 2rem;
 }
