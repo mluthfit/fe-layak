@@ -13,7 +13,7 @@ import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar-date
 import { ReactComponent as RequestedIcon } from "../../assets/icons/check-mark.svg";
 import { ReactComponent as ApprovedIcon } from "../../assets/icons/check-marks.svg";
 import { ReactComponent as DeclinedIcon } from "../../assets/icons/cross.svg";
-import { ReactComponent as AtomIcon } from "../../assets/icons/atom.svg";
+import { ReactComponent as CompanyIcon } from "../../assets/icons/organization.svg";
 import { ReactComponent as MapIcon } from "../../assets/icons/map.svg";
 import { ReactComponent as TelpIcon } from "../../assets/icons/call-hash.svg";
 import { ReactComponent as WebIcon } from "../../assets/icons/globe.svg";
@@ -248,7 +248,7 @@ const Overview = () => {
               <h2>Perusahaan</h2>
               <div className={style.details}>
                 <div>
-                  <AtomIcon />
+                  <CompanyIcon />
                   <span>Gojek Indonesia</span>
                 </div>
                 <div>

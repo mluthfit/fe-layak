@@ -7,6 +7,10 @@ import { ReactComponent as CutiIcon } from "../../assets/icons/calendar-dates.sv
 import { ReactComponent as ReimburseIcon } from "../../assets/icons/calculator.svg";
 import { ReactComponent as HideIcon } from "../../assets/icons/chevrons-left.svg";
 import { ReactComponent as LogoutIcon } from "../../assets/icons/logout.svg";
+import { ReactComponent as EmployeesIcon } from "../../assets/icons/people.svg";
+import { ReactComponent as CompanyIcon } from "../../assets/icons/organization.svg";
+import { ReactComponent as AdminIcon } from "../../assets/icons/person-add.svg";
+import TypeRole from "../../scripts/role";
 import style from "./style.module.css";
 
 const Dashboard = ({ type, role }) => {
@@ -17,6 +21,8 @@ const Dashboard = ({ type, role }) => {
     const sidebarEl = document.querySelector("#sidebar");
     sidebarEl.classList.toggle(`${style.hide}`);
   };
+
+  const relativePath = type === "user" ? "dashboard" : "admin";
 
   (() => {
     const root = document.querySelector(":root");
@@ -41,32 +47,85 @@ const Dashboard = ({ type, role }) => {
     <div className={style.dashboard}>
       <div id="sidebar" className={style.sidebar}>
         <div className={style.container}>
-          <ul className={`${style.menu} ${style.topMenu}`}>
-            <li className={page === "overview" ? `${style.active}` : ""}>
-              <a href="/dashboard">
-                <OverviewIcon />
-                <span>Overview</span>
-              </a>
-            </li>
-            <li className={page === "absensi" ? `${style.active}` : ""}>
-              <a href="/dashboard/absensi">
-                <AbsensiIcon />
-                <span>Absensi</span>
-              </a>
-            </li>
-            <li className={page === "cuti" ? `${style.active}` : ""}>
-              <a href="/dashboard/cuti">
-                <CutiIcon />
-                <span>Cuti</span>
-              </a>
-            </li>
-            <li className={page === "reimbursement" ? `${style.active}` : ""}>
-              <a href="/dashboard/reimbursement">
-                <ReimburseIcon />
-                <span>Reimbursement</span>
-              </a>
-            </li>
-          </ul>
+          <div>
+            <span
+              className={style.title}
+              style={{
+                visibility:
+                  role !== TypeRole.USER && type === TypeRole.ADMIN
+                    ? "visible"
+                    : "hidden",
+              }}
+            >
+              {role === TypeRole.ADMIN
+                ? "Administator"
+                : role === TypeRole.SUPERADMIN
+                ? "Super Admin"
+                : "User"}
+            </span>
+            <ul className={`${style.menu} ${style.topMenu}`}>
+              {type === "user" && (
+                <li className={page === "overview" ? `${style.active}` : ""}>
+                  <a href={`/${relativePath}`}>
+                    <OverviewIcon />
+                    <span>Overview</span>
+                  </a>
+                </li>
+              )}
+              {role !== TypeRole.SUPERADMIN && (
+                <li className={page === "absensi" ? `${style.active}` : ""}>
+                  <a href={`/${relativePath}/absensi`}>
+                    <AbsensiIcon />
+                    <span>Absensi</span>
+                  </a>
+                </li>
+              )}
+              {role !== TypeRole.SUPERADMIN && (
+                <li className={page === "cuti" ? `${style.active}` : ""}>
+                  <a href={`/${relativePath}/cuti`}>
+                    <CutiIcon />
+                    <span>Cuti</span>
+                  </a>
+                </li>
+              )}
+              {role !== TypeRole.SUPERADMIN && (
+                <li
+                  className={page === "reimbursement" ? `${style.active}` : ""}
+                >
+                  <a href={`/${relativePath}/reimbursement`}>
+                    <ReimburseIcon />
+                    <span>Reimbursement</span>
+                  </a>
+                </li>
+              )}
+              {type === "admin" && role !== TypeRole.SUPERADMIN && (
+                <li className={page === "employees" ? `${style.active}` : ""}>
+                  <a href="/admin/employees">
+                    <EmployeesIcon />
+                    <span>Akun Karyawan</span>
+                  </a>
+                </li>
+              )}
+              {role === TypeRole.SUPERADMIN && (
+                <li className={page === "perusahaan" ? `${style.active}` : ""}>
+                  <a href="/super-admin/perusahaan">
+                    <CompanyIcon />
+                    <span>Perusahaan</span>
+                  </a>
+                </li>
+              )}
+              {role === TypeRole.SUPERADMIN && (
+                <li
+                  className={page === "administator" ? `${style.active}` : ""}
+                >
+                  <a href="/super-admin/administator">
+                    <AdminIcon />
+                    <span>Administator</span>
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
           <ul className={style.menu}>
             <li>
               <a onClick={toggleSidebar}>
@@ -86,10 +145,10 @@ const Dashboard = ({ type, role }) => {
       <div id="mainbar" className={style.mainbar}>
         <div className={style.topbar}>
           <h1>Dashboard</h1>
-          {role === "admin" && (
+          {role === TypeRole.ADMIN && (
             <a
               className={style.changeButton}
-              href={type === "user" ? "/admin" : "/dashboard"}
+              href={type === "user" ? "/admin/absensi" : "/dashboard"}
             >
               {type === "user" ? "Admin Dashboard" : "User Dashboard"}
             </a>

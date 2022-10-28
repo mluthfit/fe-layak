@@ -27,8 +27,13 @@
   justify-content: space-between;
 }
 
-.sidebar .topMenu {
-  margin-top: 4rem;
+.sidebar .title {
+  text-align: center;
+  display: block;
+  font-size: 1.5rem;
+  color: var(--secondary-100);
+  font-weight: bolder;
+  margin-bottom: 2.9rem;
 }
 
 .sidebar .menu {
@@ -50,9 +55,16 @@
   text-decoration: none;
 }
 
+.hide .title {
+  display: none;
+}
+
+.hide .topMenu {
+  margin-top: 5rem;
+}
+
 .hide .menu > li > a {
   padding: 0.6rem;
-  transition: padding 0.5s;
 }
 
 .hide .menu > li > a > span {

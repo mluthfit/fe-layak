@@ -25,8 +25,19 @@ const App = () => {
           element={<DetailUserReimburse />}
         />
       </Route>
+      <Route path="/admin" element={<Dashboard type="admin" role="admin" />}>
+        <Route index element={<Navigate replace to="absensi" />} />
+        <Route path="absensi" element={<></>} />
+      </Route>
+      <Route
+        path="/super-admin"
+        element={<Dashboard type="admin" role="super_admin" />}
+      >
+        <Route index element={<Navigate replace to="perusahaan" />} />
+        <Route path="perusahaan" element={<></>} />
+      </Route>
       <Route path="/auth" element={<Auth />}>
-        <Route index element={<Navigate replace to="login" />}/>
+        <Route index element={<Navigate replace to="login" />} />
         <Route path="login" element={<Login />} />
         <Route path="forgot-password" element={<ForgotPassword />}></Route>
         <Route path="reset-password" element={<ResetPassword />}></Route>
