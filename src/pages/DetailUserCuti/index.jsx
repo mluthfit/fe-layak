@@ -62,9 +62,9 @@ const DetailUserCuti = () => {
     },
     {
       title: "Status",
-      value: "Ditolak",
+      value: "Diterima",
       type: "text",
-      fontColor: "danger",
+      fontColor: "success",
     },
     {
       title: "Alasan Jika Ditolak",

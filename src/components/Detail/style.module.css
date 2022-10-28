@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 3rem 5rem;
+  width: 1300px;
 }
 
 .detail .item {
@@ -34,4 +35,12 @@
 
 .item .link:hover {
   box-shadow: 1px 1px 10px var(--primary-400);
+}
+
+.danger {
+  color: var(--danger-200);
+}
+
+.success {
+  color: var(--success-200);
 }

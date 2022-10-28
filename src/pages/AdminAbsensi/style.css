@@ -4,10 +4,6 @@
   align-items: center;
 }
 
-.adminAbsensi {
-  width: 100%;
-}
-
 .adminAbsensi > h2,
 .title > h3 {
   text-transform: uppercase;
@@ -27,5 +23,5 @@
 }
 
 .adminAbsensi .history {
-  margin-top: 2rem;
+  margin-top: 3rem;
 }

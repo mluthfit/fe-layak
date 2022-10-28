@@ -13,8 +13,8 @@ const Detail = ({ lists }) => {
                 item.fontSize === "small" ? `${style.smallFont}` : ""
               } ${
                 item.fontColor === "danger"
-                  ? "danger"
-                  : `${item.fontColor === "success" ? "success" : ""}`
+                  ? `${style.danger}`
+                  : `${item.fontColor === "success" ? `${style.success}` : ""}`
               }`}
             >
               {item.value}
