@@ -160,22 +160,3 @@
 .userCuti .listCuti {
   flex: 1;
 }
-
-.success {
-  fill: var(--success-200);
-  background-color: var(--success-100);
-}
-
-.danger {
-  fill: var(--danger-200);
-  background-color: var(--danger-100);
-}
-
-.requested {
-  fill: var(--request-200);
-  background-color: var(--request-100);
-}
-
-.gray {
-  color: var(--secondary-300);
-}

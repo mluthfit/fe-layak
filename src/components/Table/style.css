@@ -1,0 +1,12 @@
+.table .header,
+.table .row {
+  padding: 1.3rem;
+  background-color: red;
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+.table .header span,
+.table .row span {
+  display: block;
+}

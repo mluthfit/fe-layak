@@ -25,7 +25,7 @@ const UserReimburse = () => {
       title: "Makan Siang",
       icons: (
         <>
-          <span className={style.requested}>
+          <span className="requested">
             <RequestedIcon />
           </span>
         </>
@@ -36,7 +36,7 @@ const UserReimburse = () => {
       title: "Makan Siang",
       icons: (
         <>
-          <span className={style.requested}>
+          <span className="requested">
             <RequestedIcon />
           </span>
         </>
@@ -47,7 +47,7 @@ const UserReimburse = () => {
       title: "Makan Siang",
       icons: (
         <>
-          <span className={style.requested}>
+          <span className="requested">
             <RequestedIcon />
           </span>
         </>
@@ -61,7 +61,7 @@ const UserReimburse = () => {
       title: "Makan Siang",
       icons: (
         <>
-          <span className={style.danger}>
+          <span className="danger">
             <DeclinedIcon />
           </span>
         </>
@@ -72,7 +72,7 @@ const UserReimburse = () => {
       title: "Makan Siang",
       icons: (
         <>
-          <span className={style.danger}>
+          <span className="danger">
             <DeclinedIcon />
           </span>
         </>
@@ -83,7 +83,7 @@ const UserReimburse = () => {
       title: "Makan Siang",
       icons: (
         <>
-          <span className={style.success}>
+          <span className="success">
             <ApprovedIcon />
           </span>
         </>

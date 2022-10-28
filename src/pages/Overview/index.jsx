@@ -96,10 +96,10 @@ const Overview = () => {
       title: "06 Januari 2021",
       icons: (
         <>
-          <span className={style.success}>
+          <span className="success">
             <ClockInIcon />
           </span>
-          <span className={style.danger}>
+          <span className="danger">
             <ClockOutIcon />
           </span>
         </>
@@ -110,10 +110,10 @@ const Overview = () => {
       title: "05 Januari 2021",
       icons: (
         <>
-          <span className={style.success}>
+          <span className="success">
             <ClockInIcon />
           </span>
-          <span className={style.danger}>
+          <span className="danger">
             <ClockOutIcon />
           </span>
         </>
@@ -127,7 +127,7 @@ const Overview = () => {
       title: "06 Januari 2021 - 08 Januari 2021",
       icons: (
         <>
-          <span className={style.requested}>
+          <span className="requested">
             <RequestedIcon />
           </span>
         </>
@@ -138,7 +138,7 @@ const Overview = () => {
       title: "06 Januari 2021 - 08 Januari 2021",
       icons: (
         <>
-          <span className={style.success}>
+          <span className="success">
             <ApprovedIcon />
           </span>
         </>
@@ -149,7 +149,7 @@ const Overview = () => {
       title: "06 Januari 2021 - 08 Januari 2021",
       icons: (
         <>
-          <span className={style.danger}>
+          <span className="danger">
             <DeclinedIcon />
           </span>
         </>
@@ -163,7 +163,7 @@ const Overview = () => {
       title: "Makan Siang",
       icons: (
         <>
-          <span className={style.requested}>
+          <span className="requested">
             <RequestedIcon />
           </span>
         </>
@@ -174,7 +174,7 @@ const Overview = () => {
       title: "Operasional Perusahaan",
       icons: (
         <>
-          <span className={style.success}>
+          <span className="success">
             <ApprovedIcon />
           </span>
         </>
@@ -185,7 +185,7 @@ const Overview = () => {
       title: "Transportasi",
       icons: (
         <>
-          <span className={style.danger}>
+          <span className="danger">
             <DeclinedIcon />
           </span>
         </>
@@ -284,16 +284,16 @@ const Overview = () => {
               additionalContent={
                 <div className={style.statusToday}>
                   <div>
-                    <span className={`${style.icon} ${style.success}`}>
+                    <span className={`${style.icon} success`}>
                       <ClockInIcon />
                     </span>
                     <span className={style.time}>08:00</span>
                   </div>
                   <div>
-                    <span className={`${style.icon} ${style.danger}`}>
+                    <span className={`${style.icon} danger`}>
                       <ClockOutIcon />
                     </span>
-                    <span className={`${style.time} ${style.gray}`}>
+                    <span className={`${style.time} gray`}>
                       Belum melakukan absensi pulang
                     </span>
                   </div>

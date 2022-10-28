@@ -35,11 +35,3 @@
 .item .link:hover {
   box-shadow: 1px 1px 10px var(--primary-400);
 }
-
-.success {
-  color: var(--success-200);
-}
-
-.danger {
-  color: var(--danger-200);
-}

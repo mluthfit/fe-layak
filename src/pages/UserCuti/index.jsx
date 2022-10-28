@@ -46,7 +46,7 @@ const UserCuti = () => {
       title: "06 Januari 2021 - 08 Januari 2021",
       icons: (
         <>
-          <span className={style.requested}>
+          <span className="requested">
             <RequestedIcon />
           </span>
         </>
@@ -57,7 +57,7 @@ const UserCuti = () => {
       title: "06 Januari 2021 - 08 Januari 2021",
       icons: (
         <>
-          <span className={style.requested}>
+          <span className="requested">
             <RequestedIcon />
           </span>
         </>
@@ -68,7 +68,7 @@ const UserCuti = () => {
       title: "06 Januari 2021 - 08 Januari 2021",
       icons: (
         <>
-          <span className={style.requested}>
+          <span className="requested">
             <RequestedIcon />
           </span>
         </>
@@ -82,7 +82,7 @@ const UserCuti = () => {
       title: "06 Januari 2021 - 08 Januari 2021",
       icons: (
         <>
-          <span className={style.danger}>
+          <span className="danger">
             <DeclinedIcon />
           </span>
         </>
@@ -93,7 +93,7 @@ const UserCuti = () => {
       title: "06 Januari 2021 - 08 Januari 2021",
       icons: (
         <>
-          <span className={style.danger}>
+          <span className="danger">
             <DeclinedIcon />
           </span>
         </>
@@ -104,7 +104,7 @@ const UserCuti = () => {
       title: "06 Januari 2021 - 08 Januari 2021",
       icons: (
         <>
-          <span className={style.success}>
+          <span className="success">
             <ApprovedIcon />
           </span>
         </>
