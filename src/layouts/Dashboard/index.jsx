@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { ReactComponent as OverviewIcon } from "../../assets/icons/square.svg";
 import { ReactComponent as AbsensiIcon } from "../../assets/icons/camera.svg";
@@ -10,18 +10,41 @@ import { ReactComponent as LogoutIcon } from "../../assets/icons/logout.svg";
 import { ReactComponent as EmployeesIcon } from "../../assets/icons/people.svg";
 import { ReactComponent as CompanyIcon } from "../../assets/icons/organization.svg";
 import { ReactComponent as AdminIcon } from "../../assets/icons/person-add.svg";
+import { getStyle, setStyle } from "../../scripts/rootStyle";
+import { getLocalStorage, setLocalStorage } from "../../scripts/localStorage";
 import TypeRole from "../../scripts/role";
 import style from "./style.module.css";
-import { getStyle, setStyle } from "../../scripts/rootStyle";
 
 const Dashboard = ({ type, role }) => {
   const location = useLocation();
   const page = location.pathname.split("/")[2] ?? "overview";
 
-  const toggleSidebar = () => {
+  const showHideHandler = () => {
     const sidebarEl = document.querySelector("#sidebar");
-    sidebarEl.classList.toggle(`${style.hide}`);
+    if (sidebarEl.classList.contains(style.hide)) {
+      showSidebar(sidebarEl);
+      setLocalStorage("sidebar-mode", "show");
+      return;
+    }
+
+    hideSidebar(sidebarEl);
+    setLocalStorage("sidebar-mode", "hide");
+    return;
   };
+
+  useEffect(() => {
+    const sidebarEl = document.querySelector("#sidebar");
+    const sidebarMode = getLocalStorage("sidebar-mode", "show");
+    if (sidebarMode === "hide") {
+      hideSidebar(sidebarEl);
+      return;
+    }
+
+    showSidebar(sidebarEl);
+  }, []);
+
+  const showSidebar = (element) => element.classList.remove(style.hide);
+  const hideSidebar = (element) => element.classList.add(style.hide);
 
   const relativePath = type === "user" ? "dashboard" : "admin";
 
@@ -126,7 +149,7 @@ const Dashboard = ({ type, role }) => {
           </div>
           <ul className={style.menu}>
             <li>
-              <a onClick={toggleSidebar}>
+              <a onClick={showHideHandler}>
                 <HideIcon />
                 <span>Sembunyikan</span>
               </a>

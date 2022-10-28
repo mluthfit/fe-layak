@@ -17,6 +17,10 @@ import { ReactComponent as CompanyIcon } from "../../assets/icons/organization.s
 import { ReactComponent as MapIcon } from "../../assets/icons/map.svg";
 import { ReactComponent as TelpIcon } from "../../assets/icons/call-hash.svg";
 import { ReactComponent as WebIcon } from "../../assets/icons/globe.svg";
+import {
+  showBackgroundModal,
+  hideBackgroundModal,
+} from "../../scripts/backgroundModal";
 import style from "./style.module.css";
 
 const Overview = () => {
@@ -38,18 +42,14 @@ const Overview = () => {
   };
 
   const toggleUpdatePassPopup = () => {
-    const backgroundPopup = document.querySelector("#backgroundPopup");
     const mainbar = document.querySelector("#mainbar");
     if (showPopup) {
-      mainbar.style.overflowY = "auto";
-      backgroundPopup.style.display = "none";
+      hideBackgroundModal(mainbar);
       setShowPopup(false);
       return;
     }
 
-    mainbar.scrollTo({ top: 0, behavior: "smooth" });
-    mainbar.style.overflowY = "hidden";
-    backgroundPopup.style.display = "block";
+    showBackgroundModal(mainbar);
     setOldPassword("");
     setNewPassword("");
     setConfirmPassword("");
