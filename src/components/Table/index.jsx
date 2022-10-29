@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { keyToCapitalize } from "../../scripts/string";
 import "./style.css";
 
@@ -17,7 +18,7 @@ const Table = ({ rows, status, width, href, isHistory }) => {
       </div>
       <div className="tbody">
         {rows.map((row, parentIdx) => (
-          <a href={href[parentIdx]} key={parentIdx} className="tr">
+          <Link to={href[parentIdx]} key={parentIdx} className="tr">
             {Object.values(row).map((value, childIdx) => (
               <div className="td" key={`${parentIdx}${childIdx}`}>
                 {value}
@@ -26,7 +27,7 @@ const Table = ({ rows, status, width, href, isHistory }) => {
             <div className="td">
               <div className="status">{status[parentIdx]}</div>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </div>

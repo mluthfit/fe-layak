@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { ReactComponent as ClockInIcon } from "../../assets/icons/arrow-up-right.svg";
 import { ReactComponent as ClockOutIcon } from "../../assets/icons/arrow-down-left.svg";
 import Detail from "../../components/Detail";
@@ -96,12 +96,12 @@ const DetailAdminAbsensi = () => {
   return (
     <div className={loading ? "center" : ""}>
       {loading ? (
-        <Spinner type="user" size={48} borderSize={5} />
+        <Spinner type="admin" size={48} borderSize={5} />
       ) : (
         <>
           <div className={style.header}>
             <h2>Detail Absensi</h2>
-            <a href="/admin/absensi">Kembali</a>
+            <Link to="/admin/absensi">Kembali</Link>
           </div>
           <div className={style.detail}>
             <Detail lists={lists} />

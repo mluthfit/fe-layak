@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Spinner from "../../components/Spinner";
-import ListOverview from "../../components/ListOverview";
-import FormUpdate from "../../components/FormUpdate";
 import { ReactComponent as AbsensiIcon } from "../../assets/icons/camera.svg";
 import { ReactComponent as ClockInIcon } from "../../assets/icons/arrow-up-right.svg";
 import { ReactComponent as ClockOutIcon } from "../../assets/icons/arrow-down-left.svg";
@@ -17,6 +14,9 @@ import { ReactComponent as CompanyIcon } from "../../assets/icons/organization.s
 import { ReactComponent as MapIcon } from "../../assets/icons/map.svg";
 import { ReactComponent as TelpIcon } from "../../assets/icons/call-hash.svg";
 import { ReactComponent as WebIcon } from "../../assets/icons/globe.svg";
+import Spinner from "../../components/Spinner";
+import ListOverview from "../../components/ListOverview";
+import FormUpdate from "../../components/FormUpdate";
 import {
   showBackgroundModal,
   hideBackgroundModal,

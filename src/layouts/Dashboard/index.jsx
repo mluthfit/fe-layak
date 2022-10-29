@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, Link } from "react-router-dom";
 import { ReactComponent as OverviewIcon } from "../../assets/icons/square.svg";
 import { ReactComponent as AbsensiIcon } from "../../assets/icons/camera.svg";
 import { ReactComponent as CutiIcon } from "../../assets/icons/calendar-dates.svg";
@@ -87,78 +87,78 @@ const Dashboard = ({ type, role }) => {
             <ul className={`${style.menu} ${style.topMenu}`}>
               {type === "user" && (
                 <li className={page === "overview" ? `${style.active}` : ""}>
-                  <a href={`/${relativePath}`}>
+                  <Link to={`/${relativePath}`}>
                     <OverviewIcon />
                     <span>Overview</span>
-                  </a>
+                  </Link>
                 </li>
               )}
               {role !== TypeRole.SUPERADMIN && (
                 <li className={page === "absensi" ? `${style.active}` : ""}>
-                  <a href={`/${relativePath}/absensi`}>
+                  <Link to={`/${relativePath}/absensi`}>
                     <AbsensiIcon />
                     <span>Absensi</span>
-                  </a>
+                  </Link>
                 </li>
               )}
               {role !== TypeRole.SUPERADMIN && (
                 <li className={page === "cuti" ? `${style.active}` : ""}>
-                  <a href={`/${relativePath}/cuti`}>
+                  <Link to={`/${relativePath}/cuti`}>
                     <CutiIcon />
                     <span>Cuti</span>
-                  </a>
+                  </Link>
                 </li>
               )}
               {role !== TypeRole.SUPERADMIN && (
                 <li
                   className={page === "reimbursement" ? `${style.active}` : ""}
                 >
-                  <a href={`/${relativePath}/reimbursement`}>
+                  <Link to={`/${relativePath}/reimbursement`}>
                     <ReimburseIcon />
                     <span>Reimbursement</span>
-                  </a>
+                  </Link>
                 </li>
               )}
               {type === "admin" && role !== TypeRole.SUPERADMIN && (
                 <li className={page === "employees" ? `${style.active}` : ""}>
-                  <a href="/admin/employees">
+                  <Link to="/admin/employees">
                     <EmployeesIcon />
                     <span>Akun Karyawan</span>
-                  </a>
+                  </Link>
                 </li>
               )}
               {role === TypeRole.SUPERADMIN && (
                 <li className={page === "perusahaan" ? `${style.active}` : ""}>
-                  <a href="/super-admin/perusahaan">
+                  <Link to="/super-admin/perusahaan">
                     <CompanyIcon />
                     <span>Perusahaan</span>
-                  </a>
+                  </Link>
                 </li>
               )}
               {role === TypeRole.SUPERADMIN && (
                 <li
                   className={page === "administator" ? `${style.active}` : ""}
                 >
-                  <a href="/super-admin/administator">
+                  <Link to="/super-admin/administator">
                     <AdminIcon />
                     <span>Administator</span>
-                  </a>
+                  </Link>
                 </li>
               )}
             </ul>
           </div>
           <ul className={style.menu}>
             <li>
-              <a onClick={showHideHandler}>
+              <Link onClick={showHideHandler}>
                 <HideIcon />
                 <span>Sembunyikan</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/logout">
+              <Link to="/logout">
                 <LogoutIcon />
                 <span>Logout</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -167,12 +167,12 @@ const Dashboard = ({ type, role }) => {
         <div className={style.topbar}>
           <h1>Dashboard</h1>
           {role === TypeRole.ADMIN && (
-            <a
+            <Link
               className={style.changeButton}
-              href={type === "user" ? "/admin/absensi" : "/dashboard"}
+              to={type === "user" ? "/admin/absensi" : "/dashboard"}
             >
               {type === "user" ? "Admin Dashboard" : "User Dashboard"}
-            </a>
+            </Link>
           )}
         </div>
         <div className={style.content}>

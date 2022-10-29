@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import ListRequest from "../../components/ListRequest";
 import { ReactComponent as RequestedIcon } from "../../assets/icons/check-mark.svg";
 import { ReactComponent as ApprovedIcon } from "../../assets/icons/check-marks.svg";
 import { ReactComponent as DeclinedIcon } from "../../assets/icons/cross.svg";
+import ListRequest from "../../components/ListRequest";
 import Spinner from "../../components/Spinner";
 import style from "./style.module.css";
 

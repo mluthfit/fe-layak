@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Bar from "../Bar";
 import style from "./style.module.css";
 
@@ -14,9 +15,9 @@ const ListOverview = ({
     <div className={style.listOverview}>
       <div className={style.header}>
         <h2>{title}</h2>
-        <a href={href} className={style.anchorIcon}>
+        <Link to={href} className={style.anchorIcon}>
           <Icon />
-        </a>
+        </Link>
       </div>
       {additionalContent}
       <div className={style.listBar}>

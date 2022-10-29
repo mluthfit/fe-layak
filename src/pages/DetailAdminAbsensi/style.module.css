@@ -17,6 +17,7 @@
   color: var(--request-200);
   font-weight: bolder;
   border-radius: 5px;
+  font-size: 0.9rem;
   text-decoration: none;
 }
 

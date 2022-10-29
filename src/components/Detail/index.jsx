@@ -1,6 +1,6 @@
 import React from "react";
-import { getStyle } from "../../scripts/rootStyle";
 import Bar from "../Bar";
+import { getStyle } from "../../scripts/rootStyle";
 import style from "./style.module.css";
 
 const Detail = ({ lists }) => {

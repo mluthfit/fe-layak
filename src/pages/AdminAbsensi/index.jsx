@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Spinner from "../../components/Spinner";
-import Table from "../../components/Table";
 import { ReactComponent as ClockInIcon } from "../../assets/icons/arrow-up-right.svg";
 import { ReactComponent as ClockOutIcon } from "../../assets/icons/arrow-down-left.svg";
+import Spinner from "../../components/Spinner";
+import Table from "../../components/Table";
 import "./style.css";
 
 const AdminAbsensi = () => {

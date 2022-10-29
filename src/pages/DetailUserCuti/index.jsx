@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Detail from "../../components/Detail";
 import Spinner from "../../components/Spinner";
 import style from "./style.module.css";
@@ -83,7 +83,7 @@ const DetailUserCuti = () => {
         <>
           <div className={style.header}>
             <h2>Detail Pengajuan Cuti</h2>
-            <a href="/dashboard/cuti">Kembali</a>
+            <Link to="/dashboard/cuti">Kembali</Link>
           </div>
           <div className={style.detail}>
             <Detail lists={lists} />
