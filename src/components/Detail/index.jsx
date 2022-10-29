@@ -1,7 +1,11 @@
 import React from "react";
+import { getStyle } from "../../scripts/rootStyle";
+import Bar from "../Bar";
 import style from "./style.module.css";
 
 const Detail = ({ lists }) => {
+  const barColor = getStyle("--secondary-100");
+
   return (
     <div className={style.detail}>
       {lists?.map((item, index) => (
@@ -31,9 +35,25 @@ const Detail = ({ lists }) => {
             </a>
           )}
           {item.type === "image" && (
-            <>
-              <img src="placeholder.png" alt="placeholder" />
-            </>
+            <div className={style.image}>
+              <img src={item.value} alt="placeholder" />
+            </div>
+          )}
+          {item.type === "listBar" && (
+            <div style={{ width: "75%" }}>
+              {!item.listBar?.length && (
+                <span className={style.blank}>{item.blank}</span>
+              )}
+              {item.listBar?.map((bar, index) => (
+                <Bar
+                  key={index}
+                  link={bar.link}
+                  title={bar.title}
+                  icons={bar.icons}
+                  barColor={barColor}
+                />
+              ))}
+            </div>
           )}
         </div>
       ))}

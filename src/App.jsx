@@ -11,6 +11,7 @@ import Overview from "./pages/Overview";
 import UserCuti from "./pages/UserCuti";
 import UserReimburse from "./pages/UserReimburse";
 import AdminAbsensi from "./pages/AdminAbsensi";
+import DetailAdminAbsensi from "./pages/DetailAdminAbsensi";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
       <Route path="/admin" element={<Dashboard type="admin" role="admin" />}>
         <Route index element={<Navigate replace to="absensi" />} />
         <Route path="absensi" element={<AdminAbsensi />} />
+        <Route path="absensi/:absensiId" element={<DetailAdminAbsensi />} />
       </Route>
       <Route
         path="/super-admin"

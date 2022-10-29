@@ -1,5 +1,6 @@
 .overview {
   display: flex;
+  gap: 2rem;
 }
 
 .overview .left,
@@ -10,8 +11,11 @@
 }
 
 .overview .left {
-  width: 350px;
-  margin-right: 2rem;
+  flex: 35%;
+}
+
+.overview .right {
+  flex: 65%;
 }
 
 .biodata {
@@ -136,11 +140,6 @@
 
 .companyProfile .details > div > span {
   margin-left: 1.5rem;
-}
-
-.overview .right {
-  width: 90%;
-  max-width: 800px;
 }
 
 .right .statusToday {

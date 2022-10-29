@@ -4,8 +4,10 @@ import style from "./style.module.css";
 
 const Bar = ({ title, link, barColor, icons }) => {
   if (!barColor) {
-    setStyle("--bar-color", getStyle("--primary-100"));
+    barColor = getStyle("--primary-100");
   }
+
+  setStyle("--bar-color", barColor);
 
   return (
     <a href={link} className={style.bar}>

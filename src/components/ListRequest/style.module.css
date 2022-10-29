@@ -3,7 +3,6 @@
   border-radius: 10px;
   background-color: var(--secondary-100);
   box-shadow: 1px 1px 3px var(--blank-100);
-  width: 700px;
 }
 
 .listRequest h3 {

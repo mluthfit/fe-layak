@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 3rem 5rem;
-  width: 1300px;
 }
 
 .detail .item {
@@ -35,6 +34,21 @@
 
 .item .link:hover {
   box-shadow: 1px 1px 10px var(--primary-400);
+}
+
+.item .image {
+  width: 60%;
+  height: 250px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: var(--secondary-200);
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .danger {

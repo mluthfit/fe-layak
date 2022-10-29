@@ -1,37 +1,64 @@
-.table .header,
-.table .row {
-  padding: 1rem 1.3rem;
-  display: flex;
-  justify-content: space-between;
+.table {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
 }
 
-.table .row {
-  background-color: var(--secondary-100);
-  border-radius: 5px;
-  box-shadow: 0px 1px 1px var(--blank-100);
-  margin-bottom: 0.5rem;
+.table .thead {
+  display: table-header-group;
+}
+
+.table .tbody {
+  display: table-row-group;
+}
+
+.table .tr {
+  display: table-row;
   text-decoration: none;
-  color: black;
 }
 
-.table.history .row {
+.table .td {
+  display: table-cell;
+  padding: 0.5rem 1.5rem;
+  vertical-align: middle;
+}
+
+.tbody .td {
+  padding: 1rem 1.5rem;
+}
+
+.tbody .tr {
+  background-color: var(--secondary-100);
+  color: black;
+  margin-bottom: 2rem;
+}
+
+.historyRow .tbody .tr {
   background-color: var(--secondary-200);
 }
 
-.table .row:hover {
+.tbody .tr:hover {
   background-color: var(--primary-400);
   color: var(--secondary-100);
 }
 
-.main {
-  display: flex;
-  align-items: center;
-  flex: 1;
+.td:last-child {
+  text-align: right;
+}
+
+.tr .td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.tr .td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .status {
   display: flex;
-  margin-left: 2rem;
+  justify-content: flex-end;
 }
 
 .status > span {

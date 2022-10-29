@@ -4,30 +4,28 @@ import "./style.css";
 
 const Table = ({ rows, status, width, href, isHistory }) => {
   return (
-    <div className={`table ${isHistory ? "history" : ""}`}>
-      <div className="header gray">
-        <div className="main">
-          {Object.keys(rows[0]).map((key, index) => (
-            <span key={`h${index}`} style={{ width: width[key] }}>
+    <div className={`table ${isHistory ? "historyRow" : ""}`}>
+      <div className="thead">
+        <div className="tr gray">
+          {Object.keys(width).map((key, index) => (
+            <div className="td" key={index}>
               {keyToCapitalize(key, "_")}
-            </span>
+            </div>
           ))}
-        </div>
-        <div className="status">
-          <span>Status</span>
+          <div className="td">Status</div>
         </div>
       </div>
-      <div className="rows">
-        {rows.map((row, rowIdx) => (
-          <a href={href[rowIdx]} className="row">
-            <div className="main">
-              {Object.keys(row).map((key, keyIdx) => (
-                <span key={`${rowIdx}${keyIdx}`} style={{ width: width[key] }}>
-                  {row[key]}
-                </span>
-              ))}
+      <div className="tbody">
+        {rows.map((row, parentIdx) => (
+          <a href={href[parentIdx]} key={parentIdx} className="tr">
+            {Object.values(row).map((value, childIdx) => (
+              <div className="td" key={`${parentIdx}${childIdx}`}>
+                {value}
+              </div>
+            ))}
+            <div className="td">
+              <div className="status">{status[parentIdx]}</div>
             </div>
-            <div className="status">{status[rowIdx]}</div>
           </a>
         ))}
       </div>
