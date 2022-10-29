@@ -69,3 +69,11 @@ button:disabled {
 .gray {
   color: var(--secondary-300);
 }
+
+.green {
+  fill: var(--success-200);
+}
+
+.red {
+  fill: var(--danger-200);
+}

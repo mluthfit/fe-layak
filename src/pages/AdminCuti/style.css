@@ -1,0 +1,93 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.header .template {
+  display: flex;
+  align-items: center;
+}
+
+.template .button {
+  border: none;
+  outline: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px var(--blank-100);
+  background-color: var(--success-100);
+  color: var(--success-200);
+  font-weight: bolder;
+}
+
+.template .button:hover {
+  box-shadow: 1px 0 5px var(--success-200);
+}
+
+.template a {
+  margin-left: 0.7rem;
+  background-color: var(--request-100);
+  color: var(--request-200);
+  padding: 0.6rem 0.8rem;
+  box-shadow: 0 1px 2px var(--blank-100);
+  border-radius: 5px;
+  display: flex;
+}
+
+.template a:hover {
+  box-shadow: 0 1px 10px var(--blank-100);
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.adminCuti h2,
+.title > h3 {
+  text-transform: uppercase;
+}
+
+.title > h3 {
+  color: var(--secondary-300);
+}
+
+.filter {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.filter .button {
+  border: none;
+  outline: none;
+  padding: 0.6rem;
+  background-color: var(--secondary-100);
+  box-shadow: 1px 1px 2px var(--blank-100);
+  border-radius: 5px;
+  display: flex;
+}
+
+.filter .button.active {
+  background-color: var(--primary-400);
+  fill: var(--secondary-100);
+}
+
+.filter input {
+  border: none;
+  outline: none;
+  padding: 0.7rem 1.3rem;
+  width: 300px;
+  box-shadow: 1px 1px 2px var(--blank-100);
+  border-radius: 5px;
+}
+
+.adminCuti .history {
+  margin-top: 3rem;
+}
+
+.blue {
+  fill: var(--primary-300);
+}

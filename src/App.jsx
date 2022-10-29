@@ -12,6 +12,7 @@ import UserCuti from "./pages/UserCuti";
 import UserReimburse from "./pages/UserReimburse";
 import AdminAbsensi from "./pages/AdminAbsensi";
 import DetailAdminAbsensi from "./pages/DetailAdminAbsensi";
+import AdminCuti from "./pages/AdminCuti";
 
 const App = () => {
   return (
@@ -31,6 +32,8 @@ const App = () => {
         <Route index element={<Navigate replace to="absensi" />} />
         <Route path="absensi" element={<AdminAbsensi />} />
         <Route path="absensi/:absensiId" element={<DetailAdminAbsensi />} />
+        <Route path="cuti" element={<AdminCuti />} />
+        <Route path="cuti/:cutiId" element={<DetailAdminAbsensi />} />
       </Route>
       <Route
         path="/super-admin"

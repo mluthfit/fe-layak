@@ -3,7 +3,7 @@ import { ReactComponent as ClockInIcon } from "../../assets/icons/arrow-up-right
 import { ReactComponent as ClockOutIcon } from "../../assets/icons/arrow-down-left.svg";
 import Spinner from "../../components/Spinner";
 import Table from "../../components/Table";
-import "./style.css";
+import style from "./style.module.css";
 
 const AdminAbsensi = () => {
   const [loading, setLoading] = useState(true);
@@ -15,12 +15,6 @@ const AdminAbsensi = () => {
 
     document.title = "Absensi - Admin Dashboard";
   }, []);
-
-  const width = {
-    nama: "450px",
-    jabatan: "350px",
-    jam_masuk: "100px",
-  };
 
   const rowsDone = [
     {
@@ -56,33 +50,27 @@ const AdminAbsensi = () => {
   ];
 
   return (
-    <div className={`adminAbsensi ${loading ? "center" : ""}`}>
+    <div className={`${style.adminAbsensi} ${loading ? "center" : ""}`}>
       {loading ? (
         <Spinner type="admin" size={48} borderSize={5} />
       ) : (
         <>
           <h2>Status Absensi Hari Ini</h2>
           <div>
-            <div className="title">
+            <div className={style.title}>
               <h3>Sudah Absensi</h3>
               <input type="text" placeholder="Cari nama atau jabatan" />
             </div>
-            <Table
-              rows={rowsDone}
-              status={statusDone}
-              width={width}
-              href={hrefDone}
-            />
+            <Table rows={rowsDone} status={statusDone} href={hrefDone} />
           </div>
-          <div className="history">
-            <div className="title">
+          <div className={style.history}>
+            <div className={style.title}>
               <h3>Belum Melakukan Absensi</h3>
               <input type="text" placeholder="Cari nama atau jabatan" />
             </div>
             <Table
               rows={rowsDone}
               status={statusDone}
-              width={width}
               href={hrefDone}
               isHistory={true}
             />

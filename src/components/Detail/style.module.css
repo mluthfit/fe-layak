@@ -37,8 +37,8 @@
 }
 
 .item .image {
-  width: 60%;
-  height: 250px;
+  width: 65%;
+  height: 275px;
   border-radius: 10px;
   overflow: hidden;
   background-color: var(--secondary-200);
