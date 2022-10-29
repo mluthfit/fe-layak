@@ -13,7 +13,9 @@ const UserReimburse = () => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  });
+
+    document.title = "Pengajuan Reimbursement - Dashboard";
+  }, []);
 
   const submitHandle = (e) => {
     e.preventDefault();

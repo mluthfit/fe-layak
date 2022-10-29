@@ -14,7 +14,9 @@ const DetailUserReimburse = () => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  });
+
+    document.title = "Detail Reimbursement - Dashboard";
+  }, []);
 
   const lists = [
     {

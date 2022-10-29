@@ -34,7 +34,9 @@ const Overview = () => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  });
+
+    document.title = "Overview - Dashboard";
+  }, []);
 
   const openUploadImage = (e) => {
     const fileInput = e.target.parentNode.querySelector("#fileInput");

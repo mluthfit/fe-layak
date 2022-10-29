@@ -15,7 +15,9 @@ const UserCuti = () => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  });
+
+    document.title = "Pengajuan Cuti - Dashboard";
+  }, []);
 
   const checkedColor = getStyle("--primary-300");
   const notCheckedColor = getStyle("--secondary-300");

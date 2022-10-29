@@ -14,7 +14,9 @@ const DetailUserCuti = () => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  });
+
+    document.title = "Detail Cuti - Dashboard";
+  }, []);
 
   const lists = [
     {

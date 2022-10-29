@@ -12,7 +12,9 @@ const AdminAbsensi = () => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  });
+
+    document.title = "Absensi - Admin Dashboard";
+  }, []);
 
   const width = {
     nama: "450px",

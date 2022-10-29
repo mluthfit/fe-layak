@@ -16,7 +16,9 @@ const DetailAdminAbsensi = () => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  });
+
+    document.title = "Detail Absensi - Admin Dashboard";
+  }, []);
 
   const listBar = [
     {
