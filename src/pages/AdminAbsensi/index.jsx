@@ -61,7 +61,12 @@ const AdminAbsensi = () => {
               <h3>Sudah Absensi</h3>
               <input type="text" placeholder="Cari nama atau jabatan" />
             </div>
-            <Table rows={rowsDone} status={statusDone} href={hrefDone} />
+            <Table
+              rows={rowsDone}
+              iconLabel="Status"
+              icons={statusDone}
+              href={hrefDone}
+            />
           </div>
           <div className={style.history}>
             <div className={style.title}>
@@ -70,7 +75,8 @@ const AdminAbsensi = () => {
             </div>
             <Table
               rows={rowsDone}
-              status={statusDone}
+              iconLabel="Status"
+              icons={statusDone}
               href={hrefDone}
               isHistory={true}
             />

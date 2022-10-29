@@ -53,16 +53,19 @@ button:disabled {
 
 .success {
   fill: var(--success-200);
+  color: var(--success-200);
   background-color: var(--success-100);
 }
 
 .danger {
   fill: var(--danger-200);
+  color: var(--danger-200);
   background-color: var(--danger-100);
 }
 
 .requested {
   fill: var(--request-200);
+  color: var(--request-200);
   background-color: var(--request-100);
 }
 

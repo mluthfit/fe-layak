@@ -8,12 +8,13 @@
 .header .template {
   display: flex;
   align-items: center;
+  margin-left: 1rem;
 }
 
 .template .button {
   border: none;
   outline: none;
-  padding: 0.7rem 1.2rem;
+  padding: 0.7rem 1.4rem;
   border-radius: 5px;
   box-shadow: 0 1px 2px var(--blank-100);
   background-color: var(--success-100);
@@ -22,7 +23,7 @@
 }
 
 .template .button:hover {
-  box-shadow: 1px 0 5px var(--success-200);
+  box-shadow: 2px 2px 5px var(--success-200);
 }
 
 .template a {
@@ -37,6 +38,10 @@
 
 .template a:hover {
   box-shadow: 0 1px 10px var(--blank-100);
+}
+
+.template input {
+  display: none;
 }
 
 .title {

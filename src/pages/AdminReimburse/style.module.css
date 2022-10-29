@@ -1,0 +1,59 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.adminReimburse h2,
+.title > h3 {
+  text-transform: uppercase;
+}
+
+.title > h3 {
+  color: var(--secondary-300);
+}
+
+.filter {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.filter .button {
+  border: none;
+  outline: none;
+  padding: 0.6rem;
+  background-color: var(--secondary-100);
+  box-shadow: 1px 1px 2px var(--blank-100);
+  border-radius: 5px;
+  display: flex;
+}
+
+.filter .button.active {
+  background-color: var(--primary-400);
+  fill: var(--secondary-100);
+}
+
+.filter input {
+  border: none;
+  outline: none;
+  padding: 0.7rem 1.3rem;
+  width: 300px;
+  box-shadow: 1px 1px 2px var(--blank-100);
+  border-radius: 5px;
+}
+
+.adminReimburse .history {
+  margin-top: 3rem;
+}
+
+.blue {
+  fill: var(--primary-300);
+}
