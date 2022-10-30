@@ -134,10 +134,18 @@ const DetailAdminCuti = () => {
             </div>
           </div>
           {approveModal && (
-            <RequestAction type="approve" backHandle={toggleApproveModal} />
+            <RequestAction
+              title="Konfirmasi Permintaan"
+              type="approve"
+              backHandle={toggleApproveModal}
+            />
           )}
           {declineModal && (
-            <RequestAction type="decline" backHandle={toggleDeclineModal} />
+            <RequestAction
+              title="Alasan Menolak Permintaan"
+              type="decline"
+              backHandle={toggleDeclineModal}
+            />
           )}
           <div className={style.detail}>
             <Detail lists={lists} />

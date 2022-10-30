@@ -5,7 +5,7 @@
 }
 
 .formCreate h2,
-.adminEmployees h3,
+.superAdminCompany h3,
 .container > span {
   text-transform: uppercase;
 }
@@ -18,14 +18,17 @@
   box-shadow: 0 1px 1px var(--blank-100);
 }
 
-.adminEmployees .form {
-  margin-top: 1rem;
+.superAdminCompany .form {
   display: flex;
 }
 
 .form .formGroup {
   margin-right: 0.7rem;
   flex: 1;
+}
+
+.formGroup .group {
+  margin-top: 1rem;
 }
 
 .formGroup label {
@@ -35,19 +38,22 @@
 }
 
 .formGroup input,
-.form button {
+.form button,
+.formGroup select {
   border: none;
   outline: none;
 }
 
-.formGroup input {
+.formGroup input,
+.formGroup select {
   width: 100%;
   border-radius: 5px;
   border: 1px solid var(--secondary-300);
   padding: 0.5rem 1rem;
 }
 
-.formGroup input:focus {
+.formGroup input:focus,
+.formGroup select:focus {
   border: 1px solid var(--primary-300);
   background-color: var(--primary-100);
 }
@@ -91,7 +97,7 @@
   fill: var(--secondary-100);
 }
 
-.listEmployees {
+.listCompanies {
   margin-top: 3rem;
 }
 

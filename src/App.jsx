@@ -17,6 +17,8 @@ import DetailAdminCuti from "./pages/DetailAdminCuti";
 import AdminReimburse from "./pages/AdminReimburse";
 import DetailAdminReimburse from "./pages/DetailAdminReimburse";
 import AdminEmployees from "./pages/AdminEmployees";
+import SuperAdminAdmin from "./pages/SuperAdminAdmin";
+import SuperAdminCompany from "./pages/SuperAdminCompany";
 
 const App = () => {
   return (
@@ -50,7 +52,8 @@ const App = () => {
         element={<Dashboard type="admin" role="super_admin" />}
       >
         <Route index element={<Navigate replace to="perusahaan" />} />
-        <Route path="perusahaan" element={<></>} />
+        <Route path="perusahaan" element={<SuperAdminCompany />} />
+        <Route path="administator" element={<SuperAdminAdmin />} />
       </Route>
       <Route path="/auth" element={<Auth />}>
         <Route index element={<Navigate replace to="login" />} />

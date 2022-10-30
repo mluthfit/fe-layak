@@ -4,6 +4,7 @@ import style from "./style.module.css";
 
 const RequestAction = ({
   type,
+  title,
   submitHandle,
   backHandle,
   stateValue,
@@ -17,13 +18,7 @@ const RequestAction = ({
 
   return (
     <div className={style.requestAction}>
-      <h2>
-        {type === "approve"
-          ? "Konfirmasi Permintaan"
-          : type === "delete"
-          ? "Konfirmasi Hapus Data"
-          : "Alasan Menolak Permintaan"}
-      </h2>
+      <h2>{title}</h2>
       {type === "approve" && !withInputFile && (
         <div className={style.alert}>
           <span>Apakah anda yakin menyetujui permintaan ini?</span>

@@ -133,12 +133,17 @@ const DetailAdminReimburse = () => {
           {approveModal && (
             <RequestAction
               type="approve"
+              title="Upload Bukti Pengembalian Dana"
               backHandle={toggleApproveModal}
               withInputFile={true}
             />
           )}
           {declineModal && (
-            <RequestAction type="decline" backHandle={toggleDeclineModal} />
+            <RequestAction
+              title="Alasan Menolak Permintaan"
+              type="decline"
+              backHandle={toggleDeclineModal}
+            />
           )}
           <div className={style.detail}>
             <Detail lists={lists} />

@@ -11,42 +11,44 @@ import {
 } from "../../scripts/backgroundModal";
 import style from "./style.module.css";
 
-const AdminEmployees = () => {
+const SuperAdminCompany = () => {
   const [loading, setLoading] = useState(true);
-  const [showCreateAcc, setShowCreateAcc] = useState(false);
+  const [showCreateAlert, setShowCreateAlert] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [name, setName] = useState("");
-  const [position, setPosition] = useState("");
   const [email, setEmail] = useState("");
-  const [sisaCuti, setSisaCuti] = useState("");
+  const [address, setAddress] = useState("");
+  const [website, setWebsite] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [maxCuti, setMaxCuti] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
 
-    document.title = "Akun Karyawan - Admin Dashboard";
+    document.title = "Perusahaan - Super Admin Dashboard";
   }, []);
 
   const rows = [
     {
-      nama: "Ahmad Sumandi Wijayakarto",
-      jabatan: "IT Architecture",
-      email: "ahmad@ankara.id",
-      sisa_cuti: "1",
+      nama: "Gojek Indonesia",
+      email: "gojek@co.id",
+      no_telepon: "022-12345678",
+      cuti_per_tahun: 10,
     },
     {
-      nama: "Angkara Messi",
-      jabatan: "Cleaning Service",
-      email: "messi@co.id",
-      sisa_cuti: "2",
+      nama: "Shoope Indonesia",
+      email: "shoope@co.id",
+      no_telepon: "022-12345678",
+      cuti_per_tahun: 15,
     },
   ];
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setShowCreateAcc(true);
+    setShowCreateAlert(true);
   };
 
   const toggleEditForm = () => {
@@ -110,57 +112,91 @@ const AdminEmployees = () => {
       type: "text",
       id: "name",
       value: name,
-      placeholder: "Masukkan nama karyawan",
+      placeholder: "Masukkan nama perusahaan",
       onChange: (e) => setName(e.target.value),
-    },
-    {
-      label: "Jabatan",
-      type: "text",
-      id: "position",
-      value: position,
-      placeholder: "Masukkan jabatan karyawan",
-      onChange: (e) => setPosition(e.target.value),
     },
     {
       label: "Email",
       type: "email",
       id: "email",
       value: email,
-      placeholder: "Masukkan email karyawan",
+      placeholder: "Masukkan email perusahaan",
       onChange: (e) => setEmail(e.target.value),
     },
     {
-      label: "Sisa Cuti",
+      label: "Alamat",
       type: "text",
-      id: "sisa_cuti",
-      value: sisaCuti,
-      placeholder: "Masukkan sisa cuti karyawan",
-      onChange: (e) => setSisaCuti(e.target.value),
+      id: "address",
+      value: address,
+      placeholder: "Masukkan alamat perusahaan",
+      onChange: (e) => setAddress(e.target.value),
+    },
+    {
+      label: "Website",
+      type: "text",
+      id: "website",
+      value: website,
+      placeholder: "Masukkan jabatan perusahaan",
+      onChange: (e) => setWebsite(e.target.value),
+    },
+    {
+      label: "Nomor Telepon",
+      type: "text",
+      id: "phone",
+      value: phoneNumber,
+      placeholder: "Masukkan nomor telepon perusahaan",
+      onChange: (e) => setPhoneNumber(e.target.value),
+    },
+    {
+      label: "Cuti Per Tahun",
+      type: "text",
+      id: "max_cuti",
+      value: maxCuti,
+      placeholder: "Masukkan cuti per tahun perusahaan",
+      onChange: (e) => setMaxCuti(e.target.value),
     },
   ];
 
   return (
-    <div className={`${style.adminEmployees} ${loading ? "center" : ""}`}>
+    <div className={`${style.superAdminCompany} ${loading ? "center" : ""}`}>
       {loading ? (
         <Spinner type="admin" size={48} borderSize={5} />
       ) : (
         <>
           <div className={style.formCreate}>
-            <h2>Akun Karyawan</h2>
+            <h2>Perusahaan</h2>
             <div className={style.container}>
-              <h3>Buat Pengguna Baru</h3>
+              <h3>Buat Data Perushaan Baru</h3>
               <form className={style.form} onSubmit={submitHandler}>
                 <div className={style.formGroup}>
-                  <label htmlFor="name">Nama</label>
-                  <input type="text" id="name" />
+                  <div className={style.group}>
+                    <label htmlFor="name">Nama</label>
+                    <input type="text" id="name" />
+                  </div>
+                  <div className={style.group}>
+                    <label htmlFor="website">Website</label>
+                    <input type="text" id="website" />
+                  </div>
                 </div>
                 <div className={style.formGroup}>
-                  <label htmlFor="email">Email</label>
-                  <input type="text" id="email" />
+                  <div className={style.group}>
+                    <label htmlFor="email">Email</label>
+                    <input type="text" id="email" />
+                  </div>
+                  <div className={style.group}>
+                    <label htmlFor="phone_number">Nomor Telepon</label>
+                    <input type="text" id="phone_number" />
+                  </div>
                 </div>
                 <div className={style.formGroup}>
-                  <label htmlFor="position">Jabatan</label>
-                  <input type="text" id="position" />
+                  <div className={style.group}>
+                    <label htmlFor="address">Alamat</label>
+                    <input type="text" id="address" />
+                  </div>
+                  <div className={style.group}>
+                    <label htmlFor="maxCuti">Cuti Per Tahun</label>
+                    <input type="text" id="maxCuti" />
+                  </div>
                 </div>
                 <button type="submit">Buat Akun</button>
               </form>
@@ -168,23 +204,27 @@ const AdminEmployees = () => {
           </div>
           <div
             className={`${style.accountCreated}  ${
-              showCreateAcc && style.show
+              showCreateAlert && style.show
             }`}
           >
-            <div className={style.info}>Akun karyawan berhasil dibuat!</div>
+            <div className={style.info}>Data perusahaan berhasil dibuat!</div>
+            <span>Nama : Komparasi Coba ID</span>
             <span>Email : komparasi@coba.id</span>
-            <span>Password : 2hdhs323d@asd8@</span>
+            <span>Alamat : Jl. Coba Coba No. 1</span>
+            <span>Website : komparasi.coba.id</span>
+            <span>Nomor Telepon : 022-12345678</span>
+            <span>Cuti Per Tahun : 15</span>
           </div>
-          <div className={style.listEmployees}>
+          <div className={style.listCompanies}>
             <div className={style.title}>
-              <h3>Daftar Karyawan</h3>
+              <h3>Daftar Administator</h3>
               <input type="text" placeholder="Cari nama atau jabatan" />
             </div>
             <Table rows={rows} iconLabel="Aksi" icons={buttonAction} />
           </div>
           {showPopup && (
             <FormUpdate
-              title="Ubah Data Karyawan"
+              title="Ubah Data Administator"
               formInputs={formInputsEmployee}
               backHandle={toggleEditForm}
             />
@@ -202,4 +242,4 @@ const AdminEmployees = () => {
   );
 };
 
-export default AdminEmployees;
+export default SuperAdminCompany;

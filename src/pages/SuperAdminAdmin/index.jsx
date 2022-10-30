@@ -11,7 +11,7 @@ import {
 } from "../../scripts/backgroundModal";
 import style from "./style.module.css";
 
-const AdminEmployees = () => {
+const SuperAdminAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [showCreateAcc, setShowCreateAcc] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -19,14 +19,13 @@ const AdminEmployees = () => {
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [email, setEmail] = useState("");
-  const [sisaCuti, setSisaCuti] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
 
-    document.title = "Akun Karyawan - Admin Dashboard";
+    document.title = "Administator - Super Admin Dashboard";
   }, []);
 
   const rows = [
@@ -34,13 +33,13 @@ const AdminEmployees = () => {
       nama: "Ahmad Sumandi Wijayakarto",
       jabatan: "IT Architecture",
       email: "ahmad@ankara.id",
-      sisa_cuti: "1",
+      perusahaan: "Gojek Indonesia",
     },
     {
       nama: "Angkara Messi",
       jabatan: "Cleaning Service",
       email: "messi@co.id",
-      sisa_cuti: "2",
+      perusahaan: "Shoope Indonesia",
     },
   ];
 
@@ -110,7 +109,7 @@ const AdminEmployees = () => {
       type: "text",
       id: "name",
       value: name,
-      placeholder: "Masukkan nama karyawan",
+      placeholder: "Masukkan nama administator",
       onChange: (e) => setName(e.target.value),
     },
     {
@@ -118,7 +117,7 @@ const AdminEmployees = () => {
       type: "text",
       id: "position",
       value: position,
-      placeholder: "Masukkan jabatan karyawan",
+      placeholder: "Masukkan jabatan administator",
       onChange: (e) => setPosition(e.target.value),
     },
     {
@@ -126,29 +125,21 @@ const AdminEmployees = () => {
       type: "email",
       id: "email",
       value: email,
-      placeholder: "Masukkan email karyawan",
+      placeholder: "Masukkan email administator",
       onChange: (e) => setEmail(e.target.value),
-    },
-    {
-      label: "Sisa Cuti",
-      type: "text",
-      id: "sisa_cuti",
-      value: sisaCuti,
-      placeholder: "Masukkan sisa cuti karyawan",
-      onChange: (e) => setSisaCuti(e.target.value),
     },
   ];
 
   return (
-    <div className={`${style.adminEmployees} ${loading ? "center" : ""}`}>
+    <div className={`${style.superAdminAdmin} ${loading ? "center" : ""}`}>
       {loading ? (
         <Spinner type="admin" size={48} borderSize={5} />
       ) : (
         <>
           <div className={style.formCreate}>
-            <h2>Akun Karyawan</h2>
+            <h2>Administator</h2>
             <div className={style.container}>
-              <h3>Buat Pengguna Baru</h3>
+              <h3>Buat Administator Baru</h3>
               <form className={style.form} onSubmit={submitHandler}>
                 <div className={style.formGroup}>
                   <label htmlFor="name">Nama</label>
@@ -162,6 +153,13 @@ const AdminEmployees = () => {
                   <label htmlFor="position">Jabatan</label>
                   <input type="text" id="position" />
                 </div>
+                <div className={style.formGroup}>
+                  <label htmlFor="company">Perusahaan</label>
+                  <select name="company" id="company">
+                    <option value="gojek">Gojek</option>
+                    <option value="shopee">Shopee</option>
+                  </select>
+                </div>
                 <button type="submit">Buat Akun</button>
               </form>
             </div>
@@ -171,20 +169,20 @@ const AdminEmployees = () => {
               showCreateAcc && style.show
             }`}
           >
-            <div className={style.info}>Akun karyawan berhasil dibuat!</div>
+            <div className={style.info}>Akun administator berhasil dibuat!</div>
             <span>Email : komparasi@coba.id</span>
             <span>Password : 2hdhs323d@asd8@</span>
           </div>
-          <div className={style.listEmployees}>
+          <div className={style.listAdministator}>
             <div className={style.title}>
-              <h3>Daftar Karyawan</h3>
+              <h3>Daftar Administator</h3>
               <input type="text" placeholder="Cari nama atau jabatan" />
             </div>
             <Table rows={rows} iconLabel="Aksi" icons={buttonAction} />
           </div>
           {showPopup && (
             <FormUpdate
-              title="Ubah Data Karyawan"
+              title="Ubah Data Administator"
               formInputs={formInputsEmployee}
               backHandle={toggleEditForm}
             />
@@ -202,4 +200,4 @@ const AdminEmployees = () => {
   );
 };
 
-export default AdminEmployees;
+export default SuperAdminAdmin;
