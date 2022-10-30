@@ -12,6 +12,13 @@ import UserCuti from "./pages/UserCuti";
 import UserReimburse from "./pages/UserReimburse";
 import AdminAbsensi from "./pages/AdminAbsensi";
 import DetailAdminAbsensi from "./pages/DetailAdminAbsensi";
+import AdminCuti from "./pages/AdminCuti";
+import DetailAdminCuti from "./pages/DetailAdminCuti";
+import AdminReimburse from "./pages/AdminReimburse";
+import DetailAdminReimburse from "./pages/DetailAdminReimburse";
+import AdminEmployees from "./pages/AdminEmployees";
+import SuperAdminAdmin from "./pages/SuperAdminAdmin";
+import SuperAdminCompany from "./pages/SuperAdminCompany";
 
 const App = () => {
   return (
@@ -31,13 +38,22 @@ const App = () => {
         <Route index element={<Navigate replace to="absensi" />} />
         <Route path="absensi" element={<AdminAbsensi />} />
         <Route path="absensi/:absensiId" element={<DetailAdminAbsensi />} />
+        <Route path="cuti" element={<AdminCuti />} />
+        <Route path="cuti/:cutiId" element={<DetailAdminCuti />} />
+        <Route path="reimbursement" element={<AdminReimburse />} />
+        <Route
+          path="reimbursement/:reimbursementId"
+          element={<DetailAdminReimburse />}
+        />
+        <Route path="employees" element={<AdminEmployees />} />
       </Route>
       <Route
         path="/super-admin"
         element={<Dashboard type="admin" role="super_admin" />}
       >
         <Route index element={<Navigate replace to="perusahaan" />} />
-        <Route path="perusahaan" element={<></>} />
+        <Route path="perusahaan" element={<SuperAdminCompany />} />
+        <Route path="administator" element={<SuperAdminAdmin />} />
       </Route>
       <Route path="/auth" element={<Auth />}>
         <Route index element={<Navigate replace to="login" />} />

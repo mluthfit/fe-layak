@@ -1,0 +1,126 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.formCreate h2,
+.superAdminCompany h3,
+.container > span {
+  text-transform: uppercase;
+}
+
+.container {
+  margin-top: 1rem;
+  background-color: var(--secondary-100);
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 1px 1px var(--blank-100);
+}
+
+.superAdminCompany .form {
+  display: flex;
+}
+
+.form .formGroup {
+  margin-right: 0.7rem;
+  flex: 1;
+}
+
+.formGroup .group {
+  margin-top: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--secondary-300);
+}
+
+.formGroup input,
+.form button,
+.formGroup select {
+  border: none;
+  outline: none;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid var(--secondary-300);
+  padding: 0.5rem 1rem;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border: 1px solid var(--primary-300);
+  background-color: var(--primary-100);
+}
+
+.form button {
+  align-self: flex-end;
+  padding: 0.5rem 2rem;
+  border-radius: 5px;
+  border: 1px solid var(--primary-400);
+  background-color: var(--primary-400);
+  color: var(--secondary-100);
+}
+
+.form button:hover {
+  box-shadow: 1px 1px 5px var(--primary-400);
+}
+
+.title > h3 {
+  color: var(--secondary-300);
+}
+
+.title input {
+  border: none;
+  outline: none;
+  padding: 0.7rem 1.3rem;
+  width: 350px;
+  box-shadow: 1px 1px 2px var(--blank-100);
+  border-radius: 5px;
+}
+
+.formCreate {
+  margin-bottom: 1rem;
+}
+
+.buttonAction {
+  cursor: pointer;
+}
+
+.buttonAction:hover {
+  background-color: var(--primary-300);
+  fill: var(--secondary-100);
+}
+
+.listCompanies {
+  margin-top: 3rem;
+}
+
+.accountCreated {
+  display: none;
+  width: 90%;
+  max-width: 600px;
+  background-color: var(--success-100);
+  padding: 1rem 1.5rem;
+  border-radius: 5px;
+  border: 2px solid var(--success-200);
+}
+
+.accountCreated.show {
+  display: block;
+}
+
+.accountCreated .info {
+  margin-bottom: 1.5rem;
+  color: var(--success-200);
+}
+
+.accountCreated span {
+  display: block;
+  margin-bottom: 0.3rem;
+}
