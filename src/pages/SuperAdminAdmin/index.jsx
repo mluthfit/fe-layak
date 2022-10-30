@@ -25,7 +25,7 @@ const SuperAdminAdmin = () => {
       setLoading(false);
     }, 1000);
 
-    document.title = "Administator - Super Admin Dashboard";
+    document.title = "Administator - Dev Dashboard";
   }, []);
 
   const rows = [

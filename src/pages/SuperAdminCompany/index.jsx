@@ -28,7 +28,7 @@ const SuperAdminCompany = () => {
       setLoading(false);
     }, 1000);
 
-    document.title = "Perusahaan - Super Admin Dashboard";
+    document.title = "Perusahaan - Dev Dashboard";
   }, []);
 
   const rows = [
