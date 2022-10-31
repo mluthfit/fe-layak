@@ -19,13 +19,16 @@ import DetailAdminReimburse from "./pages/DetailAdminReimburse";
 import AdminEmployees from "./pages/AdminEmployees";
 import SuperAdminAdmin from "./pages/SuperAdminAdmin";
 import SuperAdminCompany from "./pages/SuperAdminCompany";
+import DetailUserAbsensi from "./pages/DetailUserAbsensi";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<div>Hello World</div>} />
+      <Route path="/login" element={<Navigate replace to="/auth/login" />} />
       <Route path="/dashboard" element={<Dashboard type="user" role="admin" />}>
         <Route index element={<Overview />} />
+        <Route path="absensi/:absensiId" element={<DetailUserAbsensi />} />
         <Route path="cuti" element={<UserCuti />} />
         <Route path="cuti/:cutiId" element={<DetailUserCuti />} />
         <Route path="reimbursement" element={<UserReimburse />} />
