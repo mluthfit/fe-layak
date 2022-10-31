@@ -80,6 +80,10 @@
     font-weight: bold;
 }
 
+.buttons .takePhoto:hover {
+    box-shadow: 1px 1px 10px var(--primary-300);
+}
+
 .buttons .savePhoto {
     background-color: var(--primary-400);
     border: none;
@@ -88,4 +92,8 @@
     padding: 0.5rem;
     font-weight: bold;
     margin-left: 1rem;
+}
+
+.buttons .savePhoto:hover {
+    box-shadow: 1px 1px 10px var(--primary-400);
 }
