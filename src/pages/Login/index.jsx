@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import style from "./style.module.css";
 
@@ -6,6 +6,10 @@ const Login = (handleBack) => {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  useEffect(() => {
+    document.title = "LayaK - Login";
+  }, []);
 
   return (
     <div className={style.mainForm}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import style from "./style.module.css";
 
@@ -10,6 +10,10 @@ const ForgotPassword = () => {
     const navigateToLogin = () => {
         navigate('/auth/login');
     };
+
+    useEffect(() => {
+      document.title = "LayaK - Lupa Password";
+    }, []);
 
     return (
       <div className={style.mainForm}>
