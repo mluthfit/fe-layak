@@ -38,7 +38,7 @@ const DetailUserAbsensi = () => {
         },
         {
             title: "Tanggal Absensi",
-            value: "24 Oktober 2022",
+            value: "06 Oktober 2022",
             type: "text",
         },
         {

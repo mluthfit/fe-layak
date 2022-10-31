@@ -1,0 +1,24 @@
+.listAbsensi {
+    background-color: var(--secondary-100);
+    padding: 2rem 2.5rem;
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px var(--blank-100);
+}
+  
+.listAbsensi .header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.listBar {
+margin-top: 2rem;
+}
+
+.listBar .blank {
+background-color: var(--secondary-200);
+padding: 0.8rem 1rem;
+text-align: center;
+border-radius: 5px;
+}
+  

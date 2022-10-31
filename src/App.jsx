@@ -20,6 +20,7 @@ import AdminEmployees from "./pages/AdminEmployees";
 import SuperAdminAdmin from "./pages/SuperAdminAdmin";
 import SuperAdminCompany from "./pages/SuperAdminCompany";
 import DetailUserAbsensi from "./pages/DetailUserAbsensi";
+import UserAbsensi from "./pages/UserAbsensi";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
       <Route path="/login" element={<Navigate replace to="/auth/login" />} />
       <Route path="/dashboard" element={<Dashboard type="user" role="admin" />}>
         <Route index element={<Overview />} />
+        <Route path="absensi" element={<UserAbsensi />} />
         <Route path="absensi/:absensiId" element={<DetailUserAbsensi />} />
         <Route path="cuti" element={<UserCuti />} />
         <Route path="cuti/:cutiId" element={<DetailUserCuti />} />
