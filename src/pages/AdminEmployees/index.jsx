@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { ReactComponent as EditIcon } from "../../assets/icons/pencil.svg";
 import { ReactComponent as DeleteIcon } from "../../assets/icons/trash.svg";
 import Spinner from "../../components/Spinner";
@@ -16,187 +18,301 @@ const AdminEmployees = () => {
   const [showCreateAcc, setShowCreateAcc] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [name, setName] = useState("");
-  const [position, setPosition] = useState("");
-  const [email, setEmail] = useState("");
-  const [sisaCuti, setSisaCuti] = useState("");
+  const [userId, setUserId] = useState("0");
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+  const [formCreate, setFormCreate] = useState({
+    nama: "",
+    email: "",
+    position: "",
+  });
 
-    document.title = "Akun Karyawan - Admin Dashboard";
-  }, []);
+  const [formUpdate, setFormUpdate] = useState({
+    nama: "",
+    position: "",
+    email: "",
+    sisa_cuti: 0,
+  });
 
-  const rows = [
-    {
-      nama: "Ahmad Sumandi Wijayakarto",
-      jabatan: "IT Architecture",
-      email: "ahmad@ankara.id",
-      sisa_cuti: "1",
-    },
-    {
-      nama: "Angkara Messi",
-      jabatan: "Cleaning Service",
-      email: "messi@co.id",
-      sisa_cuti: "2",
-    },
-  ];
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    setShowCreateAcc(true);
+  const onChangeHandler = (getState, setState, key, value) => {
+    return setState({
+      ...getState,
+      [key]: Number.isInteger(getState[key]) ? parseInt(value) : value,
+    });
   };
 
-  const toggleEditForm = () => {
+  const showEditForm = (user) => {
     const mainbar = document.querySelector("#mainbar");
-    if (showPopup) {
-      hideBackgroundModal(mainbar);
-      setShowPopup(false);
-      return;
-    }
-
+    setUserId(user.id);
+    setFormUpdate({
+      nama: user.nama,
+      position: user.position,
+      email: user.email,
+      sisa_cuti: parseInt(user.sisa_cuti),
+    });
     showBackgroundModal(mainbar);
     setShowPopup(true);
   };
 
-  const toggleDeleteModal = () => {
+  const hideEditForm = () => {
     const mainbar = document.querySelector("#mainbar");
-    if (deleteModal) {
-      hideBackgroundModal(mainbar);
-      setDeleteModal(false);
-      return;
-    }
+    hideBackgroundModal(mainbar);
+    setShowPopup(false);
+  };
 
+  const showDeleteModal = ({ id }) => {
+    const mainbar = document.querySelector("#mainbar");
+    setUserId(id);
     showBackgroundModal(mainbar);
     setDeleteModal(true);
   };
 
-  const buttonAction = [
-    <>
-      <span
-        className={`requested ${style.buttonAction}`}
-        onClick={toggleEditForm}
-      >
-        <EditIcon />
-      </span>
-      <span
-        className={`danger ${style.buttonAction}`}
-        onClick={toggleDeleteModal}
-      >
-        <DeleteIcon />
-      </span>
-    </>,
-    <>
-      <span
-        className={`requested ${style.buttonAction}`}
-        onClick={toggleEditForm}
-      >
-        <EditIcon />
-      </span>
-      <span
-        className={`danger ${style.buttonAction}`}
-        onClick={toggleDeleteModal}
-      >
-        <DeleteIcon />
-      </span>
-    </>,
-  ];
+  const hideDeleteModal = () => {
+    const mainbar = document.querySelector("#mainbar");
+    hideBackgroundModal(mainbar);
+    setDeleteModal(false);
+  };
 
-  const formInputsEmployee = [
+  const inputsUpdate = [
     {
       label: "Nama",
       type: "text",
       id: "name",
-      value: name,
+      value: formUpdate.nama,
       placeholder: "Masukkan nama karyawan",
-      onChange: (e) => setName(e.target.value),
+      onChange: (e) =>
+        onChangeHandler(formUpdate, setFormUpdate, "nama", e.target.value),
     },
     {
       label: "Jabatan",
       type: "text",
       id: "position",
-      value: position,
+      value: formUpdate.position,
       placeholder: "Masukkan jabatan karyawan",
-      onChange: (e) => setPosition(e.target.value),
+      onChange: (e) =>
+        onChangeHandler(formUpdate, setFormUpdate, "position", e.target.value),
     },
     {
       label: "Email",
       type: "email",
       id: "email",
-      value: email,
+      value: formUpdate.email,
       placeholder: "Masukkan email karyawan",
-      onChange: (e) => setEmail(e.target.value),
+      onChange: (e) =>
+        onChangeHandler(formUpdate, setFormUpdate, "email", e.target.value),
     },
     {
       label: "Sisa Cuti",
-      type: "text",
+      type: "number",
       id: "sisa_cuti",
-      value: sisaCuti,
+      value: formUpdate.sisa_cuti,
       placeholder: "Masukkan sisa cuti karyawan",
-      onChange: (e) => setSisaCuti(e.target.value),
+      onChange: (e) =>
+        onChangeHandler(formUpdate, setFormUpdate, "sisa_cuti", e.target.value),
     },
   ];
 
+  const header = ["Nama", "Jabatan", "Email", "Sisa Cuti"];
+  const [table, setTable] = useState({
+    data: [],
+    action: [],
+  });
+
+  const fetchData = async () => {
+    let action = [];
+    try {
+      const {
+        data: { data: users },
+      } = await axios.get("/admin/users");
+      const mappedData = users.map((user) => {
+        action.push(
+          <>
+            <span
+              className={`requested ${style.buttonAction}`}
+              onClick={() => showEditForm(user)}
+            >
+              <EditIcon />
+            </span>
+            <span
+              className={`danger ${style.buttonAction}`}
+              onClick={() => showDeleteModal(user)}
+            >
+              <DeleteIcon />
+            </span>
+          </>
+        );
+
+        return {
+          nama: user.nama,
+          jabatan: user.position,
+          email: user.email,
+          sisa_cuti: user.sisa_cuti,
+        };
+      });
+
+      setTable({
+        data: mappedData,
+        action,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    setLoading(false);
+  };
+
+  const [userCreated, setUserCreated] = useState({
+    email: "",
+    password: "",
+  });
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const {
+        data: { data: user },
+      } = await axios.post("/admin/users", formCreate);
+      setUserCreated({
+        email: user.email,
+        password: "defaultpassword",
+      });
+
+      setShowCreateAcc(true);
+      setLoading(true);
+      fetchData();
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const submitDeleteHandler = async () => {
+    hideDeleteModal();
+
+    try {
+      await axios.delete(`/admin/users/${userId}`);
+      setLoading(true);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitUpdateHandler = async (e) => {
+    e.preventDefault();
+    hideEditForm();
+
+    try {
+      await axios.put(`/admin/users/${userId}`, formUpdate);
+      setLoading(true);
+      fetchData();
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    document.title = "Akun Karyawan - Admin Dashboard";
+  }, []);
+
   return (
-    <div className={`${style.adminEmployees} ${loading ? "center" : ""}`}>
-      {loading ? (
-        <Spinner type="admin" size={48} borderSize={5} />
-      ) : (
-        <>
-          <div className={style.formCreate}>
-            <h2>Akun Karyawan</h2>
-            <div className={style.container}>
-              <h3>Buat Pengguna Baru</h3>
-              <form className={style.form} onSubmit={submitHandler}>
-                <div className={style.formGroup}>
-                  <label htmlFor="name">Nama</label>
-                  <input type="text" id="name" />
-                </div>
-                <div className={style.formGroup}>
-                  <label htmlFor="email">Email</label>
-                  <input type="text" id="email" />
-                </div>
-                <div className={style.formGroup}>
-                  <label htmlFor="position">Jabatan</label>
-                  <input type="text" id="position" />
-                </div>
-                <button type="submit">Buat Akun</button>
-              </form>
+    <div className={style.adminEmployees}>
+      <div className={style.formCreate}>
+        <h2>Akun Karyawan</h2>
+        <div className={style.container}>
+          <h3>Buat Pengguna Baru</h3>
+          <form className={style.form} onSubmit={submitHandler}>
+            <div className={style.formGroup}>
+              <label htmlFor="name">Nama</label>
+              <input
+                type="text"
+                id="name"
+                placeholder="Masukkan nama baru"
+                onChange={(e) =>
+                  onChangeHandler(
+                    formCreate,
+                    setFormCreate,
+                    "nama",
+                    e.target.value
+                  )
+                }
+              />
             </div>
-          </div>
-          <div
-            className={`${style.accountCreated}  ${
-              showCreateAcc && style.show
-            }`}
-          >
-            <div className={style.info}>Akun karyawan berhasil dibuat!</div>
-            <span>Email : komparasi@coba.id</span>
-            <span>Password : 2hdhs323d@asd8@</span>
-          </div>
-          <div className={style.listEmployees}>
-            <div className={style.title}>
-              <h3>Daftar Karyawan</h3>
-              <input type="text" placeholder="Cari nama atau jabatan" />
+            <div className={style.formGroup}>
+              <label htmlFor="email">Email</label>
+              <input
+                type="text"
+                id="email"
+                placeholder="Masukkan email baru"
+                onChange={(e) =>
+                  onChangeHandler(
+                    formCreate,
+                    setFormCreate,
+                    "email",
+                    e.target.value
+                  )
+                }
+              />
             </div>
-            <Table rows={rows} iconLabel="Aksi" icons={buttonAction} />
-          </div>
-          {showPopup && (
-            <FormUpdate
-              title="Ubah Data Karyawan"
-              formInputs={formInputsEmployee}
-              backHandle={toggleEditForm}
+            <div className={style.formGroup}>
+              <label htmlFor="position">Jabatan</label>
+              <input
+                type="text"
+                id="position"
+                placeholder="Masukkan jabatan baru"
+                onChange={(e) =>
+                  onChangeHandler(
+                    formCreate,
+                    setFormCreate,
+                    "position",
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+            <button type="submit">Buat Akun</button>
+          </form>
+        </div>
+      </div>
+      <div
+        className={`${style.accountCreated}  ${showCreateAcc && style.show}`}
+      >
+        <div className={style.info}>Akun karyawan berhasil dibuat!</div>
+        <span>Email : {userCreated.email}</span>
+        <span>Password : {userCreated.password}</span>
+      </div>
+      <div className={style.listEmployees}>
+        <div className={style.title}>
+          <h3>Daftar Karyawan</h3>
+          <input type="text" placeholder="Cari nama atau jabatan" />
+        </div>
+        <div className={`${style.tableContainer} ${loading ? "center" : ""}`}>
+          {loading ? (
+            <Spinner type="admin" size={48} borderSize={5} />
+          ) : (
+            <Table
+              label={header}
+              rows={table.data}
+              icon={{ label: "Aksi", element: table.action }}
             />
           )}
-          {deleteModal && (
-            <RequestAction
-              title="Konfirmasi Hapus Data"
-              type="delete"
-              backHandle={toggleDeleteModal}
-            />
-          )}
-        </>
+        </div>
+      </div>
+      {showPopup && (
+        <FormUpdate
+          title="Ubah Data Karyawan"
+          formInputs={inputsUpdate}
+          submitHandle={submitUpdateHandler}
+          backHandle={hideEditForm}
+        />
+      )}
+      {deleteModal && (
+        <RequestAction
+          title="Konfirmasi Hapus Data"
+          type="delete"
+          submitHandle={submitDeleteHandler}
+          backHandle={hideDeleteModal}
+        />
       )}
     </div>
   );

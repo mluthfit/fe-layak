@@ -35,7 +35,7 @@
 }
 
 .historyRow .tbody .tr {
-  background-color: var(--secondary-200);
+  background-color: var(--request-50);
 }
 
 .tbody .tr:hover {
@@ -67,4 +67,10 @@
   display: flex;
   padding: 0.5rem;
   border-radius: 5px;
+}
+
+.notFound {
+  display: block;
+  margin-top: 2rem;
+  text-align: center;
 }

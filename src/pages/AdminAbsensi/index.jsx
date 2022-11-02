@@ -16,6 +16,7 @@ const AdminAbsensi = () => {
     document.title = "Absensi - Admin Dashboard";
   }, []);
 
+  const header = ["Nama", "Jabatan", "Jam Masuk"];
   const rowsDone = [
     {
       nama: "Ahmad Sumandi Wijayakarto",
@@ -62,9 +63,9 @@ const AdminAbsensi = () => {
               <input type="text" placeholder="Cari nama atau jabatan" />
             </div>
             <Table
+              label={header}
               rows={rowsDone}
-              iconLabel="Status"
-              icons={statusDone}
+              icon={{ label: "Status", element: statusDone }}
               href={hrefDone}
             />
           </div>
@@ -74,11 +75,11 @@ const AdminAbsensi = () => {
               <input type="text" placeholder="Cari nama atau jabatan" />
             </div>
             <Table
+              type="history"
+              label={header}
               rows={rowsDone}
-              iconLabel="Status"
-              icons={statusDone}
+              icon={{ label: "Status", element: statusDone }}
               href={hrefDone}
-              isHistory={true}
             />
           </div>
         </>
