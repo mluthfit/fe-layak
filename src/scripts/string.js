@@ -1,10 +1,27 @@
-const keyToCapitalize = (key, separator) => {
-  const splitString = key.split(separator);
-  return splitString
-    .map((word) => {
-      return word[0].toUpperCase() + word.substring(1);
-    })
-    .join(" ");
+const monthLabel = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
+
+const toDateFormat = (stringDate) => {
+  const newDate = new Date(stringDate);
+
+  const day = newDate.getDate();
+  const date = day < 10 ? `0${day}` : day;
+  const month = monthLabel[newDate.getMonth() + 1];
+  const year = newDate.getFullYear();
+
+  return `${date} ${month} ${year}`;
 };
 
-export { keyToCapitalize };
+export { toDateFormat };

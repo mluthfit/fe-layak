@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar-dates.svg";
 import { ReactComponent as DeclinedIcon } from "../../assets/icons/cross.svg";
@@ -7,6 +8,7 @@ import { ReactComponent as ApprovedIcon } from "../../assets/icons/check-marks.s
 import Spinner from "../../components/Spinner";
 import Table from "../../components/Table";
 import { getExactElementByClass } from "../../scripts/element";
+import { toDateFormat } from "../../scripts/string";
 import style from "./style.module.css";
 
 const AdminCuti = () => {
@@ -59,45 +61,72 @@ const AdminCuti = () => {
     fileInput.click();
   };
 
+  const header = ["Nama", "Jabatan", "Rentang Waktu"];
+  const [reqTable, setReqTable] = useState({
+    data: [],
+    status: [],
+    href: [],
+  });
+
+  const [historyTable, setHistoryTable] = useState({
+    data: [],
+    status: [],
+    href: [],
+  });
+
+  const fetchData = async (api, setState) => {
+    let [status, href] = [[], []];
+    try {
+      const {
+        data: { data },
+      } = await axios.get(api);
+      const mappedData = data.map((cuti) => {
+        const temp =
+          cuti.status === "Pending" ? (
+            <span className="requested">
+              <RequstedIcon />
+            </span>
+          ) : cuti.status === "Approved" ? (
+            <span className="success">
+              <ApprovedIcon />
+            </span>
+          ) : (
+            <span className="danger">
+              <DeclinedIcon />
+            </span>
+          );
+
+        status.push(temp);
+        href.push(`/admin/cuti/${cuti.id}`);
+        return {
+          nama: cuti.user.nama,
+          jabatan: cuti.user.position,
+          rentang_waktu: `${toDateFormat(cuti.start_date)} - ${toDateFormat(
+            cuti.end_date
+          )}`,
+        };
+      });
+
+      setState({
+        data: mappedData,
+        status,
+        href,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    setTimeout(() => {
+    (() => {
+      fetchData("/admin/leaves", setReqTable);
+      fetchData("/admin/leaves/history", setHistoryTable);
+
       setLoading(false);
-    }, 1000);
+    })();
 
     document.title = "Permintaan Cuti - Admin Dashboard";
   }, []);
-
-  const rowsDone = [
-    {
-      nama: "Ahmad Sumandi Wijayakarto",
-      jabatan: "IT Architecture",
-      rentang_waktu: "10 September 2022 - 15 September 2022",
-    },
-    {
-      nama: "Angkara Messi",
-      jabatan: "Cleaning Service",
-      rentang_waktu: "1 Oktober 2022 - 2 Oktober 2022",
-    },
-  ];
-
-  const hrefDone = ["/admin/cuti/1", "/admin/cuti/2"];
-  const statusNew = [
-    <span className="requested">
-      <RequstedIcon />
-    </span>,
-    <span className="requested">
-      <RequstedIcon />
-    </span>,
-  ];
-
-  const statusHistory = [
-    <span className="danger">
-      <DeclinedIcon />
-    </span>,
-    <span className="success">
-      <ApprovedIcon />
-    </span>,
-  ];
 
   return (
     <div className={`${style.adminCuti} ${loading ? "center" : ""}`}>
@@ -131,10 +160,10 @@ const AdminCuti = () => {
               </div>
             </div>
             <Table
-              rows={rowsDone}
-              iconLabel="Status"
-              icons={statusNew}
-              href={hrefDone}
+              label={header}
+              rows={reqTable.data}
+              icon={{ label: "Status", element: reqTable.status }}
+              href={reqTable.href}
             />
           </div>
           <div className={style.history}>
@@ -163,11 +192,11 @@ const AdminCuti = () => {
               </div>
             </div>
             <Table
-              rows={rowsDone}
-              iconLabel="Status"
-              icons={statusHistory}
-              href={hrefDone}
-              isHistory={true}
+              type="history"
+              label={header}
+              rows={historyTable.data}
+              icon={{ label: "Status", element: historyTable.status }}
+              href={historyTable.href}
             />
           </div>
         </>

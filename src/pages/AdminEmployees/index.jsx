@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ReactComponent as EditIcon } from "../../assets/icons/pencil.svg";
@@ -32,15 +33,10 @@ const AdminEmployees = () => {
     sisa_cuti: 0,
   });
 
-  const [userCreated, setUserCreated] = useState({
-    email: "",
-    password: "",
-  });
-
   const onChangeHandler = (getState, setState, key, value) => {
     return setState({
       ...getState,
-      [key]: value,
+      [key]: Number.isInteger(getState[key]) ? parseInt(value) : value,
     });
   };
 
@@ -163,6 +159,11 @@ const AdminEmployees = () => {
 
     setLoading(false);
   };
+
+  const [userCreated, setUserCreated] = useState({
+    email: "",
+    password: "",
+  });
 
   const submitHandler = async (e) => {
     e.preventDefault();

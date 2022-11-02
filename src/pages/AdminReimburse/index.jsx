@@ -6,6 +6,7 @@ import Spinner from "../../components/Spinner";
 import Table from "../../components/Table";
 import { getExactElementByClass } from "../../scripts/element";
 import style from "./style.module.css";
+import axios from "axios";
 
 const AdminReimburse = () => {
   const [loading, setLoading] = useState(true);
@@ -44,45 +45,70 @@ const AdminReimburse = () => {
     return;
   };
 
+  const header = ["Nama", "Jabatan", "Kebutuhan"];
+  const [reqTable, setReqTable] = useState({
+    data: [],
+    status: [],
+    href: [],
+  });
+
+  const [historyTable, setHistoryTable] = useState({
+    data: [],
+    status: [],
+    href: [],
+  });
+
+  const fetchData = async (api, setState) => {
+    let [status, href] = [[], []];
+    try {
+      const {
+        data: { data },
+      } = await axios.get(api);
+      const mappedData = data.map((reimburse) => {
+        const temp =
+          reimburse.status === "Pending" ? (
+            <span className="requested">
+              <RequstedIcon />
+            </span>
+          ) : reimburse.status === "Approved" ? (
+            <span className="success">
+              <ApprovedIcon />
+            </span>
+          ) : (
+            <span className="danger">
+              <DeclinedIcon />
+            </span>
+          );
+
+        status.push(temp);
+        href.push(`/admin/reimbursement/${reimburse.id}`);
+        return {
+          nama: reimburse.user.nama,
+          jabatan: reimburse.user.position,
+          kebutuhan: reimburse.kebutuhan,
+        };
+      });
+
+      setState({
+        data: mappedData,
+        status,
+        href,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    setTimeout(() => {
+    (() => {
+      fetchData("/admin/reimbursement", setReqTable);
+      fetchData("/admin/reimbursement/history", setHistoryTable);
+
       setLoading(false);
-    }, 1000);
+    })();
 
     document.title = "Permintaan Reimbursement - Admin Dashboard";
   }, []);
-
-  const rowsDone = [
-    {
-      nama: "Ahmad Sumandi Wijayakarto",
-      jabatan: "IT Architecture",
-      kebutuhan: "Makan Siang",
-    },
-    {
-      nama: "Angkara Messi",
-      jabatan: "Cleaning Service",
-      kebutuhan: "Operasional",
-    },
-  ];
-
-  const hrefDone = ["/admin/reimbursement/1", "/admin/reimbursement/2"];
-  const statusNew = [
-    <span className="requested">
-      <RequstedIcon />
-    </span>,
-    <span className="requested">
-      <RequstedIcon />
-    </span>,
-  ];
-
-  const statusHistory = [
-    <span className="danger">
-      <DeclinedIcon />
-    </span>,
-    <span className="success">
-      <ApprovedIcon />
-    </span>,
-  ];
 
   return (
     <div className={`${style.adminReimburse} ${loading ? "center" : ""}`}>
@@ -101,10 +127,10 @@ const AdminReimburse = () => {
               </div>
             </div>
             <Table
-              rows={rowsDone}
-              iconLabel="Status"
-              icons={statusNew}
-              href={hrefDone}
+              label={header}
+              rows={reqTable.data}
+              icon={{ label: "Status", element: reqTable.status }}
+              href={reqTable.href}
             />
           </div>
           <div className={style.history}>
@@ -127,11 +153,11 @@ const AdminReimburse = () => {
               </div>
             </div>
             <Table
-              rows={rowsDone}
-              iconLabel="Status"
-              icons={statusHistory}
-              href={hrefDone}
-              isHistory={true}
+              type="history"
+              label={header}
+              rows={historyTable.data}
+              icon={{ label: "Status", element: historyTable.status }}
+              href={historyTable.href}
             />
           </div>
         </>
