@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import Detail from "../../components/Detail";
 import RequestAction from "../../components/RequestAction";
 import Spinner from "../../components/Spinner";
@@ -7,81 +9,17 @@ import {
   hideBackgroundModal,
   showBackgroundModal,
 } from "../../scripts/backgroundModal";
+import { toDateFormat } from "../../scripts/string";
 import style from "./style.module.css";
 
 const DetailAdminCuti = () => {
-  const params = useParams();
-  console.log(params.cutiId);
+  const { cutiId } = useParams();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
+  const [declinedReason, setDeclinedReason] = useState("");
   const [approveModal, setApproveModal] = useState(false);
   const [declineModal, setDeclineModal] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    document.title = "Detail Permintaan Cuti - Admin Dashboard";
-  }, []);
-
-  const lists = [
-    {
-      title: "Nama",
-      value: "Ahmad Sodikin Alkabar",
-      type: "text",
-    },
-    {
-      title: "Jabatan",
-      value: "Junior Software Engineer",
-      type: "text",
-    },
-    {
-      title: "Email",
-      value: "ahmadsodikin64@amazon.id",
-      type: "text",
-    },
-    {
-      title: "Sisa Cuti Terakhir",
-      value: 5,
-      type: "text",
-    },
-    {
-      title: "Kategori Cuti",
-      value: "Lainnya",
-      type: "text",
-    },
-    {
-      title: "Rentang Waktu Cuti",
-      value: "2 Oktober 2022 - 5 Oktober 2022",
-      type: "text",
-    },
-    {
-      title: "Deskripsi",
-      value:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-      type: "text",
-      fontSize: "small",
-    },
-    {
-      title: "Dokumen Cuti",
-      value: "Unduh Dokumen",
-      type: "link",
-      href: "https://www.google.com",
-    },
-    {
-      title: "Status",
-      value: "Diajukan",
-      type: "text",
-    },
-    {
-      title: "Alasan Jika Ditolak",
-      value:
-        "Rentang waktu yang diusulkan tidak dapat diterima karena perusahaan membutuhkan produksi besar",
-      type: "text",
-      fontSize: "small",
-    },
-  ];
 
   const toggleApproveModal = () => {
     const mainbar = document.querySelector("#mainbar");
@@ -107,6 +45,169 @@ const DetailAdminCuti = () => {
     setDeclineModal(true);
   };
 
+  const approveHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data: response } = await axios.put(`/admin/leaves/${cutiId}`, {
+        status: "Approved",
+      });
+
+      if (response.success === "false") {
+        throw response.messages;
+      }
+
+      setLoading(true);
+      fetchDetail();
+    } catch (error) {
+      navigate("/admin/cuti", {
+        replace: true,
+        state: { type: "danger", message: error },
+      });
+    }
+
+    toggleApproveModal();
+  };
+
+  const declinedHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data: response } = await axios.put(`/admin/leaves/${cutiId}`, {
+        status: "Declined",
+        alasan_ditolak: declinedReason,
+      });
+
+      if (response.success === "false") {
+        throw response.messages;
+      }
+
+      setLoading(true);
+      fetchDetail();
+    } catch (error) {
+      navigate("/admin/reimbursement", {
+        replace: true,
+        state: { type: "danger", message: error },
+      });
+    }
+
+    toggleDeclineModal();
+  };
+
+  const [detail, setDetail] = useState({
+    name: "",
+    position: "",
+    email: "",
+    sisaCuti: "",
+    kategori: "",
+    rentang_waktu: "",
+    deskripsi: "",
+    dokumen: "",
+    status: "",
+    reason_declined: "-",
+  });
+
+  const lists = [
+    {
+      title: "Nama",
+      value: detail.name,
+      type: "text",
+    },
+    {
+      title: "Jabatan",
+      value: detail.position,
+      type: "text",
+    },
+    {
+      title: "Email",
+      value: detail.email,
+      type: "text",
+    },
+    {
+      title: "Sisa Cuti Terakhir",
+      value: detail.sisaCuti,
+      type: "text",
+    },
+    {
+      title: "Kategori Cuti",
+      value: detail.kategori,
+      type: "text",
+    },
+    {
+      title: "Rentang Waktu Cuti",
+      value: detail.rentang_waktu,
+      type: "text",
+    },
+    {
+      title: "Deskripsi",
+      value: detail.deskripsi,
+      type: "text",
+      fontSize: "small",
+    },
+    {
+      title: "Dokumen Cuti",
+      value: "Unduh Dokumen",
+      type: "link",
+      href: detail.dokumen,
+    },
+    {
+      title: "Status",
+      value: detail.status,
+      type: "text",
+      fontColor:
+        detail.status === "Approved"
+          ? "success"
+          : detail.status === "Declined"
+          ? "danger"
+          : "",
+    },
+    {
+      title: "Alasan Jika Ditolak",
+      value: detail.reason_declined || "-",
+      type: "text",
+      fontSize: "small",
+    },
+  ];
+
+  const fetchDetail = async () => {
+    try {
+      const { data: response } = await axios.get(`/admin/leaves/${cutiId}`);
+
+      if (response.success === "false") {
+        navigate("/admin/cuti");
+        throw response.messages;
+      }
+
+      setDetail({
+        name: response.data.user.nama,
+        position: response.data.user.position,
+        email: response.data.user.email,
+        sisaCuti: response.data.user.sisa_cuti,
+        kategori: response.data.tipe_cuti,
+        rentang_waktu: `${toDateFormat(
+          response.data.start_date
+        )} - ${toDateFormat(response.data.end_date)}`,
+        deskripsi: response.data.deskripsi,
+        dokumen: `${process.env.REACT_APP_STORAGE_URL}/${response.data.surat_cuti}`,
+        status: response.data.status,
+        reason_declined: response.data.alasan_ditolak,
+      });
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const id = parseInt(cutiId);
+    if (isNaN(id) || id <= 0) {
+      navigate("/admin/cuti");
+      return;
+    }
+
+    fetchDetail();
+    document.title = "Detail Permintaan Cuti - Admin Dashboard";
+  }, []);
+
   return (
     <div className={loading ? "center" : ""}>
       {loading ? (
@@ -116,18 +217,22 @@ const DetailAdminCuti = () => {
           <div className={style.header}>
             <h2>Detail Permintaan Cuti</h2>
             <div className={style.actions}>
-              <button
-                className={`success ${style.approve}`}
-                onClick={toggleApproveModal}
-              >
-                Terima
-              </button>
-              <button
-                className={`danger ${style.decline}`}
-                onClick={toggleDeclineModal}
-              >
-                Tolak
-              </button>
+              {detail.status === "Pending" && (
+                <>
+                  <button
+                    className={`success ${style.approve}`}
+                    onClick={toggleApproveModal}
+                  >
+                    Terima
+                  </button>
+                  <button
+                    className={`danger ${style.decline}`}
+                    onClick={toggleDeclineModal}
+                  >
+                    Tolak
+                  </button>
+                </>
+              )}
               <Link to="/admin/cuti" className="requested">
                 Kembali
               </Link>
@@ -137,6 +242,7 @@ const DetailAdminCuti = () => {
             <RequestAction
               title="Konfirmasi Permintaan"
               type="approve"
+              submitHandle={approveHandler}
               backHandle={toggleApproveModal}
             />
           )}
@@ -144,6 +250,8 @@ const DetailAdminCuti = () => {
             <RequestAction
               title="Alasan Menolak Permintaan"
               type="decline"
+              state={{ get: declinedReason, set: setDeclinedReason }}
+              submitHandle={declinedHandler}
               backHandle={toggleDeclineModal}
             />
           )}

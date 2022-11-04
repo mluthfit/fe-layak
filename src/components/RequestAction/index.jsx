@@ -35,11 +35,13 @@ const RequestAction = ({
         {type === "approve" && withInputFile && (
           <>
             <div
-              className={`${style.uploadFile} requested`}
+              className={`${style.uploadFile} ${
+                !state.get ? "requested" : style.uploaded
+              }`}
               onClick={fileInputClick}
             >
               <UploadIcon />
-              <span>{!state.get ? "Upload" : "Uploaded"}</span>
+              <span>{!state.get ? "Upload" : state.get.name}</span>
             </div>
             <input
               type="file"

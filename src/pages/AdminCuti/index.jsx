@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar-dates.svg";
 import { ReactComponent as DeclinedIcon } from "../../assets/icons/cross.svg";
@@ -12,6 +13,7 @@ import { toDateFormat } from "../../scripts/string";
 import style from "./style.module.css";
 
 const AdminCuti = () => {
+  const { state } = useLocation();
   const [loading, setLoading] = useState(true);
   const [filterDate, setFilterDate] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
@@ -146,6 +148,11 @@ const AdminCuti = () => {
               <input type="file" id="fileInput" />
             </div>
           </div>
+          {state?.message && (
+            <div className={`${style.flashMessage} ${state?.type}`}>
+              {state.message}
+            </div>
+          )}
           <div>
             <div className={style.title}>
               <h3>Baru</h3>

@@ -76,3 +76,9 @@
   flex-direction: column;
   align-items: center;
 }
+
+.uploaded {
+  fill: var(--primary-400);
+  color: var(--primary-400);
+  background-color: var(--primary-100);
+}

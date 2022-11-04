@@ -48,7 +48,28 @@ const DetailAdminReimburse = () => {
 
   const approveHandler = async (e) => {
     e.preventDefault();
-    console.log("hello");
+    try {
+      const formData = new FormData();
+      formData.append("status", "Approved");
+      formData.append("bukti_reimburse", reimbursePhoto);
+
+      const { data: response } = await axios.put(
+        `/admin/reimbursement/${reimbursementId}`,
+        formData
+      );
+
+      if (response.success === "false") {
+        throw response.messages;
+      }
+
+      setLoading(true);
+      fetchDetail();
+    } catch (error) {
+      navigate("/admin/reimbursement", {
+        replace: true,
+        state: { type: "danger", message: error },
+      });
+    }
 
     toggleApproveModal();
   };
@@ -68,7 +89,8 @@ const DetailAdminReimburse = () => {
         throw response.messages;
       }
 
-      navigate(`/admin/reimbursement/${reimbursementId}`);
+      setLoading(true);
+      fetchDetail();
     } catch (error) {
       navigate("/admin/reimbursement", {
         replace: true,
@@ -131,7 +153,7 @@ const DetailAdminReimburse = () => {
     },
     {
       title: "Bukti Pengembalian Dana",
-      value: "Unduh Reimbursement",
+      value: "Unduh Reimburse",
       type: "link",
       href: detail.reimburse,
     },
@@ -172,8 +194,8 @@ const DetailAdminReimburse = () => {
         kebutuhan: response.data.kebutuhan,
         dana: toCurrencyID(response.data.jumlah_uang),
         date: toDateFormat(response.data.tanggal_pembayaran),
-        proof: response.data.bukti_pembayaran,
-        reimburse: response.data.bukti_reimburse,
+        proof: `${process.env.REACT_APP_STORAGE_URL}/${response.data.bukti_pembayaran}`,
+        reimburse: `${process.env.REACT_APP_STORAGE_URL}/${response.data.bukti_reimburse}`,
         status: response.data.status,
         reason_declined: response.data.alasan_ditolak,
       });
@@ -185,8 +207,13 @@ const DetailAdminReimburse = () => {
   };
 
   useEffect(() => {
-    fetchDetail();
+    const id = parseInt(reimbursementId);
+    if (isNaN(id) || id <= 0) {
+      navigate("/admin/reimbursement");
+      return;
+    }
 
+    fetchDetail();
     document.title = "Detail Permintaan Reimbursement - Admin Dashboard";
   }, []);
 
