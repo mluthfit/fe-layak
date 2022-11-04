@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { ReactComponent as DeclinedIcon } from "../../assets/icons/cross.svg";
 import { ReactComponent as RequstedIcon } from "../../assets/icons/check-mark.svg";
 import { ReactComponent as ApprovedIcon } from "../../assets/icons/check-marks.svg";
@@ -9,6 +10,7 @@ import style from "./style.module.css";
 import axios from "axios";
 
 const AdminReimburse = () => {
+  const { state } = useLocation();
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState("all");
 
@@ -119,6 +121,11 @@ const AdminReimburse = () => {
           <div className={style.header}>
             <h2>Pengajuan Permintaan Reimbursement</h2>
           </div>
+          {state?.message && (
+            <div className={`${style.flashMessage} ${state?.type}`}>
+              {state.message}
+            </div>
+          )}
           <div>
             <div className={style.title}>
               <h3>Baru</h3>

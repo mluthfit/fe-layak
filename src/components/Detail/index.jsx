@@ -24,16 +24,20 @@ const Detail = ({ lists }) => {
               {item.value}
             </span>
           )}
-          {item.type === "link" && (
-            <a
-              href={item.href}
-              className={style.link}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              {item.value}
-            </a>
-          )}
+          {item.type === "link" &&
+            (item.href ? (
+              <a
+                href={item.href}
+                className={style.link}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {item.value}
+              </a>
+            ) : (
+              <span>-</span>
+            ))}
+
           {item.type === "image" && (
             <div className={style.image}>
               <img src={item.value} alt="placeholder" />

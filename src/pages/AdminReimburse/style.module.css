@@ -57,3 +57,10 @@
 .blue {
   fill: var(--primary-300);
 }
+
+.flashMessage {
+  padding: 1rem 1.3rem;
+  margin-bottom: 0.5rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}

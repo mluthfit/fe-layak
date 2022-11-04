@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import Detail from "../../components/Detail";
 import RequestAction from "../../components/RequestAction";
 import Spinner from "../../components/Spinner";
@@ -7,78 +9,18 @@ import {
   hideBackgroundModal,
   showBackgroundModal,
 } from "../../scripts/backgroundModal";
+import { toDateFormat, toCurrencyID } from "../../scripts/string";
 import style from "./style.module.css";
 
 const DetailAdminReimburse = () => {
-  const params = useParams();
-  console.log(params.reimbursementId);
+  const { reimbursementId } = useParams();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
+  const [declinedReason, setDeclinedReason] = useState("");
   const [approveModal, setApproveModal] = useState(false);
   const [declineModal, setDeclineModal] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    document.title = "Detail Permintaan Reimbursement - Admin Dashboard";
-  }, []);
-
-  const lists = [
-    {
-      title: "Nama",
-      value: "Ahmad Sodikin Alkabar",
-      type: "text",
-    },
-    {
-      title: "Jabatan",
-      value: "Junior Software Engineer",
-      type: "text",
-    },
-    {
-      title: "Email",
-      value: "ahmadsodikin64@amazon.id",
-      type: "text",
-    },
-    {
-      title: "Tanggal Bergabung",
-      value: "1 Juni 2021",
-      type: "text",
-    },
-    {
-      title: "Kebutuhan",
-      value: "Perangkat Elektronik",
-      type: "text",
-    },
-    {
-      title: "Jumlah Dana",
-      value: "Rp 512.000",
-      type: "text",
-    },
-    {
-      title: "Waktu Pemakaian Dana",
-      value: "11 Agustus 2022",
-      type: "text",
-    },
-    {
-      title: "Bukti Pemakaian Dana Pribadi",
-      value: "Unduh Bukti",
-      type: "link",
-      href: "https://www.google.com",
-    },
-    {
-      title: "Status",
-      value: "Diajukan",
-      type: "text",
-    },
-    {
-      title: "Alasan Jika Ditolak",
-      value: "-",
-      type: "text",
-      fontSize: "small",
-    },
-  ];
+  const [reimbursePhoto, setReimbursePhoto] = useState(null);
 
   const toggleApproveModal = () => {
     const mainbar = document.querySelector("#mainbar");
@@ -104,6 +46,150 @@ const DetailAdminReimburse = () => {
     setDeclineModal(true);
   };
 
+  const approveHandler = async (e) => {
+    e.preventDefault();
+    console.log("hello");
+
+    toggleApproveModal();
+  };
+
+  const declinedHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data: response } = await axios.put(
+        `/admin/reimbursement/${reimbursementId}`,
+        {
+          status: "Declined",
+          alasan_ditolak: declinedReason,
+        }
+      );
+
+      if (response.success === "false") {
+        throw response.messages;
+      }
+
+      navigate(`/admin/reimbursement/${reimbursementId}`);
+    } catch (error) {
+      navigate("/admin/reimbursement", {
+        replace: true,
+        state: { type: "danger", message: error },
+      });
+    }
+
+    toggleDeclineModal();
+  };
+
+  const [detail, setDetail] = useState({
+    name: "",
+    position: "",
+    email: "",
+    kebutuhan: "",
+    dana: "",
+    date: "",
+    proof: "",
+    reimburse: "",
+    status: "",
+    reason_declined: "-",
+  });
+
+  const lists = [
+    {
+      title: "Nama",
+      value: detail.name,
+      type: "text",
+    },
+    {
+      title: "Jabatan",
+      value: detail.position,
+      type: "text",
+    },
+    {
+      title: "Email",
+      value: detail.email,
+      type: "text",
+    },
+    {
+      title: "Kebutuhan",
+      value: detail.kebutuhan,
+      type: "text",
+    },
+    {
+      title: "Jumlah Dana",
+      value: detail.dana,
+      type: "text",
+    },
+    {
+      title: "Waktu Pemakaian Dana",
+      value: detail.date,
+      type: "text",
+    },
+    {
+      title: "Bukti Pemakaian Dana Pribadi",
+      value: "Unduh Bukti",
+      type: "link",
+      href: detail.proof,
+    },
+    {
+      title: "Bukti Pengembalian Dana",
+      value: "Unduh Reimbursement",
+      type: "link",
+      href: detail.reimburse,
+    },
+    {
+      title: "Status",
+      value: detail.status,
+      type: "text",
+      fontColor:
+        detail.status === "Approved"
+          ? "success"
+          : detail.status === "Declined"
+          ? "danger"
+          : "",
+    },
+    {
+      title: "Alasan Jika Ditolak",
+      value: detail.reason_declined || "-",
+      type: "text",
+      fontSize: "small",
+    },
+  ];
+
+  const fetchDetail = async () => {
+    try {
+      const { data: response } = await axios.get(
+        `/admin/reimbursement/${reimbursementId}`
+      );
+
+      if (response.success === "false") {
+        navigate("/admin/reimbursement");
+        throw response.messages;
+      }
+
+      setDetail({
+        name: response.data.user.nama,
+        position: response.data.user.position,
+        email: response.data.user.email,
+        kebutuhan: response.data.kebutuhan,
+        dana: toCurrencyID(response.data.jumlah_uang),
+        date: toDateFormat(response.data.tanggal_pembayaran),
+        proof: response.data.bukti_pembayaran,
+        reimburse: response.data.bukti_reimburse,
+        status: response.data.status,
+        reason_declined: response.data.alasan_ditolak,
+      });
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDetail();
+
+    document.title = "Detail Permintaan Reimbursement - Admin Dashboard";
+  }, []);
+
   return (
     <div className={loading ? "center" : ""}>
       {loading ? (
@@ -113,18 +199,22 @@ const DetailAdminReimburse = () => {
           <div className={style.header}>
             <h2>Detail Permintaan Reimbursement</h2>
             <div className={style.actions}>
-              <button
-                className={`success ${style.approve}`}
-                onClick={toggleApproveModal}
-              >
-                Terima
-              </button>
-              <button
-                className={`danger ${style.decline}`}
-                onClick={toggleDeclineModal}
-              >
-                Tolak
-              </button>
+              {detail.status === "Pending" && (
+                <>
+                  <button
+                    className={`success ${style.approve}`}
+                    onClick={toggleApproveModal}
+                  >
+                    Terima
+                  </button>
+                  <button
+                    className={`danger ${style.decline}`}
+                    onClick={toggleDeclineModal}
+                  >
+                    Tolak
+                  </button>
+                </>
+              )}
               <Link to="/admin/reimbursement" className="requested">
                 Kembali
               </Link>
@@ -134,6 +224,8 @@ const DetailAdminReimburse = () => {
             <RequestAction
               type="approve"
               title="Upload Bukti Pengembalian Dana"
+              state={{ get: reimbursePhoto, set: setReimbursePhoto }}
+              submitHandle={approveHandler}
               backHandle={toggleApproveModal}
               withInputFile={true}
             />
@@ -142,7 +234,9 @@ const DetailAdminReimburse = () => {
             <RequestAction
               title="Alasan Menolak Permintaan"
               type="decline"
+              state={{ get: declinedReason, set: setDeclinedReason }}
               backHandle={toggleDeclineModal}
+              submitHandle={declinedHandler}
             />
           )}
           <div className={style.detail}>

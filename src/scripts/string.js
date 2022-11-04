@@ -24,4 +24,11 @@ const toDateFormat = (stringDate) => {
   return `${date} ${month} ${year}`;
 };
 
-export { toDateFormat };
+const toCurrencyID = (number) => {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(number);
+};
+
+export { toDateFormat, toCurrencyID };
