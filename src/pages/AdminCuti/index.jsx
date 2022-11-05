@@ -14,12 +14,13 @@ import { toDateFormat } from "../../scripts/string";
 import style from "./style.module.css";
 
 const AdminCuti = () => {
+  const storageUrl = process.env.REACT_APP_STORAGE_URL;
   const { state } = useLocation();
   const [loading, setLoading] = useState(true);
   const [filterDate, setFilterDate] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
 
-  const [isUploaded, setIsUploaded] = useState(false);
+  const [templateUrl, setTemplateUrl] = useState(null);
 
   const toggleDateHandler = (e) => {
     let el = getExactElementByClass(e.target, `${style.button}`);
@@ -71,12 +72,8 @@ const AdminCuti = () => {
       const formData = new FormData();
       formData.append("template_surat_cuti", file);
 
-      const data = await axios.put(
-        "/admin/leaves/upload-template-surat-cuti",
-        formData
-      );
-      console.log(data);
-      setIsUploaded(true);
+      await axios.put("/admin/leaves/upload-template-surat-cuti", formData);
+      await fetchTemplate();
     } catch (error) {
       console.log(error);
     }
@@ -97,7 +94,7 @@ const AdminCuti = () => {
 
   const mappingData = (data, setState) => {
     let [status, href] = [[], []];
-    const mappedData = data.map((cuti) => {
+    const mappedData = data?.map((cuti) => {
       const temp =
         cuti.status === "Pending" ? (
           <span className="requested">
@@ -125,20 +122,48 @@ const AdminCuti = () => {
     });
 
     setState({
-      data: mappedData,
+      data: mappedData || [],
       status,
       href,
     });
   };
 
-  const fetchData = async () => {
-    const fetch1 = axios.get("/admin/leaves");
-    const fetch2 = axios.get("/admin/leaves/history");
+  const fetchTable = (api, setState) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(api)
+        .then(({ data: res }) => {
+          mappingData(res.data, setState);
+          resolve(`fetch ${api} success`);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
 
+  const fetchTemplate = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("/leaves/download-template-surat-cuti")
+        .then(({ data: res }) => {
+          setTemplateUrl(res.data.company.template_surat_cuti);
+          resolve("fetch template success");
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
+
+  const fetchData = async () => {
     try {
-      const response = await Promise.all([fetch1, fetch2]);
-      mappingData(response[0].data.data, setReqTable);
-      mappingData(response[1].data.data, setHistoryTable);
+      await Promise.all([
+        fetchTable("/admin/leaves", setReqTable),
+        fetchTable("/admin/leaves/history", setHistoryTable),
+        fetchTemplate(),
+      ]);
+
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -161,10 +186,14 @@ const AdminCuti = () => {
             <h2>Pengajuan Permintaan Cuti</h2>
             <div className={style.template}>
               <button className={style.button} onClick={openFileInputHandler}>
-                {isUploaded ? "Reupload" : "Upload"} Template
+                {templateUrl ? "Reupload" : "Upload"} Template
               </button>
-              {isUploaded && (
-                <a href="/download" target="_blank" rel="noopener noreferrer">
+              {templateUrl && (
+                <a
+                  href={`${storageUrl}/${templateUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <DownloadIcon width={"20px"} />
                 </a>
               )}

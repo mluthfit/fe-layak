@@ -15,6 +15,7 @@ const FormUpdate = ({ title, formInputs, submitHandle, backHandle }) => {
               value={formInput.value}
               placeholder={formInput.placeholder}
               onChange={formInput.onChange}
+              required
             />
           </div>
         ))}

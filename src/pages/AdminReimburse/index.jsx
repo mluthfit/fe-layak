@@ -61,9 +61,23 @@ const AdminReimburse = () => {
     href: [],
   });
 
+  const fetchTable = (api, setState) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(api)
+        .then(({ data: res }) => {
+          mappingData(res.data, setState);
+          resolve(`fetch ${api} success`);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
+
   const mappingData = (data, setState) => {
     let [status, href] = [[], []];
-    const mappedData = data.map((reimburse) => {
+    const mappedData = data?.map((reimburse) => {
       const temp =
         reimburse.status === "Pending" ? (
           <span className="requested">
@@ -89,20 +103,18 @@ const AdminReimburse = () => {
     });
 
     setState({
-      data: mappedData,
+      data: mappedData || [],
       status,
       href,
     });
   };
 
   const fetchData = async () => {
-    const fetch1 = axios.get("/admin/reimbursement");
-    const fetch2 = axios.get("/admin/reimbursement/history");
-
     try {
-      const response = await Promise.all([fetch1, fetch2]);
-      mappingData(response[0].data.data, setReqTable);
-      mappingData(response[1].data.data, setHistoryTable);
+      await Promise.all([
+        fetchTable("/admin/reimbursement", setReqTable),
+        fetchTable("/admin/reimbursement/history", setHistoryTable),
+      ]);
       setLoading(false);
     } catch (error) {
       console.log(error);

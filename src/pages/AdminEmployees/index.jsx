@@ -123,7 +123,7 @@ const AdminEmployees = () => {
       const {
         data: { data: users },
       } = await axios.get("/admin/users");
-      const mappedData = users.map((user) => {
+      const mappedData = users?.map((user) => {
         action.push(
           <>
             <span
@@ -150,7 +150,7 @@ const AdminEmployees = () => {
       });
 
       setTable({
-        data: mappedData,
+        data: mappedData || [],
         action,
       });
     } catch (error) {
@@ -236,6 +236,7 @@ const AdminEmployees = () => {
                     e.target.value
                   )
                 }
+                required
               />
             </div>
             <div className={style.formGroup}>
@@ -252,6 +253,7 @@ const AdminEmployees = () => {
                     e.target.value
                   )
                 }
+                required
               />
             </div>
             <div className={style.formGroup}>
@@ -268,6 +270,7 @@ const AdminEmployees = () => {
                     e.target.value
                   )
                 }
+                required
               />
             </div>
             <button type="submit">Buat Akun</button>

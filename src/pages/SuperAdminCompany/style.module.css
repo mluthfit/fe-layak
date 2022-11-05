@@ -99,6 +99,9 @@
 
 .listCompanies {
   margin-top: 3rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .accountCreated {
@@ -123,4 +126,8 @@
 .accountCreated span {
   display: block;
   margin-bottom: 0.3rem;
+}
+
+.tableContainer {
+  flex: 1;
 }
