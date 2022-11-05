@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ReactComponent as DeclinedIcon } from "../../assets/icons/cross.svg";
@@ -60,54 +61,56 @@ const AdminReimburse = () => {
     href: [],
   });
 
-  const fetchData = async (api, setState) => {
+  const mappingData = (data, setState) => {
     let [status, href] = [[], []];
+    const mappedData = data.map((reimburse) => {
+      const temp =
+        reimburse.status === "Pending" ? (
+          <span className="requested">
+            <RequstedIcon />
+          </span>
+        ) : reimburse.status === "Approved" ? (
+          <span className="success">
+            <ApprovedIcon />
+          </span>
+        ) : (
+          <span className="danger">
+            <DeclinedIcon />
+          </span>
+        );
+
+      status.push(temp);
+      href.push(`/admin/reimbursement/${reimburse.id}`);
+      return {
+        nama: reimburse.user.nama,
+        jabatan: reimburse.user.position,
+        kebutuhan: reimburse.kebutuhan,
+      };
+    });
+
+    setState({
+      data: mappedData,
+      status,
+      href,
+    });
+  };
+
+  const fetchData = async () => {
+    const fetch1 = axios.get("/admin/reimbursement");
+    const fetch2 = axios.get("/admin/reimbursement/history");
+
     try {
-      const {
-        data: { data },
-      } = await axios.get(api);
-      const mappedData = data.map((reimburse) => {
-        const temp =
-          reimburse.status === "Pending" ? (
-            <span className="requested">
-              <RequstedIcon />
-            </span>
-          ) : reimburse.status === "Approved" ? (
-            <span className="success">
-              <ApprovedIcon />
-            </span>
-          ) : (
-            <span className="danger">
-              <DeclinedIcon />
-            </span>
-          );
-
-        status.push(temp);
-        href.push(`/admin/reimbursement/${reimburse.id}`);
-        return {
-          nama: reimburse.user.nama,
-          jabatan: reimburse.user.position,
-          kebutuhan: reimburse.kebutuhan,
-        };
-      });
-
-      setState({
-        data: mappedData,
-        status,
-        href,
-      });
+      const response = await Promise.all([fetch1, fetch2]);
+      mappingData(response[0].data.data, setReqTable);
+      mappingData(response[1].data.data, setHistoryTable);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    (() => {
-      fetchData("/admin/reimbursement", setReqTable);
-      fetchData("/admin/reimbursement/history", setHistoryTable);
-
-      setLoading(false);
-    })();
+    fetchData();
 
     document.title = "Permintaan Reimbursement - Admin Dashboard";
   }, []);

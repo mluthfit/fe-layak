@@ -194,8 +194,8 @@ const DetailAdminReimburse = () => {
         kebutuhan: response.data.kebutuhan,
         dana: toCurrencyID(response.data.jumlah_uang),
         date: toDateFormat(response.data.tanggal_pembayaran),
-        proof: `${process.env.REACT_APP_STORAGE_URL}/${response.data.bukti_pembayaran}`,
-        reimburse: `${process.env.REACT_APP_STORAGE_URL}/${response.data.bukti_reimburse}`,
+        proof: response.data.bukti_pembayaran,
+        reimburse: response.data.bukti_reimburse,
         status: response.data.status,
         reason_declined: response.data.alasan_ditolak,
       });

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -17,6 +18,8 @@ const AdminCuti = () => {
   const [loading, setLoading] = useState(true);
   const [filterDate, setFilterDate] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
+
+  const [isUploaded, setIsUploaded] = useState(false);
 
   const toggleDateHandler = (e) => {
     let el = getExactElementByClass(e.target, `${style.button}`);
@@ -63,6 +66,22 @@ const AdminCuti = () => {
     fileInput.click();
   };
 
+  const submitTemplateHandler = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("template_surat_cuti", file);
+
+      const data = await axios.put(
+        "/admin/leaves/upload-template-surat-cuti",
+        formData
+      );
+      console.log(data);
+      setIsUploaded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const header = ["Nama", "Jabatan", "Rentang Waktu"];
   const [reqTable, setReqTable] = useState({
     data: [],
@@ -76,56 +95,58 @@ const AdminCuti = () => {
     href: [],
   });
 
-  const fetchData = async (api, setState) => {
+  const mappingData = (data, setState) => {
     let [status, href] = [[], []];
+    const mappedData = data.map((cuti) => {
+      const temp =
+        cuti.status === "Pending" ? (
+          <span className="requested">
+            <RequstedIcon />
+          </span>
+        ) : cuti.status === "Approved" ? (
+          <span className="success">
+            <ApprovedIcon />
+          </span>
+        ) : (
+          <span className="danger">
+            <DeclinedIcon />
+          </span>
+        );
+
+      status.push(temp);
+      href.push(`/admin/cuti/${cuti.id}`);
+      return {
+        nama: cuti.user.nama,
+        jabatan: cuti.user.position,
+        rentang_waktu: `${toDateFormat(cuti.start_date)} - ${toDateFormat(
+          cuti.end_date
+        )}`,
+      };
+    });
+
+    setState({
+      data: mappedData,
+      status,
+      href,
+    });
+  };
+
+  const fetchData = async () => {
+    const fetch1 = axios.get("/admin/leaves");
+    const fetch2 = axios.get("/admin/leaves/history");
+
     try {
-      const {
-        data: { data },
-      } = await axios.get(api);
-      const mappedData = data.map((cuti) => {
-        const temp =
-          cuti.status === "Pending" ? (
-            <span className="requested">
-              <RequstedIcon />
-            </span>
-          ) : cuti.status === "Approved" ? (
-            <span className="success">
-              <ApprovedIcon />
-            </span>
-          ) : (
-            <span className="danger">
-              <DeclinedIcon />
-            </span>
-          );
-
-        status.push(temp);
-        href.push(`/admin/cuti/${cuti.id}`);
-        return {
-          nama: cuti.user.nama,
-          jabatan: cuti.user.position,
-          rentang_waktu: `${toDateFormat(cuti.start_date)} - ${toDateFormat(
-            cuti.end_date
-          )}`,
-        };
-      });
-
-      setState({
-        data: mappedData,
-        status,
-        href,
-      });
+      const response = await Promise.all([fetch1, fetch2]);
+      mappingData(response[0].data.data, setReqTable);
+      mappingData(response[1].data.data, setHistoryTable);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    (() => {
-      fetchData("/admin/leaves", setReqTable);
-      fetchData("/admin/leaves/history", setHistoryTable);
-
-      setLoading(false);
-    })();
+    fetchData();
 
     document.title = "Permintaan Cuti - Admin Dashboard";
   }, []);
@@ -140,12 +161,18 @@ const AdminCuti = () => {
             <h2>Pengajuan Permintaan Cuti</h2>
             <div className={style.template}>
               <button className={style.button} onClick={openFileInputHandler}>
-                Reupload Template
+                {isUploaded ? "Reupload" : "Upload"} Template
               </button>
-              <a href="/download" target="_blank" rel="noopener noreferrer">
-                <DownloadIcon width={"20px"} />
-              </a>
-              <input type="file" id="fileInput" />
+              {isUploaded && (
+                <a href="/download" target="_blank" rel="noopener noreferrer">
+                  <DownloadIcon width={"20px"} />
+                </a>
+              )}
+              <input
+                type="file"
+                id="fileInput"
+                onChange={(e) => submitTemplateHandler(e.target.files[0])}
+              />
             </div>
           </div>
           {state?.message && (
