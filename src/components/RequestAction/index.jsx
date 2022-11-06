@@ -8,7 +8,7 @@ const RequestAction = ({
   submitHandle,
   backHandle,
   state,
-  withInputFile,
+  uploadFile,
 }) => {
   const fileInputClick = () => {
     const fileInput = document.getElementById("fileInput");
@@ -20,7 +20,7 @@ const RequestAction = ({
     <div className={style.requestAction}>
       <h2>{title}</h2>
       <form onSubmit={submitHandle}>
-        {type === "approve" && !withInputFile && (
+        {type === "approve" && !uploadFile && (
           <div className={style.alert}>
             <span>Apakah anda yakin menyetujui permintaan ini?</span>
             <span>Pastikan anda sudah cek data dengan benar</span>
@@ -32,7 +32,7 @@ const RequestAction = ({
             <span>Pastikan anda sudah cek data dengan benar</span>
           </div>
         )}
-        {type === "approve" && withInputFile && (
+        {type === "approve" && uploadFile && (
           <>
             <div
               className={`${style.uploadFile} ${
@@ -42,6 +42,14 @@ const RequestAction = ({
             >
               <UploadIcon />
               <span>{!state.get ? "Upload" : state.get.name}</span>
+              {uploadFile.showProgressBar && (
+                <div className={style.uploadBar}>
+                  <div
+                    className={style.progress}
+                    style={{ width: `${uploadFile.progress}%` }}
+                  ></div>
+                </div>
+              )}
             </div>
             <input
               type="file"

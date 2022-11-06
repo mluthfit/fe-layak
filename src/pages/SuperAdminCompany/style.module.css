@@ -22,13 +22,16 @@
   display: flex;
 }
 
-.form .formGroup {
-  margin-right: 0.7rem;
+.form .formContainer {
   flex: 1;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.formGroup .group {
-  margin-top: 1rem;
+.form .formGroup {
+  margin-top: 0.5rem;
+  margin-right: 0.7rem;
+  flex: 1 0 30%;
 }
 
 .formGroup label {
@@ -56,6 +59,12 @@
 .formGroup select:focus {
   border: 1px solid var(--primary-300);
   background-color: var(--primary-100);
+}
+
+.formGroup .error {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
 }
 
 .form button {

@@ -33,6 +33,44 @@ const AdminEmployees = () => {
     sisa_cuti: 0,
   });
 
+  const [formCreateError, setFormCreateError] = useState({
+    nama: "",
+    email: "",
+    position: "",
+  });
+
+  const [formUpdateError, setFormUpdateError] = useState({
+    nama: "",
+    email: "",
+    position: "",
+    sisa_cuti: "",
+  });
+
+  const resetFormCreate = () => {
+    setFormCreate({
+      nama: "",
+      email: "",
+      position: "",
+    });
+  };
+
+  const resetFormCreateError = () => {
+    setFormCreateError({
+      nama: "",
+      email: "",
+      position: "",
+    });
+  };
+
+  const resetFormUpdateError = () => {
+    setFormUpdateError({
+      nama: "",
+      email: "",
+      position: "",
+      sisa_cuti: "",
+    });
+  };
+
   const onChangeHandler = (getState, setState, key, value) => {
     return setState({
       ...getState,
@@ -76,7 +114,7 @@ const AdminEmployees = () => {
     {
       label: "Nama",
       type: "text",
-      id: "name",
+      id: "nama",
       value: formUpdate.nama,
       placeholder: "Masukkan nama karyawan",
       onChange: (e) =>
@@ -107,7 +145,10 @@ const AdminEmployees = () => {
       value: formUpdate.sisa_cuti,
       placeholder: "Masukkan sisa cuti karyawan",
       onChange: (e) =>
-        onChangeHandler(formUpdate, setFormUpdate, "sisa_cuti", e.target.value),
+        setFormUpdate({
+          ...formUpdate,
+          sisa_cuti: parseInt(e.target.value),
+        }),
     },
   ];
 
@@ -128,7 +169,10 @@ const AdminEmployees = () => {
           <>
             <span
               className={`requested ${style.buttonAction}`}
-              onClick={() => showEditForm(user)}
+              onClick={() => {
+                resetFormUpdateError();
+                showEditForm(user);
+              }}
             >
               <EditIcon />
             </span>
@@ -165,6 +209,15 @@ const AdminEmployees = () => {
     password: "",
   });
 
+  const onFormError = (error, setState) => {
+    error.forEach(({ field, message }) => {
+      setState((current) => ({
+        ...current,
+        [field]: message,
+      }));
+    });
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -177,16 +230,22 @@ const AdminEmployees = () => {
         password: "defaultpassword",
       });
 
+      resetFormCreate();
+      resetFormCreateError();
       setShowCreateAcc(true);
       setLoading(true);
       fetchData();
-    } catch (error) {
-      console.log(error.response);
+    } catch ({ response }) {
+      console.log(response);
+      if (Array.isArray(response.data)) {
+        onFormError(response.data, setFormCreateError);
+      }
     }
   };
 
   const submitDeleteHandler = async () => {
     hideDeleteModal();
+    console.log(userId);
 
     try {
       await axios.delete(`/admin/users/${userId}`);
@@ -199,15 +258,21 @@ const AdminEmployees = () => {
 
   const submitUpdateHandler = async (e) => {
     e.preventDefault();
-    hideEditForm();
 
     try {
       await axios.put(`/admin/users/${userId}`, formUpdate);
+      hideEditForm();
+      resetFormUpdateError();
       setLoading(true);
       fetchData();
-    } catch (error) {
-      console.log(error.response);
+    } catch ({ response }) {
+      console.log(response);
+      if (Array.isArray(response.data)) {
+        onFormError(response.data, setFormUpdateError);
+      }
     }
+
+    console.log(formUpdateError);
   };
 
   useEffect(() => {
@@ -238,6 +303,11 @@ const AdminEmployees = () => {
                 }
                 required
               />
+              {formCreateError.nama && (
+                <div className={`${style.error} danger`}>
+                  {formCreateError.nama}
+                </div>
+              )}
             </div>
             <div className={style.formGroup}>
               <label htmlFor="email">Email</label>
@@ -255,6 +325,11 @@ const AdminEmployees = () => {
                 }
                 required
               />
+              {formCreateError.email && (
+                <div className={`${style.error} danger`}>
+                  {formCreateError.email}
+                </div>
+              )}
             </div>
             <div className={style.formGroup}>
               <label htmlFor="position">Jabatan</label>
@@ -272,6 +347,11 @@ const AdminEmployees = () => {
                 }
                 required
               />
+              {formCreateError.position && (
+                <div className={`${style.error} danger`}>
+                  {formCreateError.position}
+                </div>
+              )}
             </div>
             <button type="submit">Buat Akun</button>
           </form>
@@ -305,6 +385,7 @@ const AdminEmployees = () => {
         <FormUpdate
           title="Ubah Data Karyawan"
           formInputs={inputsUpdate}
+          formError={formUpdateError}
           submitHandle={submitUpdateHandler}
           backHandle={hideEditForm}
         />

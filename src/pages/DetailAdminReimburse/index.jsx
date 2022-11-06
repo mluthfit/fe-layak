@@ -22,6 +22,9 @@ const DetailAdminReimburse = () => {
   const [declineModal, setDeclineModal] = useState(false);
   const [reimbursePhoto, setReimbursePhoto] = useState(null);
 
+  const [showProgressBar, setShowProgressBar] = useState(false);
+  const [progress, setProgress] = useState(0);
+
   const toggleApproveModal = () => {
     const mainbar = document.querySelector("#mainbar");
     if (approveModal) {
@@ -53,10 +56,18 @@ const DetailAdminReimburse = () => {
       formData.append("status", "Approved");
       formData.append("bukti_reimburse", reimbursePhoto);
 
+      setShowProgressBar(true);
       const { data: response } = await axios.put(
         `/admin/reimbursement/${reimbursementId}`,
-        formData
+        formData,
+        {
+          onUploadProgress: ({ loaded, total }) => {
+            const percent = Math.round((loaded / total) * 100);
+            setProgress(percent);
+          },
+        }
       );
+      setShowProgressBar(false);
 
       if (response.success === "false") {
         throw response.messages;
@@ -254,7 +265,7 @@ const DetailAdminReimburse = () => {
               state={{ get: reimbursePhoto, set: setReimbursePhoto }}
               submitHandle={approveHandler}
               backHandle={toggleApproveModal}
-              withInputFile={true}
+              uploadFile={{ showProgressBar, progress }}
             />
           )}
           {declineModal && (

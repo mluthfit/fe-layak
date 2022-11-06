@@ -27,11 +27,59 @@ const SuperAdminAdmin = () => {
     company_id: 0,
   });
 
+  const [formCreateError, setFormCreateError] = useState({
+    nama: "",
+    email: "",
+    position: "",
+    company_id: "",
+  });
+
   const [formUpdate, setFormUpdate] = useState({
     nama: "",
     position: "",
     email: "",
   });
+
+  const [formUpdateError, setFormUpdateError] = useState({
+    nama: "",
+    position: "",
+    email: "",
+  });
+
+  const onResetFormCreate = () => {
+    setFormCreate({
+      nama: "",
+      email: "",
+      position: "",
+      company_id: "",
+    });
+  };
+
+  const onResetFormCreateError = () => {
+    setFormCreateError({
+      nama: "",
+      email: "",
+      position: "",
+      company_id: 0,
+    });
+  };
+
+  const onResetFormUpdateError = () => {
+    setFormUpdateError({
+      nama: "",
+      position: "",
+      email: "",
+    });
+  };
+
+  const onFormError = (error, setState) => {
+    error.forEach(({ field, message }) => {
+      setState((current) => ({
+        ...current,
+        [field]: message,
+      }));
+    });
+  };
 
   const onChangeHandler = (getState, setState, key, value) => {
     return setState({
@@ -76,7 +124,7 @@ const SuperAdminAdmin = () => {
     {
       label: "Nama",
       type: "text",
-      id: "name",
+      id: "nama",
       value: formUpdate.nama,
       placeholder: "Masukkan nama karyawan",
       onChange: (e) =>
@@ -119,7 +167,10 @@ const SuperAdminAdmin = () => {
           <>
             <span
               className={`requested ${style.buttonAction}`}
-              onClick={() => showEditForm(user)}
+              onClick={() => {
+                onResetFormUpdateError();
+                showEditForm(user);
+              }}
             >
               <EditIcon />
             </span>
@@ -168,11 +219,16 @@ const SuperAdminAdmin = () => {
         password: "defaultpassword",
       });
 
+      onResetFormCreate();
+      onResetFormCreateError();
       setShowCreateAcc(true);
       setLoading(true);
       fetchData();
-    } catch (error) {
-      console.log(error.response);
+    } catch ({ response }) {
+      console.log(response);
+      if (Array.isArray(response.data)) {
+        onFormError(response.data, setFormCreateError);
+      }
     }
   };
 
@@ -190,14 +246,18 @@ const SuperAdminAdmin = () => {
 
   const submitUpdateHandler = async (e) => {
     e.preventDefault();
-    hideEditForm();
 
     try {
       await axios.put(`/super-admin/admin/${userId}`, formUpdate);
+      hideEditForm();
+      onResetFormUpdateError();
       setLoading(true);
       fetchData();
-    } catch (error) {
-      console.log(error.response);
+    } catch ({ response }) {
+      console.log(response);
+      if (Array.isArray(response.data)) {
+        onFormError(response.data, setFormUpdateError);
+      }
     }
   };
 
@@ -240,7 +300,7 @@ const SuperAdminAdmin = () => {
                   <label htmlFor="name">Nama</label>
                   <input
                     type="text"
-                    id="name"
+                    id="nama"
                     value={formCreate.nama}
                     onChange={(e) =>
                       onChangeHandler(
@@ -252,6 +312,11 @@ const SuperAdminAdmin = () => {
                     }
                     required
                   />
+                  {formCreateError.nama && (
+                    <div className={`${style.error} danger`}>
+                      {formCreateError.nama}
+                    </div>
+                  )}
                 </div>
                 <div className={style.formGroup}>
                   <label htmlFor="email">Email</label>
@@ -269,6 +334,11 @@ const SuperAdminAdmin = () => {
                     }
                     required
                   />
+                  {formCreateError.email && (
+                    <div className={`${style.error} danger`}>
+                      {formCreateError.email}
+                    </div>
+                  )}
                 </div>
                 <div className={style.formGroup}>
                   <label htmlFor="position">Jabatan</label>
@@ -286,6 +356,11 @@ const SuperAdminAdmin = () => {
                     }
                     required
                   />
+                  {formCreateError.position && (
+                    <div className={`${style.error} danger`}>
+                      {formCreateError.position}
+                    </div>
+                  )}
                 </div>
                 <div className={style.formGroup}>
                   <label htmlFor="company">Perusahaan</label>
@@ -337,6 +412,7 @@ const SuperAdminAdmin = () => {
               title="Ubah Data Administator"
               formInputs={inputsUpdate}
               submitHandle={submitUpdateHandler}
+              formError={formUpdateError}
               backHandle={hideEditForm}
             />
           )}

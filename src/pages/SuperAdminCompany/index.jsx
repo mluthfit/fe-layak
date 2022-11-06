@@ -29,6 +29,15 @@ const SuperAdminCompany = () => {
     jatah_cuti: 0,
   });
 
+  const [formCreateError, setFormCreateError] = useState({
+    nama: "",
+    email: "",
+    alamat: "",
+    web: "",
+    no_hp: "",
+    jatah_cuti: "",
+  });
+
   const [formUpdate, setFormUpdate] = useState({
     nama: "",
     email: "",
@@ -37,6 +46,57 @@ const SuperAdminCompany = () => {
     no_hp: "",
     jatah_cuti: 0,
   });
+
+  const [formUpdateError, setFormUpdateError] = useState({
+    nama: "",
+    email: "",
+    alamat: "",
+    web: "",
+    no_hp: "",
+    jatah_cuti: "",
+  });
+
+  const resetFormCreateError = () => {
+    setFormCreateError({
+      nama: "",
+      email: "",
+      alamat: "",
+      web: "",
+      no_hp: "",
+      jatah_cuti: "",
+    });
+  };
+
+  const resetFormCreate = () => {
+    setFormCreate({
+      nama: "",
+      email: "",
+      alamat: "",
+      web: "",
+      no_hp: "",
+      jatah_cuti: 0,
+    });
+  };
+
+  const resetFormUpdateError = () => {
+    setFormUpdateError({
+      nama: "",
+      email: "",
+      alamat: "",
+      web: "",
+      no_hp: "",
+      jatah_cuti: "",
+    });
+  };
+
+  const onFormError = (error, setState) => {
+    error.forEach(({ field, message }) => {
+      setState((current) => ({
+        ...current,
+        [field]: message,
+      }));
+    });
+  };
 
   const onChangeHandler = (getState, setState, key, value) => {
     return setState({
@@ -83,7 +143,7 @@ const SuperAdminCompany = () => {
     {
       label: "Nama",
       type: "text",
-      id: "name",
+      id: "nama",
       value: formUpdate.nama,
       placeholder: "Masukkan nama perusahaan",
       onChange: (e) =>
@@ -101,7 +161,7 @@ const SuperAdminCompany = () => {
     {
       label: "Alamat",
       type: "text",
-      id: "address",
+      id: "alamat",
       value: formUpdate.alamat,
       placeholder: "Masukkan alamat perusahaan",
       onChange: (e) =>
@@ -110,7 +170,7 @@ const SuperAdminCompany = () => {
     {
       label: "Website",
       type: "text",
-      id: "website",
+      id: "web",
       value: formUpdate.web,
       placeholder: "Masukkan jabatan perusahaan",
       onChange: (e) =>
@@ -119,7 +179,7 @@ const SuperAdminCompany = () => {
     {
       label: "Nomor Telepon",
       type: "text",
-      id: "phone",
+      id: "no_hp",
       value: formUpdate.no_hp,
       placeholder: "Masukkan nomor telepon perusahaan",
       onChange: (e) =>
@@ -128,16 +188,14 @@ const SuperAdminCompany = () => {
     {
       label: "Cuti Per Tahun",
       type: "text",
-      id: "max_cuti",
+      id: "jatah_cuti",
       value: formUpdate.jatah_cuti,
       placeholder: "Masukkan cuti per tahun perusahaan",
       onChange: (e) =>
-        onChangeHandler(
-          formUpdate,
-          setFormUpdate,
-          "jatah_cuti",
-          e.target.value
-        ),
+        setFormUpdate({
+          ...formUpdate,
+          jatah_cuti: parseInt(e.target.value),
+        }),
     },
   ];
 
@@ -158,7 +216,10 @@ const SuperAdminCompany = () => {
           <>
             <span
               className={`requested ${style.buttonAction}`}
-              onClick={() => showEditForm(company)}
+              onClick={() => {
+                resetFormUpdateError();
+                showEditForm(company);
+              }}
             >
               <EditIcon />
             </span>
@@ -216,10 +277,15 @@ const SuperAdminCompany = () => {
       });
 
       setShowCreateAlert(true);
+      resetFormCreate();
+      resetFormCreateError();
       setLoading(true);
       fetchData();
-    } catch (error) {
-      console.log(error.response);
+    } catch ({ response }) {
+      console.log(response);
+      if (Array.isArray(response.data)) {
+        onFormError(response.data, setFormCreateError);
+      }
     }
   };
 
@@ -237,18 +303,18 @@ const SuperAdminCompany = () => {
 
   const submitUpdateHandler = async (e) => {
     e.preventDefault();
-    hideEditForm();
 
     try {
-      const data = await axios.put(
-        `/super-admin/companies/${companyId}`,
-        formUpdate
-      );
-      console.log(data);
+      await axios.put(`/super-admin/companies/${companyId}`, formUpdate);
+      hideEditForm();
       setLoading(true);
+      resetFormUpdateError();
       fetchData();
-    } catch (error) {
-      console.log(error.response);
+    } catch ({ response }) {
+      console.log(response);
+      if (Array.isArray(response.data)) {
+        onFormError(response.data, setFormUpdateError);
+      }
     }
   };
 
@@ -264,8 +330,8 @@ const SuperAdminCompany = () => {
         <div className={style.container}>
           <h3>Buat Data Perushaan Baru</h3>
           <form className={style.form} onSubmit={submitHandler}>
-            <div className={style.formGroup}>
-              <div className={style.group}>
+            <div className={style.formContainer}>
+              <div className={style.formGroup}>
                 <label htmlFor="name">Nama</label>
                 <input
                   type="text"
@@ -281,27 +347,13 @@ const SuperAdminCompany = () => {
                   }
                   required
                 />
+                {formCreateError.email && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.email}
+                  </div>
+                )}
               </div>
-              <div className={style.group}>
-                <label htmlFor="website">Website</label>
-                <input
-                  type="text"
-                  id="website"
-                  value={formCreate.web}
-                  onChange={(e) =>
-                    onChangeHandler(
-                      formCreate,
-                      setFormCreate,
-                      "web",
-                      e.target.value
-                    )
-                  }
-                  required
-                />
-              </div>
-            </div>
-            <div className={style.formGroup}>
-              <div className={style.group}>
+              <div className={style.formGroup}>
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
@@ -317,27 +369,13 @@ const SuperAdminCompany = () => {
                   }
                   required
                 />
+                {formCreateError.email && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.email}
+                  </div>
+                )}
               </div>
-              <div className={style.group}>
-                <label htmlFor="phone_number">Nomor Telepon</label>
-                <input
-                  type="text"
-                  id="phone_number"
-                  value={formCreate.no_hp}
-                  onChange={(e) =>
-                    onChangeHandler(
-                      formCreate,
-                      setFormCreate,
-                      "no_hp",
-                      e.target.value
-                    )
-                  }
-                  required
-                />
-              </div>
-            </div>
-            <div className={style.formGroup}>
-              <div className={style.group}>
+              <div className={style.formGroup}>
                 <label htmlFor="address">Alamat</label>
                 <input
                   type="text"
@@ -353,8 +391,56 @@ const SuperAdminCompany = () => {
                   }
                   required
                 />
+                {formCreateError.alamat && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.alamat}
+                  </div>
+                )}
               </div>
-              <div className={style.group}>
+              <div className={style.formGroup}>
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  value={formCreate.web}
+                  onChange={(e) =>
+                    onChangeHandler(
+                      formCreate,
+                      setFormCreate,
+                      "web",
+                      e.target.value
+                    )
+                  }
+                />
+                {formCreateError.web && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.web}
+                  </div>
+                )}
+              </div>
+              <div className={style.formGroup}>
+                <label htmlFor="phone_number">Nomor Telepon</label>
+                <input
+                  type="text"
+                  id="phone_number"
+                  value={formCreate.no_hp}
+                  onChange={(e) =>
+                    onChangeHandler(
+                      formCreate,
+                      setFormCreate,
+                      "no_hp",
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+                {formCreateError.no_hp && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.no_hp}
+                  </div>
+                )}
+              </div>
+              <div className={style.formGroup}>
                 <label htmlFor="maxCuti">Cuti Per Tahun</label>
                 <input
                   type="text"
@@ -370,6 +456,11 @@ const SuperAdminCompany = () => {
                   }
                   required
                 />
+                {formCreateError.jatah_cuti && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.jatah_cuti}
+                  </div>
+                )}
               </div>
             </div>
             <button type="submit">Buat Akun</button>
@@ -408,6 +499,7 @@ const SuperAdminCompany = () => {
         <FormUpdate
           title="Ubah Data Administator"
           formInputs={inputsUpdate}
+          formError={formUpdateError}
           submitHandle={submitUpdateHandler}
           backHandle={hideEditForm}
         />

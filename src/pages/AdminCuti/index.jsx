@@ -14,12 +14,15 @@ import { toDateFormat } from "../../scripts/string";
 import style from "./style.module.css";
 
 const AdminCuti = () => {
-  const storageUrl = process.env.REACT_APP_STORAGE_URL;
   const { state } = useLocation();
+  const storageUrl = process.env.REACT_APP_STORAGE_URL;
+
   const [loading, setLoading] = useState(true);
   const [filterDate, setFilterDate] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
 
+  const [showProgressBar, setShowProgressBar] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [templateUrl, setTemplateUrl] = useState(null);
 
   const toggleDateHandler = (e) => {
@@ -72,7 +75,15 @@ const AdminCuti = () => {
       const formData = new FormData();
       formData.append("template_surat_cuti", file);
 
-      await axios.put("/admin/leaves/upload-template-surat-cuti", formData);
+      setShowProgressBar(true);
+      await axios.put("/admin/leaves/upload-template-surat-cuti", formData, {
+        onUploadProgress: ({ loaded, total }) => {
+          const percent = Math.round((loaded / total) * 100);
+          setProgress(percent);
+        },
+      });
+      setShowProgressBar(false);
+
       await fetchTemplate();
     } catch (error) {
       console.log(error);
@@ -183,26 +194,36 @@ const AdminCuti = () => {
       ) : (
         <>
           <div className={style.header}>
-            <h2>Pengajuan Permintaan Cuti</h2>
-            <div className={style.template}>
-              <button className={style.button} onClick={openFileInputHandler}>
-                {templateUrl ? "Reupload" : "Upload"} Template
-              </button>
-              {templateUrl && (
-                <a
-                  href={`${storageUrl}/${templateUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <DownloadIcon width={"20px"} />
-                </a>
-              )}
-              <input
-                type="file"
-                id="fileInput"
-                onChange={(e) => submitTemplateHandler(e.target.files[0])}
-              />
+            <div className={style.main}>
+              <h2>Pengajuan Permintaan Cuti</h2>
+              <div className={style.template}>
+                <button className={style.button} onClick={openFileInputHandler}>
+                  {templateUrl ? "Reupload" : "Upload"} Template
+                </button>
+                {templateUrl && (
+                  <a
+                    href={`${storageUrl}/${templateUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <DownloadIcon width={"20px"} />
+                  </a>
+                )}
+                <input
+                  type="file"
+                  id="fileInput"
+                  onChange={(e) => submitTemplateHandler(e.target.files[0])}
+                />
+              </div>
             </div>
+            {showProgressBar && (
+              <div className={style.uploadBar}>
+                <div
+                  className={style.progress}
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            )}
           </div>
           {state?.message && (
             <div className={`${style.flashMessage} ${state?.type}`}>

@@ -1,14 +1,28 @@
 .header {
+  margin-bottom: 1rem;
+}
+
+.header .main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
 }
 
 .header .template {
   display: flex;
   align-items: center;
   margin-left: 1rem;
+}
+
+.uploadBar {
+  margin-top: 0.3rem;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.uploadBar .progress {
+  height: 5px;
+  background-color: var(--secondary-300);
 }
 
 .template .button {

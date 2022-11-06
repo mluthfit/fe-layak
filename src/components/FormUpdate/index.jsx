@@ -1,7 +1,13 @@
 import React from "react";
 import style from "./style.module.css";
 
-const FormUpdate = ({ title, formInputs, submitHandle, backHandle }) => {
+const FormUpdate = ({
+  title,
+  formInputs,
+  formError,
+  submitHandle,
+  backHandle,
+}) => {
   return (
     <div className={style.formUpdate}>
       <h2>{title}</h2>
@@ -15,8 +21,12 @@ const FormUpdate = ({ title, formInputs, submitHandle, backHandle }) => {
               value={formInput.value}
               placeholder={formInput.placeholder}
               onChange={formInput.onChange}
-              required
             />
+            {formError && formError[formInput.id] && (
+              <div className={`${style.error} danger`}>
+                {formError[formInput.id]}
+              </div>
+            )}
           </div>
         ))}
         <div className={style.buttons}>

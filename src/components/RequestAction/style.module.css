@@ -35,6 +35,8 @@
   flex-direction: column;
   cursor: pointer;
   border-radius: 10px;
+  overflow: hidden;
+  position: relative;
 }
 
 .uploadFile span {
@@ -81,4 +83,15 @@
   fill: var(--primary-400);
   color: var(--primary-400);
   background-color: var(--primary-100);
+}
+
+.uploadBar {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.uploadBar .progress {
+  height: 5px;
+  background-color: var(--secondary-300);
 }
