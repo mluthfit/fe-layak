@@ -9,6 +9,7 @@ import { ReactComponent as ApprovedIcon } from "../../assets/icons/check-marks.s
 import { ReactComponent as DeclinedIcon } from "../../assets/icons/cross.svg";
 import humanpics from "../../assets/images/humanpics.png";
 import { Link } from "react-router-dom";
+import { HashLink} from "react-router-hash-link";
 import ListOverview from "../../components/ListOverview";
 import style from "./style.module.css";
 
@@ -89,28 +90,28 @@ const LandingPage = () => {
                 </span>
                 <div className={style.topbarright}>
                     <span>
-                        <Link 
+                        <HashLink 
                         className={style.pages}
-                        to="/#home"
+                        smooth to="/#home"
                         >
                             Beranda
-                        </Link>
+                        </HashLink>
                     </span>
                     <span>
-                        <Link
+                        <HashLink
                         className={style.pages}
-                        to="/#features"
+                        smooth to="/#features"
                         >
                             Fitur
-                        </Link>
+                        </HashLink>
                     </span>
                     <span>
-                        <Link
+                        <HashLink
                         className={style.pages}
-                        to="/#testimoni"
+                        smooth to="/#testimoni"
                         >
                             Testimoni    
-                        </Link>
+                        </HashLink>
                     </span>
                     <span>
                         <Link
@@ -143,7 +144,7 @@ const LandingPage = () => {
                     <img src={humanpics} alt="humanpics" />
                 </span>
             </div>
-            <div id="Absensi" className={style.features}>
+            <div id="features" className={style.features}>
                 <h1>Absensi.</h1>
                 <p>Integrasikan absensi seluruh pegawai dalam fitur sederhana ini. Dilengkapi dengan validasi foto.</p>
                 <div className={style.listFitur}>
@@ -176,7 +177,7 @@ const LandingPage = () => {
                     />
                 </div>
             </div>
-            <div id="Cuti" className={style.features}>
+            <div className={style.features}>
                 <h1>Pengajuan Cuti.</h1>
                 <p>Simplifikasi proses pengajuan dan penerimaan cuti dengan layanan kami.</p>
                 <div className={style.listFitur}>
@@ -198,7 +199,7 @@ const LandingPage = () => {
             <div className={style.more}>
                 <h1 className={style.textcenter}>dan masih banyak lagi...</h1>
             </div>
-            <div id="Testimoni" className={style.testimoni}>
+            <div id="testimoni" className={style.testimoni}>
                 <h1>Testimoni Pengguna Kami</h1>
                 <div className={style.listTestimoni}>
                     <h2 className={style.review}>"Perusahaan saya telah menggunakan aplikasi <span className={style.italic}>Layak</span> selama 3 bulan.
