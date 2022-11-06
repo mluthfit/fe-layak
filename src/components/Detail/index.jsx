@@ -39,11 +39,14 @@ const Detail = ({ lists }) => {
               <span>-</span>
             ))}
 
-          {item.type === "image" && (
-            <div className={style.image}>
-              <img src={item.value} alt="placeholder" />
-            </div>
-          )}
+          {item.type === "image" &&
+            (!item.value ? (
+              <span>-</span>
+            ) : (
+              <div className={style.image}>
+                <img src={`${storageUrl}/${item.value}`} alt="placeholder" />
+              </div>
+            ))}
           {item.type === "listBar" && (
             <div style={{ width: "75%" }}>
               {!item.listBar?.length && (
