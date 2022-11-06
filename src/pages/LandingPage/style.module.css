@@ -1,7 +1,6 @@
 .main {
     height: 2700px;
     background-color: var(--secondary-200);
-    border: 1px solid black;
 }
 
 .topbar {
