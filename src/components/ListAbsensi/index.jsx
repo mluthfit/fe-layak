@@ -1,5 +1,4 @@
 import React from "react";
-import { getStyle } from "../../scripts/rootStyle";
 import Bar from "../Bar";
 import style from "./style.module.css";
 

@@ -2,22 +2,14 @@
   text-align: center;
   padding: 45% 20%;
   width: 100%;
-  height: 100%;
+  height: 61.25em;
   background-size: 43em 110%;
   background-repeat: no-repeat;
   background-position-x: -1em;
 }
 
-.SideLogo .SideContainer {
-  padding: 10em 10em;
-  text-align: center;
-  width: 50%;
-  height: 50%;
-  border: 1px solid black;
-}
-
 .SideLogo h1,
-.sideLogo h2 {
+.SideLogo h2 {
   text-align: center;
   color: var(--primary-100);
 }

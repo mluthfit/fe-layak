@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ReactComponent as ClockInIcon } from "../../assets/icons/arrow-up-right.svg";
-import { ReactComponent as ClockOutIcon } from "../../assets/icons/arrow-down-left.svg";
 import Detail from "../../components/Detail";
 import Spinner from "../../components/Spinner";
 import style from "./style.module.css";
