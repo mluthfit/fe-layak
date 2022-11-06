@@ -9,11 +9,9 @@ const SideLogo = () => {
       className={style.SideLogo}
       style={{ backgroundImage: `url(${bluepattern})` }}
     >
-      {/* <div className={style.SideContainer}> */}
       <img src={logolayak} alt="logolayak" />
       <h1>LayaK</h1>
       <h2>Layanan Kantor Online</h2>
-      {/* </div> */}
     </div>
   );
 };
