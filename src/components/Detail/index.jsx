@@ -5,6 +5,7 @@ import style from "./style.module.css";
 
 const Detail = ({ lists }) => {
   const barColor = getStyle("--secondary-100");
+  const storageUrl = process.env.REACT_APP_STORAGE_URL;
 
   return (
     <div className={style.detail}>
@@ -27,7 +28,7 @@ const Detail = ({ lists }) => {
           {item.type === "link" &&
             (item.href ? (
               <a
-                href={item.href}
+                href={`${storageUrl}/${item.href}`}
                 className={style.link}
                 rel="noopener noreferrer"
                 target="_blank"
@@ -38,11 +39,14 @@ const Detail = ({ lists }) => {
               <span>-</span>
             ))}
 
-          {item.type === "image" && (
-            <div className={style.image}>
-              <img src={item.value} alt="placeholder" />
-            </div>
-          )}
+          {item.type === "image" &&
+            (!item.value ? (
+              <span>-</span>
+            ) : (
+              <div className={style.image}>
+                <img src={`${storageUrl}/${item.value}`} alt="placeholder" />
+              </div>
+            ))}
           {item.type === "listBar" && (
             <div style={{ width: "75%" }}>
               {!item.listBar?.length && (

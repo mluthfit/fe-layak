@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -14,9 +15,15 @@ import style from "./style.module.css";
 
 const AdminCuti = () => {
   const { state } = useLocation();
+  const storageUrl = process.env.REACT_APP_STORAGE_URL;
+
   const [loading, setLoading] = useState(true);
   const [filterDate, setFilterDate] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
+
+  const [showProgressBar, setShowProgressBar] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [templateUrl, setTemplateUrl] = useState(null);
 
   const toggleDateHandler = (e) => {
     let el = getExactElementByClass(e.target, `${style.button}`);
@@ -63,6 +70,26 @@ const AdminCuti = () => {
     fileInput.click();
   };
 
+  const submitTemplateHandler = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("template_surat_cuti", file);
+
+      setShowProgressBar(true);
+      await axios.put("/admin/leaves/upload-template-surat-cuti", formData, {
+        onUploadProgress: ({ loaded, total }) => {
+          const percent = Math.round((loaded / total) * 100);
+          setProgress(percent);
+        },
+      });
+      setShowProgressBar(false);
+
+      await fetchTemplate();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const header = ["Nama", "Jabatan", "Rentang Waktu"];
   const [reqTable, setReqTable] = useState({
     data: [],
@@ -76,56 +103,86 @@ const AdminCuti = () => {
     href: [],
   });
 
-  const fetchData = async (api, setState) => {
+  const mappingData = (data, setState) => {
     let [status, href] = [[], []];
+    const mappedData = data?.map((cuti) => {
+      const temp =
+        cuti.status === "Pending" ? (
+          <span className="requested">
+            <RequstedIcon />
+          </span>
+        ) : cuti.status === "Approved" ? (
+          <span className="success">
+            <ApprovedIcon />
+          </span>
+        ) : (
+          <span className="danger">
+            <DeclinedIcon />
+          </span>
+        );
+
+      status.push(temp);
+      href.push(`/admin/cuti/${cuti.id}`);
+      return {
+        nama: cuti.user.nama,
+        jabatan: cuti.user.position,
+        rentang_waktu: `${toDateFormat(cuti.start_date)} - ${toDateFormat(
+          cuti.end_date
+        )}`,
+      };
+    });
+
+    setState({
+      data: mappedData || [],
+      status,
+      href,
+    });
+  };
+
+  const fetchTable = (api, setState) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(api)
+        .then(({ data: res }) => {
+          mappingData(res.data, setState);
+          resolve(`fetch ${api} success`);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
+
+  const fetchTemplate = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("/leaves/download-template-surat-cuti")
+        .then(({ data: res }) => {
+          setTemplateUrl(res.data.company.template_surat_cuti);
+          resolve("fetch template success");
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
+
+  const fetchData = async () => {
     try {
-      const {
-        data: { data },
-      } = await axios.get(api);
-      const mappedData = data.map((cuti) => {
-        const temp =
-          cuti.status === "Pending" ? (
-            <span className="requested">
-              <RequstedIcon />
-            </span>
-          ) : cuti.status === "Approved" ? (
-            <span className="success">
-              <ApprovedIcon />
-            </span>
-          ) : (
-            <span className="danger">
-              <DeclinedIcon />
-            </span>
-          );
+      await Promise.all([
+        fetchTable("/admin/leaves", setReqTable),
+        fetchTable("/admin/leaves/history", setHistoryTable),
+        fetchTemplate(),
+      ]);
 
-        status.push(temp);
-        href.push(`/admin/cuti/${cuti.id}`);
-        return {
-          nama: cuti.user.nama,
-          jabatan: cuti.user.position,
-          rentang_waktu: `${toDateFormat(cuti.start_date)} - ${toDateFormat(
-            cuti.end_date
-          )}`,
-        };
-      });
-
-      setState({
-        data: mappedData,
-        status,
-        href,
-      });
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    (() => {
-      fetchData("/admin/leaves", setReqTable);
-      fetchData("/admin/leaves/history", setHistoryTable);
-
-      setLoading(false);
-    })();
+    fetchData();
 
     document.title = "Permintaan Cuti - Admin Dashboard";
   }, []);
@@ -137,16 +194,36 @@ const AdminCuti = () => {
       ) : (
         <>
           <div className={style.header}>
-            <h2>Pengajuan Permintaan Cuti</h2>
-            <div className={style.template}>
-              <button className={style.button} onClick={openFileInputHandler}>
-                Reupload Template
-              </button>
-              <a href="/download" target="_blank" rel="noopener noreferrer">
-                <DownloadIcon width={"20px"} />
-              </a>
-              <input type="file" id="fileInput" />
+            <div className={style.main}>
+              <h2>Pengajuan Permintaan Cuti</h2>
+              <div className={style.template}>
+                <button className={style.button} onClick={openFileInputHandler}>
+                  {templateUrl ? "Reupload" : "Upload"} Template
+                </button>
+                {templateUrl && (
+                  <a
+                    href={`${storageUrl}/${templateUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <DownloadIcon width={"20px"} />
+                  </a>
+                )}
+                <input
+                  type="file"
+                  id="fileInput"
+                  onChange={(e) => submitTemplateHandler(e.target.files[0])}
+                />
+              </div>
             </div>
+            {showProgressBar && (
+              <div className={style.uploadBar}>
+                <div
+                  className={style.progress}
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            )}
           </div>
           {state?.message && (
             <div className={`${style.flashMessage} ${state?.type}`}>

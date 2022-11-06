@@ -22,6 +22,9 @@ const DetailAdminReimburse = () => {
   const [declineModal, setDeclineModal] = useState(false);
   const [reimbursePhoto, setReimbursePhoto] = useState(null);
 
+  const [showProgressBar, setShowProgressBar] = useState(false);
+  const [progress, setProgress] = useState(0);
+
   const toggleApproveModal = () => {
     const mainbar = document.querySelector("#mainbar");
     if (approveModal) {
@@ -53,10 +56,18 @@ const DetailAdminReimburse = () => {
       formData.append("status", "Approved");
       formData.append("bukti_reimburse", reimbursePhoto);
 
+      setShowProgressBar(true);
       const { data: response } = await axios.put(
         `/admin/reimbursement/${reimbursementId}`,
-        formData
+        formData,
+        {
+          onUploadProgress: ({ loaded, total }) => {
+            const percent = Math.round((loaded / total) * 100);
+            setProgress(percent);
+          },
+        }
       );
+      setShowProgressBar(false);
 
       if (response.success === "false") {
         throw response.messages;
@@ -194,8 +205,8 @@ const DetailAdminReimburse = () => {
         kebutuhan: response.data.kebutuhan,
         dana: toCurrencyID(response.data.jumlah_uang),
         date: toDateFormat(response.data.tanggal_pembayaran),
-        proof: `${process.env.REACT_APP_STORAGE_URL}/${response.data.bukti_pembayaran}`,
-        reimburse: `${process.env.REACT_APP_STORAGE_URL}/${response.data.bukti_reimburse}`,
+        proof: response.data.bukti_pembayaran,
+        reimburse: response.data.bukti_reimburse,
         status: response.data.status,
         reason_declined: response.data.alasan_ditolak,
       });
@@ -254,7 +265,7 @@ const DetailAdminReimburse = () => {
               state={{ get: reimbursePhoto, set: setReimbursePhoto }}
               submitHandle={approveHandler}
               backHandle={toggleApproveModal}
-              withInputFile={true}
+              uploadFile={{ showProgressBar, progress }}
             />
           )}
           {declineModal && (

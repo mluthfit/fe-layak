@@ -55,6 +55,12 @@
   background-color: var(--primary-100);
 }
 
+.formGroup .error {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
 .form button {
   align-self: flex-end;
   padding: 0.5rem 2rem;

@@ -31,4 +31,13 @@ const toCurrencyID = (number) => {
   }).format(number);
 };
 
-export { toDateFormat, toCurrencyID };
+const toTimeFormat = (stringTime) => {
+  if (stringTime === null) {
+    return null;
+  }
+
+  const [hour, minute] = stringTime.split(":");
+  return `${hour}:${minute}`;
+};
+
+export { toDateFormat, toCurrencyID, toTimeFormat };

@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { ReactComponent as EditIcon } from "../../assets/icons/pencil.svg";
 import { ReactComponent as DeleteIcon } from "../../assets/icons/trash.svg";
 import Spinner from "../../components/Spinner";
@@ -16,227 +18,499 @@ const SuperAdminCompany = () => {
   const [showCreateAlert, setShowCreateAlert] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [website, setWebsite] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [maxCuti, setMaxCuti] = useState("");
+  const [companyId, setCompanyId] = useState("0");
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+  const [formCreate, setFormCreate] = useState({
+    nama: "",
+    email: "",
+    alamat: "",
+    web: "",
+    no_hp: "",
+    jatah_cuti: 0,
+  });
 
-    document.title = "Perusahaan - Dev Dashboard";
-  }, []);
+  const [formCreateError, setFormCreateError] = useState({
+    nama: "",
+    email: "",
+    alamat: "",
+    web: "",
+    no_hp: "",
+    jatah_cuti: "",
+  });
 
-  const rows = [
-    {
-      nama: "Gojek Indonesia",
-      email: "gojek@co.id",
-      no_telepon: "022-12345678",
-      cuti_per_tahun: 10,
-    },
-    {
-      nama: "Shoope Indonesia",
-      email: "shoope@co.id",
-      no_telepon: "022-12345678",
-      cuti_per_tahun: 15,
-    },
-  ];
+  const [formUpdate, setFormUpdate] = useState({
+    nama: "",
+    email: "",
+    alamat: "",
+    web: "",
+    no_hp: "",
+    jatah_cuti: 0,
+  });
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    setShowCreateAlert(true);
+  const [formUpdateError, setFormUpdateError] = useState({
+    nama: "",
+    email: "",
+    alamat: "",
+    web: "",
+    no_hp: "",
+    jatah_cuti: "",
+  });
+
+  const resetFormCreateError = () => {
+    setFormCreateError({
+      nama: "",
+      email: "",
+      alamat: "",
+      web: "",
+      no_hp: "",
+      jatah_cuti: "",
+    });
   };
 
-  const toggleEditForm = () => {
-    const mainbar = document.querySelector("#mainbar");
-    if (showPopup) {
-      hideBackgroundModal(mainbar);
-      setShowPopup(false);
-      return;
-    }
+  const resetFormCreate = () => {
+    setFormCreate({
+      nama: "",
+      email: "",
+      alamat: "",
+      web: "",
+      no_hp: "",
+      jatah_cuti: 0,
+    });
+  };
 
+  const resetFormUpdateError = () => {
+    setFormUpdateError({
+      nama: "",
+      email: "",
+      alamat: "",
+      web: "",
+      no_hp: "",
+      jatah_cuti: "",
+    });
+  };
+
+  const onFormError = (error, setState) => {
+    error.forEach(({ field, message }) => {
+      setState((current) => ({
+        ...current,
+        [field]: message,
+      }));
+    });
+  };
+
+  const onChangeHandler = (getState, setState, key, value) => {
+    return setState({
+      ...getState,
+      [key]: Number.isInteger(getState[key]) ? parseInt(value) : value,
+    });
+  };
+
+  const showEditForm = (company) => {
+    const mainbar = document.querySelector("#mainbar");
+    setCompanyId(company.id);
+    setFormUpdate({
+      nama: company.nama,
+      email: company.email,
+      alamat: company.alamat,
+      web: company.web,
+      no_hp: company.no_hp,
+      jatah_cuti: company.jatah_cuti,
+    });
     showBackgroundModal(mainbar);
     setShowPopup(true);
   };
 
-  const toggleDeleteModal = () => {
+  const hideEditForm = () => {
     const mainbar = document.querySelector("#mainbar");
-    if (deleteModal) {
-      hideBackgroundModal(mainbar);
-      setDeleteModal(false);
-      return;
-    }
+    hideBackgroundModal(mainbar);
+    setShowPopup(false);
+  };
 
+  const showDeleteModal = ({ id }) => {
+    const mainbar = document.querySelector("#mainbar");
+    setCompanyId(id);
     showBackgroundModal(mainbar);
     setDeleteModal(true);
   };
 
-  const buttonAction = [
-    <>
-      <span
-        className={`requested ${style.buttonAction}`}
-        onClick={toggleEditForm}
-      >
-        <EditIcon />
-      </span>
-      <span
-        className={`danger ${style.buttonAction}`}
-        onClick={toggleDeleteModal}
-      >
-        <DeleteIcon />
-      </span>
-    </>,
-    <>
-      <span
-        className={`requested ${style.buttonAction}`}
-        onClick={toggleEditForm}
-      >
-        <EditIcon />
-      </span>
-      <span
-        className={`danger ${style.buttonAction}`}
-        onClick={toggleDeleteModal}
-      >
-        <DeleteIcon />
-      </span>
-    </>,
-  ];
+  const hideDeleteModal = () => {
+    const mainbar = document.querySelector("#mainbar");
+    hideBackgroundModal(mainbar);
+    setDeleteModal(false);
+  };
 
-  const formInputsEmployee = [
+  const inputsUpdate = [
     {
       label: "Nama",
       type: "text",
-      id: "name",
-      value: name,
+      id: "nama",
+      value: formUpdate.nama,
       placeholder: "Masukkan nama perusahaan",
-      onChange: (e) => setName(e.target.value),
+      onChange: (e) =>
+        onChangeHandler(formUpdate, setFormUpdate, "nama", e.target.value),
     },
     {
       label: "Email",
       type: "email",
       id: "email",
-      value: email,
+      value: formUpdate.email,
       placeholder: "Masukkan email perusahaan",
-      onChange: (e) => setEmail(e.target.value),
+      onChange: (e) =>
+        onChangeHandler(formUpdate, setFormUpdate, "email", e.target.value),
     },
     {
       label: "Alamat",
       type: "text",
-      id: "address",
-      value: address,
+      id: "alamat",
+      value: formUpdate.alamat,
       placeholder: "Masukkan alamat perusahaan",
-      onChange: (e) => setAddress(e.target.value),
+      onChange: (e) =>
+        onChangeHandler(formUpdate, setFormUpdate, "alamat", e.target.value),
     },
     {
       label: "Website",
       type: "text",
-      id: "website",
-      value: website,
+      id: "web",
+      value: formUpdate.web,
       placeholder: "Masukkan jabatan perusahaan",
-      onChange: (e) => setWebsite(e.target.value),
+      onChange: (e) =>
+        onChangeHandler(formUpdate, setFormUpdate, "web", e.target.value),
     },
     {
       label: "Nomor Telepon",
       type: "text",
-      id: "phone",
-      value: phoneNumber,
+      id: "no_hp",
+      value: formUpdate.no_hp,
       placeholder: "Masukkan nomor telepon perusahaan",
-      onChange: (e) => setPhoneNumber(e.target.value),
+      onChange: (e) =>
+        onChangeHandler(formUpdate, setFormUpdate, "no_hp", e.target.value),
     },
     {
       label: "Cuti Per Tahun",
       type: "text",
-      id: "max_cuti",
-      value: maxCuti,
+      id: "jatah_cuti",
+      value: formUpdate.jatah_cuti,
       placeholder: "Masukkan cuti per tahun perusahaan",
-      onChange: (e) => setMaxCuti(e.target.value),
+      onChange: (e) =>
+        setFormUpdate({
+          ...formUpdate,
+          jatah_cuti: parseInt(e.target.value),
+        }),
     },
   ];
 
+  const header = ["Nama", "Email", "No Telepon", "Cuti Per Tahun"];
+  const [table, setTable] = useState({
+    data: [],
+    action: [],
+  });
+
+  const fetchData = async () => {
+    let action = [];
+    try {
+      const {
+        data: { data: companies },
+      } = await axios.get("/super-admin/companies");
+      const mappedData = companies?.map((company) => {
+        action.push(
+          <>
+            <span
+              className={`requested ${style.buttonAction}`}
+              onClick={() => {
+                resetFormUpdateError();
+                showEditForm(company);
+              }}
+            >
+              <EditIcon />
+            </span>
+            <span
+              className={`danger ${style.buttonAction}`}
+              onClick={() => showDeleteModal(company)}
+            >
+              <DeleteIcon />
+            </span>
+          </>
+        );
+
+        return {
+          nama: company.nama,
+          email: company.email,
+          no_telepon: company.no_hp,
+          cuti_per_tahun: company.jatah_cuti,
+        };
+      });
+
+      setTable({
+        data: mappedData || [],
+        action,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    setLoading(false);
+  };
+
+  const [companyCreated, setCompanyCreated] = useState({
+    nama: "",
+    email: "",
+    alamat: "",
+    web: "",
+    no_hp: "",
+    jatah_cuti: 0,
+  });
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const {
+        data: { data: company },
+      } = await axios.post("/super-admin/companies", formCreate);
+      setCompanyCreated({
+        nama: company.nama,
+        email: company.email,
+        alamat: company.alamat,
+        web: company.web,
+        no_hp: company.no_hp,
+        jatah_cuti: company.jatah_cuti,
+      });
+
+      setShowCreateAlert(true);
+      resetFormCreate();
+      resetFormCreateError();
+      setLoading(true);
+      fetchData();
+    } catch ({ response }) {
+      console.log(response);
+      if (Array.isArray(response.data)) {
+        onFormError(response.data, setFormCreateError);
+      }
+    }
+  };
+
+  const submitDeleteHandler = async () => {
+    hideDeleteModal();
+
+    try {
+      await axios.delete(`/super-admin/companies/${companyId}`);
+      setLoading(true);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitUpdateHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.put(`/super-admin/companies/${companyId}`, formUpdate);
+      hideEditForm();
+      setLoading(true);
+      resetFormUpdateError();
+      fetchData();
+    } catch ({ response }) {
+      console.log(response);
+      if (Array.isArray(response.data)) {
+        onFormError(response.data, setFormUpdateError);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    document.title = "Perusahaan - Dev Dashboard";
+  }, []);
+
   return (
-    <div className={`${style.superAdminCompany} ${loading ? "center" : ""}`}>
-      {loading ? (
-        <Spinner type="admin" size={48} borderSize={5} />
-      ) : (
-        <>
-          <div className={style.formCreate}>
-            <h2>Perusahaan</h2>
-            <div className={style.container}>
-              <h3>Buat Data Perushaan Baru</h3>
-              <form className={style.form} onSubmit={submitHandler}>
-                <div className={style.formGroup}>
-                  <div className={style.group}>
-                    <label htmlFor="name">Nama</label>
-                    <input type="text" id="name" />
+    <div className={style.superAdminCompany}>
+      <div className={style.formCreate}>
+        <h2>Perusahaan</h2>
+        <div className={style.container}>
+          <h3>Buat Data Perushaan Baru</h3>
+          <form className={style.form} onSubmit={submitHandler}>
+            <div className={style.formContainer}>
+              <div className={style.formGroup}>
+                <label htmlFor="name">Nama</label>
+                <input
+                  type="text"
+                  id="name"
+                  value={formCreate.nama}
+                  onChange={(e) =>
+                    onChangeHandler(
+                      formCreate,
+                      setFormCreate,
+                      "nama",
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+                {formCreateError.email && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.email}
                   </div>
-                  <div className={style.group}>
-                    <label htmlFor="website">Website</label>
-                    <input type="text" id="website" />
+                )}
+              </div>
+              <div className={style.formGroup}>
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={formCreate.email}
+                  onChange={(e) =>
+                    onChangeHandler(
+                      formCreate,
+                      setFormCreate,
+                      "email",
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+                {formCreateError.email && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.email}
                   </div>
-                </div>
-                <div className={style.formGroup}>
-                  <div className={style.group}>
-                    <label htmlFor="email">Email</label>
-                    <input type="text" id="email" />
+                )}
+              </div>
+              <div className={style.formGroup}>
+                <label htmlFor="address">Alamat</label>
+                <input
+                  type="text"
+                  id="address"
+                  value={formCreate.alamat}
+                  onChange={(e) =>
+                    onChangeHandler(
+                      formCreate,
+                      setFormCreate,
+                      "alamat",
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+                {formCreateError.alamat && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.alamat}
                   </div>
-                  <div className={style.group}>
-                    <label htmlFor="phone_number">Nomor Telepon</label>
-                    <input type="text" id="phone_number" />
+                )}
+              </div>
+              <div className={style.formGroup}>
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  value={formCreate.web}
+                  onChange={(e) =>
+                    onChangeHandler(
+                      formCreate,
+                      setFormCreate,
+                      "web",
+                      e.target.value
+                    )
+                  }
+                />
+                {formCreateError.web && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.web}
                   </div>
-                </div>
-                <div className={style.formGroup}>
-                  <div className={style.group}>
-                    <label htmlFor="address">Alamat</label>
-                    <input type="text" id="address" />
+                )}
+              </div>
+              <div className={style.formGroup}>
+                <label htmlFor="phone_number">Nomor Telepon</label>
+                <input
+                  type="text"
+                  id="phone_number"
+                  value={formCreate.no_hp}
+                  onChange={(e) =>
+                    onChangeHandler(
+                      formCreate,
+                      setFormCreate,
+                      "no_hp",
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+                {formCreateError.no_hp && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.no_hp}
                   </div>
-                  <div className={style.group}>
-                    <label htmlFor="maxCuti">Cuti Per Tahun</label>
-                    <input type="text" id="maxCuti" />
+                )}
+              </div>
+              <div className={style.formGroup}>
+                <label htmlFor="maxCuti">Cuti Per Tahun</label>
+                <input
+                  type="text"
+                  id="maxCuti"
+                  value={formCreate.jatah_cuti}
+                  onChange={(e) =>
+                    onChangeHandler(
+                      formCreate,
+                      setFormCreate,
+                      "jatah_cuti",
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+                {formCreateError.jatah_cuti && (
+                  <div className={`${style.error} danger`}>
+                    {formCreateError.jatah_cuti}
                   </div>
-                </div>
-                <button type="submit">Buat Akun</button>
-              </form>
+                )}
+              </div>
             </div>
-          </div>
-          <div
-            className={`${style.accountCreated}  ${
-              showCreateAlert && style.show
-            }`}
-          >
-            <div className={style.info}>Data perusahaan berhasil dibuat!</div>
-            <span>Nama : Komparasi Coba ID</span>
-            <span>Email : komparasi@coba.id</span>
-            <span>Alamat : Jl. Coba Coba No. 1</span>
-            <span>Website : komparasi.coba.id</span>
-            <span>Nomor Telepon : 022-12345678</span>
-            <span>Cuti Per Tahun : 15</span>
-          </div>
-          <div className={style.listCompanies}>
-            <div className={style.title}>
-              <h3>Daftar Administator</h3>
-              <input type="text" placeholder="Cari nama atau jabatan" />
-            </div>
-            <Table rows={rows} iconLabel="Aksi" icons={buttonAction} />
-          </div>
-          {showPopup && (
-            <FormUpdate
-              title="Ubah Data Administator"
-              formInputs={formInputsEmployee}
-              backHandle={toggleEditForm}
+            <button type="submit">Buat Akun</button>
+          </form>
+        </div>
+      </div>
+      <div
+        className={`${style.accountCreated}  ${showCreateAlert && style.show}`}
+      >
+        <div className={style.info}>Data perusahaan berhasil dibuat!</div>
+        <span>Nama : {companyCreated.nama}</span>
+        <span>Email : {companyCreated.email}</span>
+        <span>Alamat : {companyCreated.alamat}</span>
+        <span>Website : {companyCreated.web}</span>
+        <span>Nomor Telepon : {companyCreated.no_hp}</span>
+        <span>Cuti Per Tahun : {companyCreated.jatah_cuti}</span>
+      </div>
+      <div className={style.listCompanies}>
+        <div className={style.title}>
+          <h3>Daftar Perusahaan</h3>
+          <input type="text" placeholder="Cari nama perusahaan" />
+        </div>
+        <div className={`${style.tableContainer} ${loading ? "center" : ""}`}>
+          {loading ? (
+            <Spinner type="admin" size={48} borderSize={5} />
+          ) : (
+            <Table
+              label={header}
+              rows={table.data}
+              icon={{ label: "Aksi", element: table.action }}
             />
           )}
-          {deleteModal && (
-            <RequestAction
-              title="Konfirmasi Hapus Data"
-              type="delete"
-              backHandle={toggleDeleteModal}
-            />
-          )}
-        </>
+        </div>
+      </div>
+      {showPopup && (
+        <FormUpdate
+          title="Ubah Data Administator"
+          formInputs={inputsUpdate}
+          formError={formUpdateError}
+          submitHandle={submitUpdateHandler}
+          backHandle={hideEditForm}
+        />
+      )}
+      {deleteModal && (
+        <RequestAction
+          title="Konfirmasi Hapus Data"
+          type="delete"
+          submitHandle={submitDeleteHandler}
+          backHandle={hideDeleteModal}
+        />
       )}
     </div>
   );
