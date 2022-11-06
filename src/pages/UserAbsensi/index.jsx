@@ -4,7 +4,6 @@ import { ReactComponent as ClockOutIcon } from "../../assets/icons/arrow-down-le
 import Spinner from "../../components/Spinner";
 import style from "./style.module.css";
 import ListAbsensi from "../../components/ListAbsensi";
-import { getStyle } from "../../scripts/rootStyle";
 
 const UserAbsensi = () => {
     const [loading, setLoading] = useState(true);
@@ -61,7 +60,7 @@ const UserAbsensi = () => {
                     <ClockInIcon />
                 </span>
                 <span className="success">
-                    <ClockInIcon />
+                    <ClockOutIcon />
                 </span>
                 </>
             ),
@@ -72,7 +71,7 @@ const UserAbsensi = () => {
             icons : (
                 <>
                 <span className="danger">
-                    <ClockOutIcon />
+                    <ClockInIcon />
                 </span>
                 <span className="danger">
                     <ClockOutIcon />

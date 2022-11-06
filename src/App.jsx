@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./layouts/Dashboard";
 import Auth from "./layouts/Auth";
+import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
@@ -25,7 +26,7 @@ import UserAbsensi from "./pages/UserAbsensi";
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<div>Hello World</div>} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Navigate replace to="/auth/login" />} />
       <Route path="/dashboard" element={<Dashboard type="user" role="admin" />}>
         <Route index element={<Overview />} />
