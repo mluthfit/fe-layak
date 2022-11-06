@@ -291,6 +291,7 @@ const SuperAdminCompany = () => {
 
   const submitDeleteHandler = async () => {
     hideDeleteModal();
+    setShowCreateAlert(false);
 
     try {
       await axios.delete(`/super-admin/companies/${companyId}`);

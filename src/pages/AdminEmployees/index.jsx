@@ -245,7 +245,7 @@ const AdminEmployees = () => {
 
   const submitDeleteHandler = async () => {
     hideDeleteModal();
-    console.log(userId);
+    setShowCreateAcc(false);
 
     try {
       await axios.delete(`/admin/users/${userId}`);

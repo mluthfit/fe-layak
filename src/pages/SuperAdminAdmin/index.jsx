@@ -187,7 +187,7 @@ const SuperAdminAdmin = () => {
           nama: user.nama,
           jabatan: user.position,
           email: user.email,
-          perusahaan: user.company.name,
+          perusahaan: user.company?.name || "-",
         };
       });
 
@@ -234,6 +234,7 @@ const SuperAdminAdmin = () => {
 
   const submitDeleteHandler = async () => {
     hideDeleteModal();
+    setShowCreateAcc(false);
 
     try {
       await axios.delete(`/super-admin/admin/${userId}`);
@@ -378,8 +379,10 @@ const SuperAdminAdmin = () => {
                     }
                     required
                   >
-                    {companyList.map(({ id, nama }) => (
-                      <option value={id}>{nama}</option>
+                    {companyList.map(({ id, nama }, index) => (
+                      <option value={id} key={index}>
+                        {nama}
+                      </option>
                     ))}
                   </select>
                 </div>
