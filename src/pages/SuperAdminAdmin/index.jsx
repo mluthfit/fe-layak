@@ -19,6 +19,7 @@ const SuperAdminAdmin = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [userId, setUserId] = useState("0");
+  const [search, setSearch] = useState("");
 
   const [formCreate, setFormCreate] = useState({
     nama: "",
@@ -51,7 +52,7 @@ const SuperAdminAdmin = () => {
       nama: "",
       email: "",
       position: "",
-      company_id: "",
+      company_id: 0,
     });
   };
 
@@ -156,12 +157,12 @@ const SuperAdminAdmin = () => {
     action: [],
   });
 
-  const fetchData = async () => {
+  const fetchData = async (api) => {
     let action = [];
     try {
       const {
         data: { data: users },
-      } = await axios.get("/super-admin/admin");
+      } = await axios.get(api);
       const mappedData = users?.map((user) => {
         action.push(
           <>
@@ -187,7 +188,7 @@ const SuperAdminAdmin = () => {
           nama: user.nama,
           jabatan: user.position,
           email: user.email,
-          perusahaan: user.company.name,
+          perusahaan: user.company?.nama || "-",
         };
       });
 
@@ -223,7 +224,8 @@ const SuperAdminAdmin = () => {
       onResetFormCreateError();
       setShowCreateAcc(true);
       setLoading(true);
-      fetchData();
+      setSearch("");
+      fetchData("/super-admin/admin");
     } catch ({ response }) {
       console.log(response);
       if (Array.isArray(response.data)) {
@@ -234,11 +236,12 @@ const SuperAdminAdmin = () => {
 
   const submitDeleteHandler = async () => {
     hideDeleteModal();
+    setShowCreateAcc(false);
 
     try {
       await axios.delete(`/super-admin/admin/${userId}`);
       setLoading(true);
-      fetchData();
+      fetchData(`/super-admin/admin?search=${search}`);
     } catch (error) {
       console.log(error);
     }
@@ -252,7 +255,7 @@ const SuperAdminAdmin = () => {
       hideEditForm();
       onResetFormUpdateError();
       setLoading(true);
-      fetchData();
+      fetchData(`/super-admin/admin?search=${search}`);
     } catch ({ response }) {
       console.log(response);
       if (Array.isArray(response.data)) {
@@ -281,150 +284,159 @@ const SuperAdminAdmin = () => {
 
   useEffect(() => {
     fetchCompany();
-    fetchData();
+    fetchData("/super-admin/admin");
     document.title = "Administator - Dev Dashboard";
   }, []);
 
   return (
-    <div className={`${style.superAdminAdmin} ${loading ? "center" : ""}`}>
-      {loading ? (
-        <Spinner type="admin" size={48} borderSize={5} />
-      ) : (
-        <>
-          <div className={style.formCreate}>
-            <h2>Administator</h2>
-            <div className={style.container}>
-              <h3>Buat Administator Baru</h3>
-              <form className={style.form} onSubmit={submitHandler}>
-                <div className={style.formGroup}>
-                  <label htmlFor="name">Nama</label>
-                  <input
-                    type="text"
-                    id="nama"
-                    value={formCreate.nama}
-                    onChange={(e) =>
-                      onChangeHandler(
-                        formCreate,
-                        setFormCreate,
-                        "nama",
-                        e.target.value
-                      )
-                    }
-                    required
-                  />
-                  {formCreateError.nama && (
-                    <div className={`${style.error} danger`}>
-                      {formCreateError.nama}
-                    </div>
-                  )}
+    <div className={style.superAdminAdmin}>
+      <div className={style.formCreate}>
+        <h2>Administator</h2>
+        <div className={style.container}>
+          <h3>Buat Administator Baru</h3>
+          <form className={style.form} onSubmit={submitHandler}>
+            <div className={style.formGroup}>
+              <label htmlFor="name">Nama</label>
+              <input
+                type="text"
+                id="nama"
+                value={formCreate.nama}
+                onChange={(e) =>
+                  onChangeHandler(
+                    formCreate,
+                    setFormCreate,
+                    "nama",
+                    e.target.value
+                  )
+                }
+                required
+              />
+              {formCreateError.nama && (
+                <div className={`${style.error} danger`}>
+                  {formCreateError.nama}
                 </div>
-                <div className={style.formGroup}>
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="text"
-                    id="email"
-                    value={formCreate.email}
-                    onChange={(e) =>
-                      onChangeHandler(
-                        formCreate,
-                        setFormCreate,
-                        "email",
-                        e.target.value
-                      )
-                    }
-                    required
-                  />
-                  {formCreateError.email && (
-                    <div className={`${style.error} danger`}>
-                      {formCreateError.email}
-                    </div>
-                  )}
-                </div>
-                <div className={style.formGroup}>
-                  <label htmlFor="position">Jabatan</label>
-                  <input
-                    type="text"
-                    id="position"
-                    value={formCreate.position}
-                    onChange={(e) =>
-                      onChangeHandler(
-                        formCreate,
-                        setFormCreate,
-                        "position",
-                        e.target.value
-                      )
-                    }
-                    required
-                  />
-                  {formCreateError.position && (
-                    <div className={`${style.error} danger`}>
-                      {formCreateError.position}
-                    </div>
-                  )}
-                </div>
-                <div className={style.formGroup}>
-                  <label htmlFor="company">Perusahaan</label>
-                  <select
-                    name="company"
-                    id="company"
-                    value={formCreate.company_id}
-                    onChange={(e) =>
-                      onChangeHandler(
-                        formCreate,
-                        setFormCreate,
-                        "company_id",
-                        e.target.value
-                      )
-                    }
-                    required
-                  >
-                    {companyList.map(({ id, nama }) => (
-                      <option value={id}>{nama}</option>
-                    ))}
-                  </select>
-                </div>
-                <button type="submit">Buat Akun</button>
-              </form>
+              )}
             </div>
-          </div>
-          <div
-            className={`${style.accountCreated}  ${
-              showCreateAcc && style.show
-            }`}
-          >
-            <div className={style.info}>Akun administator berhasil dibuat!</div>
-            <span>Email : {userCreated.email}</span>
-            <span>Password : {userCreated.password}</span>
-          </div>
-          <div className={style.listAdministator}>
-            <div className={style.title}>
-              <h3>Daftar Administator</h3>
-              <input type="text" placeholder="Cari nama atau jabatan" />
+            <div className={style.formGroup}>
+              <label htmlFor="email">Email</label>
+              <input
+                type="text"
+                id="email"
+                value={formCreate.email}
+                onChange={(e) =>
+                  onChangeHandler(
+                    formCreate,
+                    setFormCreate,
+                    "email",
+                    e.target.value
+                  )
+                }
+                required
+              />
+              {formCreateError.email && (
+                <div className={`${style.error} danger`}>
+                  {formCreateError.email}
+                </div>
+              )}
             </div>
+            <div className={style.formGroup}>
+              <label htmlFor="position">Jabatan</label>
+              <input
+                type="text"
+                id="position"
+                value={formCreate.position}
+                onChange={(e) =>
+                  onChangeHandler(
+                    formCreate,
+                    setFormCreate,
+                    "position",
+                    e.target.value
+                  )
+                }
+                required
+              />
+              {formCreateError.position && (
+                <div className={`${style.error} danger`}>
+                  {formCreateError.position}
+                </div>
+              )}
+            </div>
+            <div className={style.formGroup}>
+              <label htmlFor="company">Perusahaan</label>
+              <select
+                name="company"
+                id="company"
+                value={formCreate.company_id}
+                onChange={(e) =>
+                  onChangeHandler(
+                    formCreate,
+                    setFormCreate,
+                    "company_id",
+                    e.target.value
+                  )
+                }
+                required
+              >
+                {companyList.map(({ id, nama }, index) => (
+                  <option value={id} key={index}>
+                    {nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button type="submit">Buat Akun</button>
+          </form>
+        </div>
+      </div>
+      <div
+        className={`${style.accountCreated}  ${showCreateAcc && style.show}`}
+      >
+        <div className={style.info}>Akun administator berhasil dibuat!</div>
+        <span>Email : {userCreated.email}</span>
+        <span>Password : {userCreated.password}</span>
+      </div>
+      <div className={style.listAdministator}>
+        <div className={style.title}>
+          <h3>Daftar Administator</h3>
+          <input
+            type="text"
+            placeholder="Cari nama atau jabatan"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setLoading(true);
+              fetchData(`/super-admin/admin?search=${e.target.value}`);
+            }}
+          />
+        </div>
+        <div className={`${style.tableContainer} ${loading ? "center" : ""}`}>
+          {loading ? (
+            <Spinner type="admin" size={48} borderSize={5} />
+          ) : (
             <Table
               label={header}
               rows={table.data}
               icon={{ label: "Aksi", element: table.action }}
             />
-          </div>
-          {showPopup && (
-            <FormUpdate
-              title="Ubah Data Administator"
-              formInputs={inputsUpdate}
-              submitHandle={submitUpdateHandler}
-              formError={formUpdateError}
-              backHandle={hideEditForm}
-            />
           )}
-          {deleteModal && (
-            <RequestAction
-              title="Konfirmasi Hapus Data"
-              type="delete"
-              submitHandle={submitDeleteHandler}
-              backHandle={hideDeleteModal}
-            />
-          )}
-        </>
+        </div>
+      </div>
+      {showPopup && (
+        <FormUpdate
+          title="Ubah Data Administator"
+          formInputs={inputsUpdate}
+          submitHandle={submitUpdateHandler}
+          formError={formUpdateError}
+          backHandle={hideEditForm}
+        />
+      )}
+      {deleteModal && (
+        <RequestAction
+          title="Konfirmasi Hapus Data"
+          type="delete"
+          submitHandle={submitDeleteHandler}
+          backHandle={hideDeleteModal}
+        />
       )}
     </div>
   );

@@ -25,3 +25,10 @@
 .adminAbsensi .history {
   margin-top: 3rem;
 }
+
+.history,
+.new {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+}

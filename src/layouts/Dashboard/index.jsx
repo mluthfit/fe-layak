@@ -1,11 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet, useLocation, Link } from "react-router-dom";
 import { ReactComponent as OverviewIcon } from "../../assets/icons/square.svg";
 import { ReactComponent as AbsensiIcon } from "../../assets/icons/camera.svg";
 import { ReactComponent as CutiIcon } from "../../assets/icons/calendar-dates.svg";
 import { ReactComponent as ReimburseIcon } from "../../assets/icons/calculator.svg";
 import { ReactComponent as HideIcon } from "../../assets/icons/chevrons-left.svg";
+import { ReactComponent as ShowIcon } from "../../assets/icons/chevrons-right.svg";
 import { ReactComponent as LogoutIcon } from "../../assets/icons/logout.svg";
 import { ReactComponent as EmployeesIcon } from "../../assets/icons/people.svg";
 import { ReactComponent as CompanyIcon } from "../../assets/icons/organization.svg";
@@ -18,23 +20,27 @@ import style from "./style.module.css";
 const Dashboard = ({ type, role }) => {
   const location = useLocation();
   const page = location.pathname.split("/")[2] ?? "overview";
+  const [sidebarMode, setSidebarMode] = useState(
+    getLocalStorage("sidebar-mode", "show")
+  );
 
   const showHideHandler = () => {
     const sidebarEl = document.querySelector("#sidebar");
     if (sidebarEl.classList.contains(style.hide)) {
       showSidebar(sidebarEl);
+      setSidebarMode("show");
       setLocalStorage("sidebar-mode", "show");
       return;
     }
 
     hideSidebar(sidebarEl);
+    setSidebarMode("hide");
     setLocalStorage("sidebar-mode", "hide");
     return;
   };
 
   useEffect(() => {
     const sidebarEl = document.querySelector("#sidebar");
-    const sidebarMode = getLocalStorage("sidebar-mode", "show");
     if (sidebarMode === "hide") {
       hideSidebar(sidebarEl);
       return;
@@ -150,7 +156,7 @@ const Dashboard = ({ type, role }) => {
           <ul className={style.menu}>
             <li>
               <Link onClick={showHideHandler}>
-                <HideIcon />
+                {sidebarMode === "show" ? <HideIcon /> : <ShowIcon />}
                 <span>Sembunyikan</span>
               </Link>
             </li>

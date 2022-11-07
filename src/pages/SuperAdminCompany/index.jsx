@@ -19,6 +19,7 @@ const SuperAdminCompany = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [companyId, setCompanyId] = useState("0");
+  const [search, setSearch] = useState("");
 
   const [formCreate, setFormCreate] = useState({
     nama: "",
@@ -205,12 +206,12 @@ const SuperAdminCompany = () => {
     action: [],
   });
 
-  const fetchData = async () => {
+  const fetchData = async (api) => {
     let action = [];
     try {
       const {
         data: { data: companies },
-      } = await axios.get("/super-admin/companies");
+      } = await axios.get(api);
       const mappedData = companies?.map((company) => {
         action.push(
           <>
@@ -271,7 +272,7 @@ const SuperAdminCompany = () => {
         nama: company.nama,
         email: company.email,
         alamat: company.alamat,
-        web: company.web,
+        web: company.web || "-",
         no_hp: company.no_hp,
         jatah_cuti: company.jatah_cuti,
       });
@@ -280,7 +281,8 @@ const SuperAdminCompany = () => {
       resetFormCreate();
       resetFormCreateError();
       setLoading(true);
-      fetchData();
+      setSearch("");
+      fetchData("/super-admin/companies");
     } catch ({ response }) {
       console.log(response);
       if (Array.isArray(response.data)) {
@@ -291,11 +293,12 @@ const SuperAdminCompany = () => {
 
   const submitDeleteHandler = async () => {
     hideDeleteModal();
+    setShowCreateAlert(false);
 
     try {
       await axios.delete(`/super-admin/companies/${companyId}`);
       setLoading(true);
-      fetchData();
+      fetchData(`/super-admin/companies?search=${search}`);
     } catch (error) {
       console.log(error);
     }
@@ -309,7 +312,7 @@ const SuperAdminCompany = () => {
       hideEditForm();
       setLoading(true);
       resetFormUpdateError();
-      fetchData();
+      fetchData(`/super-admin/companies?search=${search}`);
     } catch ({ response }) {
       console.log(response);
       if (Array.isArray(response.data)) {
@@ -319,7 +322,7 @@ const SuperAdminCompany = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData("/super-admin/companies");
     document.title = "Perusahaan - Dev Dashboard";
   }, []);
 
@@ -481,7 +484,16 @@ const SuperAdminCompany = () => {
       <div className={style.listCompanies}>
         <div className={style.title}>
           <h3>Daftar Perusahaan</h3>
-          <input type="text" placeholder="Cari nama perusahaan" />
+          <input
+            type="text"
+            placeholder="Cari nama perusahaan"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setLoading(true);
+              fetchData(`/super-admin/companies?search=${e.target.value}`);
+            }}
+          />
         </div>
         <div className={`${style.tableContainer} ${loading ? "center" : ""}`}>
           {loading ? (

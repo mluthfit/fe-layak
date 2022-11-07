@@ -64,3 +64,10 @@
   border-radius: 5px;
   font-size: 0.9rem;
 }
+
+.history,
+.new {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+}
