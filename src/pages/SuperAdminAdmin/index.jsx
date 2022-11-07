@@ -51,7 +51,7 @@ const SuperAdminAdmin = () => {
       nama: "",
       email: "",
       position: "",
-      company_id: "",
+      company_id: 0,
     });
   };
 
@@ -187,7 +187,7 @@ const SuperAdminAdmin = () => {
           nama: user.nama,
           jabatan: user.position,
           email: user.email,
-          perusahaan: user.company?.name || "-",
+          perusahaan: user.company?.nama || "-",
         };
       });
 

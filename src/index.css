@@ -81,3 +81,7 @@ button:disabled {
 .red {
   fill: var(--danger-200);
 }
+
+.fillFlex {
+  flex: 1;
+}

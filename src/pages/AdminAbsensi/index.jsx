@@ -10,6 +10,10 @@ import style from "./style.module.css";
 
 const AdminAbsensi = () => {
   const [loading, setLoading] = useState(true);
+  const [newLoading, setNewLoading] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [newSearch, setNewSearch] = useState("");
+  const [historySearch, setHistorySearch] = useState("");
 
   const header = ["Nama", "Jabatan", "Jam Masuk"];
   const [yetTable, setYetTable] = useState({
@@ -60,6 +64,7 @@ const AdminAbsensi = () => {
         .get(api)
         .then(({ data: res }) => {
           mappingData(res.data, setState);
+          console.log(res.data);
           resolve(`fetch ${api} success`);
         })
         .catch((err) => {
@@ -70,7 +75,6 @@ const AdminAbsensi = () => {
 
   const fetchData = async () => {
     try {
-      await axios.get("/admin/presences/yet");
       await Promise.all([
         fetchTable("/admin/presences", setYetTable),
         fetchTable("/admin/presences/yet", setNotYetTable),
@@ -87,6 +91,29 @@ const AdminAbsensi = () => {
     document.title = "Absensi - Admin Dashboard";
   }, []);
 
+  const fetchNew = async () => {
+    setNewLoading(true);
+    try {
+      await fetchTable(`/admin/presences?search=${newSearch}`, setYetTable);
+      setNewLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchHistory = async () => {
+    setHistoryLoading(true);
+    try {
+      await fetchTable(
+        `/admin/presences/yet?search=${historySearch}`,
+        setNotYetTable
+      );
+      setHistoryLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={`${style.adminAbsensi} ${loading ? "center" : ""}`}>
       {loading ? (
@@ -94,30 +121,58 @@ const AdminAbsensi = () => {
       ) : (
         <>
           <h2>Status Absensi Hari Ini</h2>
-          <div>
+          <div className={style.new}>
             <div className={style.title}>
               <h3>Sudah Absensi</h3>
-              <input type="text" placeholder="Cari nama atau jabatan" />
+              <input
+                type="text"
+                placeholder="Cari nama atau jabatan"
+                value={newSearch}
+                onChange={(e) => {
+                  setNewSearch(e.target.value);
+                  fetchNew();
+                }}
+              />
             </div>
-            <Table
-              label={header}
-              rows={yetTable.data}
-              icon={{ label: "Status", element: yetTable.status }}
-              href={yetTable.href}
-            />
+            {newLoading ? (
+              <div className="center fillFlex">
+                <Spinner type="admin" size={48} borderSize={5} />
+              </div>
+            ) : (
+              <Table
+                label={header}
+                rows={yetTable.data}
+                icon={{ label: "Status", element: yetTable.status }}
+                href={yetTable.href}
+              />
+            )}
           </div>
           <div className={style.history}>
             <div className={style.title}>
               <h3>Belum Melakukan Absensi</h3>
-              <input type="text" placeholder="Cari nama atau jabatan" />
+              <input
+                type="text"
+                placeholder="Cari nama atau jabatan"
+                value={historySearch}
+                onChange={(e) => {
+                  setHistorySearch(e.target.value);
+                  fetchHistory();
+                }}
+              />
             </div>
-            <Table
-              type="history"
-              label={header}
-              rows={notYetTable.data}
-              icon={{ label: "Status", element: notYetTable.status }}
-              href={notYetTable.href}
-            />
+            {historyLoading ? (
+              <div className="center fillFlex">
+                <Spinner type="admin" size={48} borderSize={5} />
+              </div>
+            ) : (
+              <Table
+                type="history"
+                label={header}
+                rows={notYetTable.data}
+                icon={{ label: "Status", element: notYetTable.status }}
+                href={notYetTable.href}
+              />
+            )}
           </div>
         </>
       )}

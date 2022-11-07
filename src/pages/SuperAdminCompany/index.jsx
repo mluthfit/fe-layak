@@ -271,7 +271,7 @@ const SuperAdminCompany = () => {
         nama: company.nama,
         email: company.email,
         alamat: company.alamat,
-        web: company.web,
+        web: company.web || "-",
         no_hp: company.no_hp,
         jatah_cuti: company.jatah_cuti,
       });

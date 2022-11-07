@@ -19,6 +19,7 @@ const AdminEmployees = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [userId, setUserId] = useState("0");
+  const [search, setSearch] = useState("");
 
   const [formCreate, setFormCreate] = useState({
     nama: "",
@@ -158,12 +159,12 @@ const AdminEmployees = () => {
     action: [],
   });
 
-  const fetchData = async () => {
+  const fetchData = async (api) => {
     let action = [];
     try {
       const {
         data: { data: users },
-      } = await axios.get("/admin/users");
+      } = await axios.get(api);
       const mappedData = users?.map((user) => {
         action.push(
           <>
@@ -234,7 +235,8 @@ const AdminEmployees = () => {
       resetFormCreateError();
       setShowCreateAcc(true);
       setLoading(true);
-      fetchData();
+      setSearch("");
+      fetchData("/admin/users");
     } catch ({ response }) {
       console.log(response);
       if (Array.isArray(response.data)) {
@@ -250,7 +252,7 @@ const AdminEmployees = () => {
     try {
       await axios.delete(`/admin/users/${userId}`);
       setLoading(true);
-      fetchData();
+      fetchData(`/admin/users?search=${search}`);
     } catch (error) {
       console.log(error);
     }
@@ -264,7 +266,7 @@ const AdminEmployees = () => {
       hideEditForm();
       resetFormUpdateError();
       setLoading(true);
-      fetchData();
+      fetchData(`/admin/users?search=${search}`);
     } catch ({ response }) {
       console.log(response);
       if (Array.isArray(response.data)) {
@@ -276,7 +278,7 @@ const AdminEmployees = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData("/admin/users");
     document.title = "Akun Karyawan - Admin Dashboard";
   }, []);
 
@@ -293,6 +295,7 @@ const AdminEmployees = () => {
                 type="text"
                 id="name"
                 placeholder="Masukkan nama baru"
+                value={formCreate.nama}
                 onChange={(e) =>
                   onChangeHandler(
                     formCreate,
@@ -315,6 +318,7 @@ const AdminEmployees = () => {
                 type="text"
                 id="email"
                 placeholder="Masukkan email baru"
+                value={formCreate.email}
                 onChange={(e) =>
                   onChangeHandler(
                     formCreate,
@@ -337,6 +341,7 @@ const AdminEmployees = () => {
                 type="text"
                 id="position"
                 placeholder="Masukkan jabatan baru"
+                value={formCreate.position}
                 onChange={(e) =>
                   onChangeHandler(
                     formCreate,
@@ -367,7 +372,16 @@ const AdminEmployees = () => {
       <div className={style.listEmployees}>
         <div className={style.title}>
           <h3>Daftar Karyawan</h3>
-          <input type="text" placeholder="Cari nama atau jabatan" />
+          <input
+            type="text"
+            placeholder="Cari nama atau jabatan"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setLoading(true);
+              fetchData(`/admin/users?search=${e.target.value}`);
+            }}
+          />
         </div>
         <div className={`${style.tableContainer} ${loading ? "center" : ""}`}>
           {loading ? (
