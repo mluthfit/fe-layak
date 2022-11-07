@@ -186,7 +186,7 @@ const DetailAdminCuti = () => {
           response.data.start_date
         )} - ${toDateFormat(response.data.end_date)}`,
         deskripsi: response.data.deskripsi,
-        dokumen: `${process.env.REACT_APP_STORAGE_URL}/${response.data.surat_cuti}`,
+        dokumen: response.data.surat_cuti,
         status: response.data.status,
         reason_declined: response.data.alasan_ditolak,
       });
