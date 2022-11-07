@@ -64,7 +64,6 @@ const AdminAbsensi = () => {
         .get(api)
         .then(({ data: res }) => {
           mappingData(res.data, setState);
-          console.log(res.data);
           resolve(`fetch ${api} success`);
         })
         .catch((err) => {
@@ -91,23 +90,20 @@ const AdminAbsensi = () => {
     document.title = "Absensi - Admin Dashboard";
   }, []);
 
-  const fetchNew = async () => {
+  const fetchNew = async (value) => {
     setNewLoading(true);
     try {
-      await fetchTable(`/admin/presences?search=${newSearch}`, setYetTable);
+      await fetchTable(`/admin/presences?search=${value}`, setYetTable);
       setNewLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const fetchHistory = async () => {
+  const fetchHistory = async (value) => {
     setHistoryLoading(true);
     try {
-      await fetchTable(
-        `/admin/presences/yet?search=${historySearch}`,
-        setNotYetTable
-      );
+      await fetchTable(`/admin/presences/yet?search=${value}`, setNotYetTable);
       setHistoryLoading(false);
     } catch (error) {
       console.log(error);
@@ -130,7 +126,7 @@ const AdminAbsensi = () => {
                 value={newSearch}
                 onChange={(e) => {
                   setNewSearch(e.target.value);
-                  fetchNew();
+                  fetchNew(e.target.value);
                 }}
               />
             </div>
@@ -156,7 +152,7 @@ const AdminAbsensi = () => {
                 value={historySearch}
                 onChange={(e) => {
                   setHistorySearch(e.target.value);
-                  fetchHistory();
+                  fetchHistory(e.target.value);
                 }}
               />
             </div>
