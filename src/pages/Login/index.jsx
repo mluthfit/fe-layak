@@ -1,10 +1,45 @@
+import axios from "axios";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import style from "./style.module.css";
 
-const Login = (handleBack) => {
+const Login = (props) => {
+  const { setLogged } = props;
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const api_url = "https://localhost:8080/api";
+
+  const clearInput = () => {
+    setEmail("");
+    setPassword("");
+  ;}
+
+  const login = async () => {
+    try {
+      const authenticate = {
+        email,
+        password,
+      };
+
+      const { data } = await axios.post(
+        `${api_url}/auth/login`,
+        authenticate
+      );
+
+      localStorage.setItem("token", data.access_token);
+      setLogged(true);
+      navigate('/dashboard');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    login();
+    clearInput();
   };
 
   useEffect(() => {
@@ -21,8 +56,10 @@ const Login = (handleBack) => {
             type="email"
             name="email"
             id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Masukkan Email Anda"
-            autocomplete="off"
+            autoComplete="off"
           />
         </div>
         <div className={style.formGroup}>
@@ -32,6 +69,7 @@ const Login = (handleBack) => {
             name="password"
             id="password"
             placeholder="Masukkan Password Anda"
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <p>
