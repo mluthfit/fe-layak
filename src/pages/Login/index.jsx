@@ -14,7 +14,7 @@ const Login = (props) => {
   const clearInput = () => {
     setEmail("");
     setPassword("");
-  ;}
+  };
 
   const login = async () => {
     try {
