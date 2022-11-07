@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg";
-import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar-dates.svg";
 import { ReactComponent as DeclinedIcon } from "../../assets/icons/cross.svg";
 import { ReactComponent as RequstedIcon } from "../../assets/icons/check-mark.svg";
 import { ReactComponent as ApprovedIcon } from "../../assets/icons/check-marks.svg";
@@ -18,19 +17,15 @@ const AdminCuti = () => {
   const storageUrl = process.env.REACT_APP_STORAGE_URL;
 
   const [loading, setLoading] = useState(true);
-  const [filterDate, setFilterDate] = useState(false);
-  const [filterStatus, setFilterStatus] = useState("all");
+  const [newLoading, setNewLoading] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [newSearch, setNewSearch] = useState("");
+  const [historySearch, setHistorySearch] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
 
   const [showProgressBar, setShowProgressBar] = useState(false);
   const [progress, setProgress] = useState(0);
   const [templateUrl, setTemplateUrl] = useState(null);
-
-  const toggleDateHandler = (e) => {
-    let el = getExactElementByClass(e.target, `${style.button}`);
-    el.classList.toggle(`${style.active}`);
-
-    setFilterDate(!filterDate);
-  };
 
   const resetFilterStatus = () => {
     const statusesEl = document.querySelectorAll(".status");
@@ -40,13 +35,15 @@ const AdminCuti = () => {
   const approveHandler = (e) => {
     resetFilterStatus();
     const el = getExactElementByClass(e.target, "status");
-    if (filterStatus === "approved") {
-      setFilterStatus("all");
+    if (filterStatus === "Approved") {
+      setFilterStatus("");
+      fetchFilterHistory(historySearch, "");
       el.classList.remove(`${style.active}`);
       return;
     }
 
-    setFilterStatus("approved");
+    setFilterStatus("Approved");
+    fetchFilterHistory(historySearch, "Approved");
     el.classList.add(`${style.active}`);
     return;
   };
@@ -54,13 +51,15 @@ const AdminCuti = () => {
   const declineHandler = (e) => {
     resetFilterStatus();
     const el = getExactElementByClass(e.target, "status");
-    if (filterStatus === "declined") {
-      setFilterStatus("all");
+    if (filterStatus === "Declined") {
+      setFilterStatus("");
+      fetchFilterHistory(historySearch, "");
       el.classList.remove(`${style.active}`);
       return;
     }
 
-    setFilterStatus("declined");
+    setFilterStatus("Declined");
+    fetchFilterHistory(historySearch, "Declined");
     el.classList.add(`${style.active}`);
     return;
   };
@@ -158,7 +157,7 @@ const AdminCuti = () => {
       axios
         .get("/leaves/download-template-surat-cuti")
         .then(({ data: res }) => {
-          setTemplateUrl(res.data.company.template_surat_cuti);
+          setTemplateUrl(res.data.company?.template_surat_cuti);
           resolve("fetch template success");
         })
         .catch((err) => {
@@ -181,9 +180,33 @@ const AdminCuti = () => {
     }
   };
 
+  const fetchFilterNew = async (value) => {
+    setNewLoading(true);
+    try {
+      await fetchTable(`/admin/leaves?search=${value}`, setReqTable);
+      setNewLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchFilterHistory = async (searchValue, statusValue) => {
+    setHistoryLoading(true);
+    try {
+      await fetchTable(
+        `/admin/leaves/history?search=${searchValue}${
+          statusValue && `&status=${statusValue}`
+        }`,
+        setHistoryTable
+      );
+      setHistoryLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
-
     document.title = "Permintaan Cuti - Admin Dashboard";
   }, []);
 
@@ -230,25 +253,33 @@ const AdminCuti = () => {
               {state.message}
             </div>
           )}
-          <div>
+          <div className={style.new}>
             <div className={style.title}>
               <h3>Baru</h3>
               <div className={style.filter}>
-                <button
-                  className={`${style.button} ${style.blue}`}
-                  onClick={toggleDateHandler}
-                >
-                  <CalendarIcon />
-                </button>
-                <input type="text" placeholder="Cari nama atau jabatan" />
+                <input
+                  type="text"
+                  placeholder="Cari nama atau jabatan"
+                  value={newSearch}
+                  onChange={(e) => {
+                    setNewSearch(e.target.value);
+                    fetchFilterNew(e.target.value);
+                  }}
+                />
               </div>
             </div>
-            <Table
-              label={header}
-              rows={reqTable.data}
-              icon={{ label: "Status", element: reqTable.status }}
-              href={reqTable.href}
-            />
+            {newLoading ? (
+              <div className="center fillFlex">
+                <Spinner type="admin" size={48} borderSize={5} />
+              </div>
+            ) : (
+              <Table
+                label={header}
+                rows={reqTable.data}
+                icon={{ label: "Status", element: reqTable.status }}
+                href={reqTable.href}
+              />
+            )}
           </div>
           <div className={style.history}>
             <div className={style.title}>
@@ -266,22 +297,30 @@ const AdminCuti = () => {
                 >
                   <ApprovedIcon />
                 </button>
-                <button
-                  className={`${style.button} ${style.blue}`}
-                  onClick={toggleDateHandler}
-                >
-                  <CalendarIcon />
-                </button>
-                <input type="text" placeholder="Cari nama atau jabatan" />
+                <input
+                  type="text"
+                  placeholder="Cari nama atau jabatan"
+                  value={historySearch}
+                  onChange={(e) => {
+                    setHistorySearch(e.target.value);
+                    fetchFilterHistory(e.target.value, filterStatus);
+                  }}
+                />
               </div>
             </div>
-            <Table
-              type="history"
-              label={header}
-              rows={historyTable.data}
-              icon={{ label: "Status", element: historyTable.status }}
-              href={historyTable.href}
-            />
+            {historyLoading ? (
+              <div className="center fillFlex">
+                <Spinner type="admin" size={48} borderSize={5} />
+              </div>
+            ) : (
+              <Table
+                type="history"
+                label={header}
+                rows={historyTable.data}
+                icon={{ label: "Status", element: historyTable.status }}
+                href={historyTable.href}
+              />
+            )}
           </div>
         </>
       )}

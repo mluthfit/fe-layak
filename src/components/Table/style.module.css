@@ -3,6 +3,7 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0 0.5rem;
+  flex: 1;
 }
 
 .table .thead {
@@ -71,5 +72,4 @@
 
 .notFound {
   display: block;
-  margin-bottom: 3rem;
 }
