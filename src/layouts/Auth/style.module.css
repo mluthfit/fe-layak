@@ -1,8 +1,8 @@
-.Login {
+.auth {
   display: flex;
   flex-direction: row;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
   background-color: var(--primary-400);
 }
 
@@ -10,7 +10,22 @@
   flex: 65%;
 }
 
-.SideLogo {
+.flexCenter {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.sideLogo {
   flex: 35%;
   background: var(--primary-100);
+  flex-direction: column;
+}
+
+.sideLogo img {
+  width: 35%;
+}
+
+.sideLogo h1 {
+  margin-top: 2rem;
 }

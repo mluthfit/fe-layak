@@ -115,7 +115,7 @@ const UserCuti = () => {
   ];
 
   return (
-    <div className={`${style.userCuti} ${loading ? "center" : ""}`}>
+    <div className={loading ? "center" : ""}>
       {loading ? (
         <Spinner type="user" size={48} borderSize={5} />
       ) : (

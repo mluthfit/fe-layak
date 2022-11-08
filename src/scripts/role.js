@@ -1,7 +1,7 @@
 const role = {
-  USER: "user",
-  ADMIN: "admin",
-  SUPERADMIN: "super_admin",
+  USER: "User",
+  ADMIN: "Admin",
+  SUPERADMIN: "Super Admin",
 };
 
 export default role;

@@ -18,7 +18,7 @@ const toDateFormat = (stringDate) => {
 
   const day = newDate.getDate();
   const date = day < 10 ? `0${day}` : day;
-  const month = monthLabel[newDate.getMonth() + 1];
+  const month = monthLabel[newDate.getMonth()];
   const year = newDate.getFullYear();
 
   return `${date} ${month} ${year}`;

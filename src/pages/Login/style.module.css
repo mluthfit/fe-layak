@@ -1,72 +1,76 @@
 .mainForm {
-    width: 30rem;
-    margin: 21rem auto;
+  width: 90%;
+  max-width: 450px;
 }
-  
-  .mainForm h2 {
-    text-align: center;
-    font-size: 28px;
-    padding-bottom: 1em;
-    color: var(--primary-100);
-  }
-  
-  .mainForm p,
-  .mainForm a,
-  .formGroup label,
-  .buttons .loginButton {
-    color: var(--primary-100);
-    font-weight: 600;
-    font-size: 14px;
-  }
-  
-  .mainForm p {
-    text-align: right;
-    margin: 1em 0em;
-  }
-  
-  .mainForm a {
-    text-decoration: none;
-  }
-  
-  .formGroup {
-    margin: 1em 0;
-    text-align: center;
-  }
-  
-  .formGroup label {
-    text-align: left;
-    display: block;
-  }
-  
-  .formGroup input {
-    border: none;
-    outline: none;
-    width: 100%;
-    padding: 0.7em 1em;
-    border-radius: 5px;
-    border: 1px solid var(--primary-400);
-  }
-  
-  .mainForm .formGroup input:focus {
-    border: 1px solid var(--primary-200);
-    background-color: var(--primary-100);
-  }
-  
-  .mainForm::placeholder {
-    font-family: "Poppins", sans-serif;
-  }
-  
-  .buttons {
-    text-align: center;
-  }
-  
-  .buttons .loginButton {
-    font-family: "Poppins", sans-serif;
-    border: none;
-    border-radius: 20px;
-    width: 100%;
-    padding: 0.5em;
-    background-color: var(--primary-300);
-    text-align: center;
-  }
-  
+
+.mainForm h2 {
+  text-align: center;
+  font-size: 28px;
+  padding-bottom: 2rem;
+  color: var(--primary-100);
+}
+
+.mainForm p,
+.mainForm a,
+.formGroup label,
+.buttons .loginButton {
+  color: var(--primary-100);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mainForm p {
+  text-align: right;
+  margin: 1em 0em;
+}
+
+.mainForm a {
+  text-decoration: none;
+}
+
+.formGroup {
+  margin: 1em 0;
+  text-align: center;
+}
+
+.formGroup label {
+  text-align: left;
+  display: block;
+}
+
+.formGroup input {
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 0.7em 1em;
+  border-radius: 5px;
+  border: 1px solid var(--primary-400);
+}
+
+.mainForm .formGroup input:focus {
+  border: 1px solid var(--primary-200);
+  background-color: var(--primary-100);
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.buttons .loginButton {
+  border: none;
+  border-radius: 20px;
+  width: 100%;
+  padding: 0.5em;
+  background-color: var(--primary-300);
+  text-align: center;
+}
+
+.loginButton:hover {
+  box-shadow: 3px 3px 10px var(--blank-100);
+}
+
+.alert {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}

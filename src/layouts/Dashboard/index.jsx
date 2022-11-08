@@ -161,7 +161,7 @@ const Dashboard = ({ type, role }) => {
               </Link>
             </li>
             <li>
-              <Link to="/logout">
+              <Link to="/auth/logout">
                 <LogoutIcon />
                 <span>Logout</span>
               </Link>

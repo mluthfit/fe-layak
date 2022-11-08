@@ -1,22 +1,22 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import style from "./style.module.css";
 
 const ResetPassword = () => {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
-    const navigate = useNavigate();
-    const navigateToLogin = () => {
-        navigate('/auth/login');
-    };
-    
-    useEffect(() => {
-      document.title = "LayaK - Reset Password";
-    }, []);
-    
-    return (
-      <div className={style.mainForm}>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+  const navigate = useNavigate();
+  const navigateToLogin = () => {
+    navigate("/auth/login");
+  };
+
+  useEffect(() => {
+    document.title = "LayaK - Reset Password";
+  }, []);
+
+  return (
+    <div className={style.mainForm}>
       <h2>RESET PASSWORD</h2>
       <form onSubmit={handleSubmit}>
         <div className={style.formGroup}>
@@ -51,13 +51,17 @@ const ResetPassword = () => {
           <button type="submit" className={style.submitButton}>
             Ganti Password
           </button>
-          <button type="button" onClick={navigateToLogin} className={style.submitButton}>
+          <button
+            type="button"
+            onClick={navigateToLogin}
+            className={style.submitButton}
+          >
             Kembali
           </button>
         </div>
       </form>
     </div>
-    )
+  );
 };
 
 export default ResetPassword;

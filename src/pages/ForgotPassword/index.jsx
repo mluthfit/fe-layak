@@ -1,22 +1,22 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import style from "./style.module.css";
 
 const ForgotPassword = () => {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
-    const navigate = useNavigate();
-    const navigateToLogin = () => {
-        navigate('/auth/login');
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+  const navigate = useNavigate();
+  const navigateToLogin = () => {
+    navigate("/auth/login");
+  };
 
-    useEffect(() => {
-      document.title = "LayaK - Lupa Password";
-    }, []);
+  useEffect(() => {
+    document.title = "LayaK - Lupa Password";
+  }, []);
 
-    return (
-      <div className={style.mainForm}>
+  return (
+    <div className={style.mainForm}>
       <h2>LUPA PASSWORD</h2>
       <form onSubmit={handleSubmit}>
         <div className={style.formGroup}>
@@ -33,13 +33,17 @@ const ForgotPassword = () => {
           <button type="submit" className={style.submitButton}>
             Kirim Email
           </button>
-          <button type="button" onClick={navigateToLogin} className={style.submitButton}>
+          <button
+            type="button"
+            onClick={navigateToLogin}
+            className={style.submitButton}
+          >
             Kembali
           </button>
         </div>
       </form>
     </div>
-    )
+  );
 };
 
 export default ForgotPassword;
