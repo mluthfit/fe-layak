@@ -30,26 +30,23 @@ import Logout from "./pages/Logout";
 import { useEffect } from "react";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [roleUser, setRoleUser] = useState("");
   const fetchUser = async () => {
     try {
       const { data: response } = await axios.get(
         "/leaves/download-template-surat-cuti"
       );
 
-      setUser({
-        ...user,
-        role: response.data.role,
-      });
+      setRoleUser(response.data.role);
     } catch (error) {
-      setUser(null);
+      setRoleUser("");
       console.log(error);
     }
   };
 
   useEffect(() => {
     fetchUser();
-  });
+  }, [roleUser]);
 
   return (
     <Routes>
@@ -58,8 +55,8 @@ const App = () => {
       <Route
         path="/dashboard"
         element={
-          [TypeRole.ADMIN, TypeRole.USER].includes(user?.role) ? (
-            <Dashboard type="user" role={user.role} />
+          [TypeRole.ADMIN, TypeRole.USER].includes(roleUser) ? (
+            <Dashboard type="user" role={roleUser} />
           ) : (
             <Navigate to="/auth/login" />
           )
@@ -79,8 +76,8 @@ const App = () => {
       <Route
         path="/admin"
         element={
-          user?.role === TypeRole.ADMIN ? (
-            <Dashboard type="admin" role={user.role} />
+          roleUser === TypeRole.ADMIN ? (
+            <Dashboard type="admin" role={roleUser} />
           ) : (
             <Navigate to="/auth/login" />
           )
@@ -101,8 +98,8 @@ const App = () => {
       <Route
         path="/super-admin"
         element={
-          user?.role === TypeRole.SUPERADMIN ? (
-            <Dashboard type="admin" role={user.role} />
+          roleUser === TypeRole.SUPERADMIN ? (
+            <Dashboard type="admin" role={roleUser} />
           ) : (
             <Navigate to="/auth/login" />
           )
@@ -114,17 +111,21 @@ const App = () => {
       </Route>
       <Route
         path="/auth"
-        element={user ? <RouteNavigate user={user} /> : <Auth />}
+        element={roleUser ? <RouteNavigate role={roleUser} /> : <Auth />}
       >
         <Route index element={<Navigate replace to="login" />} />
-        <Route path="login" element={<Login setUser={setUser} />} />
+        <Route path="login" element={<Login setState={setRoleUser} />} />
         <Route path="forgot-password" element={<ForgotPassword />}></Route>
         <Route path="reset-password" element={<ResetPassword />}></Route>
       </Route>
       <Route
         path="/auth/logout"
         element={
-          user ? <Logout setUser={setUser} /> : <Navigate to="/auth/login" />
+          roleUser ? (
+            <Logout setState={setRoleUser} />
+          ) : (
+            <Navigate to="/auth/login" />
+          )
         }
       />
     </Routes>

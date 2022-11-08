@@ -2,13 +2,13 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { setLocalStorage } from "../../scripts/localStorage";
 
-const Logout = ({ setUser }) => {
+const Logout = ({ setState }) => {
   (async () => {
     try {
       await axios.post("/auth/logout");
       setLocalStorage("token", "");
       axios.defaults.headers.common["Authorization"] = "";
-      setUser(null);
+      setState("");
     } catch (error) {
       console.log(error);
     }

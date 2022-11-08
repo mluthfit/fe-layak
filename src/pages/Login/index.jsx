@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { setLocalStorage } from "../../scripts/localStorage";
 import style from "./style.module.css";
 
-const Login = ({ setUser }) => {
+const Login = ({ setState }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,10 +27,7 @@ const Login = ({ setUser }) => {
       const { token } = response;
       setLocalStorage("token", token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      setUser((user) => ({
-        ...user,
-        role: response.data.role,
-      }));
+      setState(response.data.role);
 
       onResetInput();
       navigate("/dashboard");
@@ -54,6 +51,7 @@ const Login = ({ setUser }) => {
             type="email"
             id="email"
             value={email}
+            autoComplete="off"
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Masukkan Email Anda"
           />
