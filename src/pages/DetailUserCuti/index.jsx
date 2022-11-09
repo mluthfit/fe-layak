@@ -1,58 +1,63 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import Detail from "../../components/Detail";
 import Spinner from "../../components/Spinner";
+import { toDateFormat } from "../../scripts/string";
 import style from "./style.module.css";
 
 const DetailUserCuti = () => {
-  const params = useParams();
-  console.log(params.cutiId);
-
+  const navigate = useNavigate();
+  const { cutiId } = useParams();
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    document.title = "Detail Cuti - Dashboard";
-  }, []);
+  const [detail, setDetail] = useState({
+    name: "",
+    position: "",
+    email: "",
+    sisaCuti: "",
+    kategori: "",
+    rentang_waktu: "",
+    deskripsi: "",
+    dokumen: "",
+    status: "",
+    reason_declined: "-",
+  });
 
   const lists = [
     {
       title: "Nama",
-      value: "Ahmad Sodikin Alkabar",
+      value: detail.name,
       type: "text",
     },
     {
       title: "Jabatan",
-      value: "Junior Software Engineer",
+      value: detail.position,
       type: "text",
     },
     {
       title: "Email",
-      value: "ahmadsodikin64@amazon.id",
+      value: detail.email,
       type: "text",
     },
     {
       title: "Sisa Cuti Terakhir",
-      value: 5,
+      value: detail.sisaCuti,
       type: "text",
     },
     {
       title: "Kategori Cuti",
-      value: "Lainnya",
+      value: detail.kategori,
       type: "text",
     },
     {
       title: "Rentang Waktu Cuti",
-      value: "2 Oktober 2022 - 5 Oktober 2022",
+      value: detail.rentang_waktu,
       type: "text",
     },
     {
       title: "Deskripsi",
-      value:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+      value: detail.deskripsi,
       type: "text",
       fontSize: "small",
     },
@@ -60,22 +65,67 @@ const DetailUserCuti = () => {
       title: "Dokumen Cuti",
       value: "Unduh Dokumen",
       type: "link",
-      href: "https://www.google.com",
+      href: detail.dokumen,
     },
     {
       title: "Status",
-      value: "Diterima",
+      value: detail.status,
       type: "text",
-      fontColor: "success",
+      fontColor:
+        detail.status === "Approved"
+          ? "success"
+          : detail.status === "Declined"
+          ? "danger"
+          : "",
     },
     {
       title: "Alasan Jika Ditolak",
-      value:
-        "Rentang waktu yang diusulkan tidak dapat diterima karena perusahaan membutuhkan produksi besar",
+      value: detail.reason_declined || "-",
       type: "text",
       fontSize: "small",
     },
   ];
+
+  const fetchDetail = async () => {
+    try {
+      const { data: response } = await axios.get(`/leaves/${cutiId}`);
+
+      if (response.success === "false") {
+        navigate("/admin/cuti");
+        throw response.messages;
+      }
+
+      setDetail({
+        name: response.data.user.nama,
+        position: response.data.user.position,
+        email: response.data.user.email,
+        sisaCuti: response.data.user.sisa_cuti,
+        kategori: response.data.tipe_cuti,
+        rentang_waktu: `${toDateFormat(
+          response.data.start_date
+        )} - ${toDateFormat(response.data.end_date)}`,
+        deskripsi: response.data.deskripsi,
+        dokumen: response.data.surat_cuti,
+        status: response.data.status,
+        reason_declined: response.data.alasan_ditolak,
+      });
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const id = parseInt(cutiId);
+    if (isNaN(id) || id <= 0) {
+      navigate("/dashboard/cuti");
+      return;
+    }
+
+    fetchDetail();
+    document.title = "Detail Cuti - Dashboard";
+  }, []);
 
   return (
     <div className={loading ? "center" : ""}>
