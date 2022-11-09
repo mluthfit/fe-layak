@@ -180,3 +180,19 @@
   padding: 0.5rem;
   border-radius: 5px;
 }
+
+.flash {
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+}
+
+.uploadBar {
+  border-radius: 3px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.uploadBar .progress {
+  height: 3px;
+  background-color: var(--secondary-300);
+}

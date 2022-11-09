@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import axios from "axios";
 import Dashboard from "./layouts/Dashboard";
 import Auth from "./layouts/Auth";
 import LandingPage from "./pages/LandingPage";
@@ -24,44 +23,14 @@ import SuperAdminAdmin from "./pages/SuperAdminAdmin";
 import SuperAdminCompany from "./pages/SuperAdminCompany";
 import DetailUserAbsensi from "./pages/DetailUserAbsensi";
 import UserAbsensi from "./pages/UserAbsensi";
-import RouteNavigate from "./components/RouteNavigate";
-import TypeRole from "./scripts/role";
 import Logout from "./pages/Logout";
-import { useEffect } from "react";
 
 const App = () => {
-  const [roleUser, setRoleUser] = useState("");
-  const fetchUser = async () => {
-    try {
-      const { data: response } = await axios.get(
-        "/leaves/download-template-surat-cuti"
-      );
-
-      setRoleUser(response.data.role);
-    } catch (error) {
-      setRoleUser("");
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, [roleUser]);
-
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Navigate replace to="/auth/login" />} />
-      <Route
-        path="/dashboard"
-        element={
-          [TypeRole.ADMIN, TypeRole.USER].includes(roleUser) ? (
-            <Dashboard type="user" role={roleUser} />
-          ) : (
-            <Navigate to="/auth/login" />
-          )
-        }
-      >
+      <Route path="/dashboard" element={<Dashboard type="user" role="User" />}>
         <Route index element={<Overview />} />
         <Route path="absensi" element={<UserAbsensi />} />
         <Route path="absensi/:absensiId" element={<DetailUserAbsensi />} />
@@ -73,16 +42,7 @@ const App = () => {
           element={<DetailUserReimburse />}
         />
       </Route>
-      <Route
-        path="/admin"
-        element={
-          roleUser === TypeRole.ADMIN ? (
-            <Dashboard type="admin" role={roleUser} />
-          ) : (
-            <Navigate to="/auth/login" />
-          )
-        }
-      >
+      <Route path="/admin" element={<Dashboard type="admin" role="Admin" />}>
         <Route index element={<Navigate replace to="absensi" />} />
         <Route path="absensi" element={<AdminAbsensi />} />
         <Route path="absensi/:absensiId" element={<DetailAdminAbsensi />} />
@@ -97,37 +57,19 @@ const App = () => {
       </Route>
       <Route
         path="/super-admin"
-        element={
-          roleUser === TypeRole.SUPERADMIN ? (
-            <Dashboard type="admin" role={roleUser} />
-          ) : (
-            <Navigate to="/auth/login" />
-          )
-        }
+        element={<Dashboard type="admin" role="Super Admin" />}
       >
         <Route index element={<Navigate replace to="perusahaan" />} />
         <Route path="perusahaan" element={<SuperAdminCompany />} />
         <Route path="administator" element={<SuperAdminAdmin />} />
       </Route>
-      <Route
-        path="/auth"
-        element={roleUser ? <RouteNavigate role={roleUser} /> : <Auth />}
-      >
+      <Route path="/auth" element={<Auth />}>
         <Route index element={<Navigate replace to="login" />} />
-        <Route path="login" element={<Login setState={setRoleUser} />} />
+        <Route path="login" element={<Login />} />
         <Route path="forgot-password" element={<ForgotPassword />}></Route>
         <Route path="reset-password" element={<ResetPassword />}></Route>
       </Route>
-      <Route
-        path="/auth/logout"
-        element={
-          roleUser ? (
-            <Logout setState={setRoleUser} />
-          ) : (
-            <Navigate to="/auth/login" />
-          )
-        }
-      />
+      <Route path="/auth/logout" element={<Logout />} />
     </Routes>
   );
 };

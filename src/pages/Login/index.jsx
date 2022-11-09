@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { setLocalStorage } from "../../scripts/localStorage";
 import style from "./style.module.css";
 
-const Login = ({ setState }) => {
+const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,6 @@ const Login = ({ setState }) => {
       const { token } = response;
       setLocalStorage("token", token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      setState(response.data.role);
 
       onResetInput();
       navigate("/dashboard");
