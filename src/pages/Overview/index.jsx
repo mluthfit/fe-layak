@@ -185,15 +185,15 @@ const Overview = () => {
   };
 
   const mapUser = (user) => {
-    setProfile({
-      ...profile,
+    setProfile((current) => ({
+      ...current,
       name: user.nama,
       position: user.position,
       email: user.email,
       avatar: user.foto_profil,
       joined: toDateFormat(user.createdAt),
       sisaCuti: user.sisa_cuti,
-    });
+    }));
 
     setCompany({
       name: user.company?.nama || "-",
@@ -210,11 +210,11 @@ const Overview = () => {
     const mapped = presences.map((presence) => {
       const presenceDate = toDateFormat(presence.createdAt);
       if (nowDate === presenceDate) {
-        setProfile({
-          ...profile,
+        setProfile((current) => ({
+          ...current,
           clockIn: presence.clock_in && toTimeFormat(presence.clock_in),
           clockOut: presence.clock_out && toTimeFormat(presence.clock_out),
-        });
+        }));
       }
 
       return {
