@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ReactComponent as RequestedIcon } from "../../assets/icons/check-mark.svg";
 import { ReactComponent as ApprovedIcon } from "../../assets/icons/check-marks.svg";
@@ -8,22 +9,130 @@ import style from "./style.module.css";
 
 const UserReimburse = () => {
   const [loading, setLoading] = useState(true);
+  const [proofPhoto, setProofPhoto] = useState(null);
+  const [showProgressBar, setShowProgressBar] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [data, setData] = useState({
+    kebutuhan: "",
+    dana: "",
+    date: "",
+    proof: "",
+  })
+  const [reqTable, setReqTable] = useState({
+    link: [],
+    title: [],
+    icons: [],
+  });
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+  const [hisTable, setHisTable] = useState({
+    link: [],
+    title: [],
+    icons: [],
+  });
 
-    document.title = "Pengajuan Reimbursement - Dashboard";
-  }, []);
+  const inputHandle = (e) => {
+    const newData = {...data};
+    newData[e.target.id] = e.target.value
+    setData(newData)
+    console.log(newData)
+  }
 
-  const submitHandle = (e) => {
+  const submitHandle = async (e) => {
     e.preventDefault();
+    try {
+
+      const formData = new FormData();
+      formData.append("bukti_pembayaran", proofPhoto);
+      formData.append("kebutuhan", data.kebutuhan);
+      formData.append("jumlah_uang", data.dana);
+      formData.append("tanggal_pembayaran", data.date);
+
+      setShowProgressBar(true);
+      const { data: response } = await axios.post("/reimbursement", 
+        formData,
+        {
+          onUploadProgress: ({loaded, total}) => {
+          const percent = Math.round((loaded/total) * 100);
+          setProgress(percent);
+        }},
+      );
+      setShowProgressBar(false);
+    } catch ({response}) {
+      console.log(response);
+    }
   };
+
+  const fetchTable = async(api, setState) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(api)
+        .then(({data: res}) => {
+          mappingData(res.data, setState);
+          resolve(`fetch ${api} success`);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
+
+  const mappingData = (data, setState) => {
+    let [icons, link] = [[], []];
+
+    const mappedData = data?.map((reimburse) => {
+      const temp = 
+        reimburse.status === "Pending" ? (
+          <span className="requested">
+            <RequestedIcon />
+          </span>
+        ) : reimburse.status === "Approved" ? (
+          <span className="success">
+            <ApprovedIcon />
+          </span>
+        ) : (
+          <span className="danger">
+            <DeclinedIcon />
+          </span>
+        );
+      
+      icons.push(temp);
+      link.push(`/reimbursement/${reimburse.id}`);
+      return {
+        kebutuhan : reimburse.kebutuhan,
+      };
+    });
+
+    setState({
+      title: mappedData,
+      icons,
+      link,
+    });
+  };
+
+  const fetchData = async () => {
+    try {
+      await Promise.all([
+        fetchTable("/reimbursement", setReqTable),
+        fetchTable("/reimbursement/history", setHisTable),
+      ]);
+      setLoading(false);
+    } catch(err) {
+      console.log(err);
+    };
+  };
+
+  
+  // const listRequested = [
+  //   Object.keys(reqTable).map((items, i) => {
+  //     return {
+  //       link: reqTable[items],
+  //     }
+  //   })
+  // ];
 
   const listRequested = [
     {
-      link: "/dashboard/reimbursement/1",
+      link: "/dashboard/reimbursement/6",
       title: "Makan Siang",
       icons: (
         <>
@@ -34,7 +143,7 @@ const UserReimburse = () => {
       ),
     },
     {
-      link: "/dashboard/reimbursement/2",
+      link: "/dashboard/reimbursement/7",
       title: "Makan Siang",
       icons: (
         <>
@@ -45,7 +154,7 @@ const UserReimburse = () => {
       ),
     },
     {
-      link: "/dashboard/reimbursement/3",
+      link: "/dashboard/reimbursement/8",
       title: "Makan Siang",
       icons: (
         <>
@@ -59,7 +168,7 @@ const UserReimburse = () => {
 
   const listHistory = [
     {
-      link: "/dashboard/reimbursement/1",
+      link: "/dashboard/reimbursement/5",
       title: "Makan Siang",
       icons: (
         <>
@@ -93,6 +202,12 @@ const UserReimburse = () => {
     },
   ];
 
+  
+  useEffect(() => {
+    fetchData();
+    document.title = "Pengajuan Reimbursement - Dashboard";
+  }, []);
+
   return (
     <div className={loading ? "center" : ""}>
       {loading ? (
@@ -107,40 +222,51 @@ const UserReimburse = () => {
               <h3>Buat Pengajuan Baru</h3>
               <form onSubmit={submitHandle}>
                 <div className={style.formGroup}>
-                  <label htmlFor="need">Kebutuhan</label>
+                  <label htmlFor="kebutuhan">Kebutuhan</label>
                   <textarea
-                    id="need"
+                    onChange={(e) => inputHandle(e)}
+                    id="kebutuhan"
                     className={style.need}
                     placeholder="Masukkan kebutuhan pembelian"
                   ></textarea>
                 </div>
                 <div className={style.formGroup}>
-                  <label htmlFor="fund">Jumlah Dana</label>
+                  <label htmlFor="dana">Jumlah Dana</label>
                   <div className={style.fund}>
                     <span className={style.fundLabel}>Rp</span>
                     <input
+                      onChange={(e) => inputHandle(e)}
                       type="number"
-                      id="fund"
+                      id="dana"
                       className={style.fundInput}
                     />
                   </div>
                 </div>
                 <div className={style.formGroup}>
-                  <label htmlFor="paymentDate">Tanggal Pembayaran</label>
+                  <label htmlFor="date">Tanggal Pembayaran</label>
                   <input
+                    onChange={(e) => inputHandle(e)}
                     type="date"
-                    id="paymentDate"
+                    id="date"
                     className={style.paymentDate}
                   />
                 </div>
                 <div className={style.formGroup}>
-                  <label htmlFor="uploadProof">Unggah Bukti</label>
+                  <label htmlFor="proof">Unggah Bukti</label>
                   <input
+                    onChange={(e) => setProofPhoto(e.target.files[0])}
                     type="file"
-                    id="uploadProof"
+                    id="proof"
                     className={style.uploadProof}
                   />
                 </div>
+                {showProgressBar ? (
+                  <>
+                  <div>
+                    <p>{progress}</p>
+                  </div>
+                  </>
+                ) : (<></>)}
                 <button type="submit" className={style.submitForm}>
                   Ajukan
                 </button>
