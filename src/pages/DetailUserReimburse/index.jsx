@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useParams,useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Detail from "../../components/Detail";
 import Spinner from "../../components/Spinner";
 import { toDateFormat, toCurrencyID } from "../../scripts/string";
@@ -11,20 +12,18 @@ const DetailUserReimburse = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
-  const [detail, setDetail] = useState(
-    {
-      name: "",
-      position: "",
-      email: "",
-      kebutuhan: "",
-      dana: "",
-      date: "",
-      proof: "",
-      reimburse: "",
-      status: "",
-      reason_declined: "-",
-    }
-  );
+  const [detail, setDetail] = useState({
+    name: "",
+    position: "",
+    email: "",
+    kebutuhan: "",
+    dana: "",
+    date: "",
+    proof: "",
+    reimburse: "",
+    status: "",
+    reason_declined: "-",
+  });
 
   const lists = [
     {
@@ -73,9 +72,11 @@ const DetailUserReimburse = () => {
       value: detail.status,
       type: "text",
       fontColor:
-        detail.status === "Approved" ? "success"
-        : detail.status === "Declined" ? "danger"
-        : "",
+        detail.status === "Approved"
+          ? "success"
+          : detail.status === "Declined"
+          ? "danger"
+          : "",
     },
     {
       title: "Alasan Jika Ditolak",
@@ -85,9 +86,9 @@ const DetailUserReimburse = () => {
     },
   ];
 
-  const fetchData = async() => {
+  const fetchData = async () => {
     try {
-      const { data: response} = await axios.get(
+      const { data: response } = await axios.get(
         `/reimbursement/${reimburseId}`
       );
 
@@ -113,11 +114,11 @@ const DetailUserReimburse = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     const id = parseInt(reimburseId);
-    if (isNaN(id) || id <= 0){
+    if (isNaN(id) || id <= 0) {
       navigate("/dashboard/reimbursement");
       return;
     }
