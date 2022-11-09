@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ReactComponent as RequestedIcon } from "../../assets/icons/check-mark.svg";
@@ -17,7 +18,7 @@ const UserReimburse = () => {
     dana: "",
     date: "",
     proof: "",
-  })
+  });
   const [reqTable, setReqTable] = useState({
     link: [],
     title: [],
@@ -31,16 +32,15 @@ const UserReimburse = () => {
   });
 
   const inputHandle = (e) => {
-    const newData = {...data};
-    newData[e.target.id] = e.target.value
-    setData(newData)
-    console.log(newData)
-  }
+    const newData = { ...data };
+    newData[e.target.id] = e.target.value;
+    setData(newData);
+    console.log(newData);
+  };
 
   const submitHandle = async (e) => {
     e.preventDefault();
     try {
-
       const formData = new FormData();
       formData.append("bukti_pembayaran", proofPhoto);
       formData.append("kebutuhan", data.kebutuhan);
@@ -48,25 +48,23 @@ const UserReimburse = () => {
       formData.append("tanggal_pembayaran", data.date);
 
       setShowProgressBar(true);
-      const { data: response } = await axios.post("/reimbursement", 
-        formData,
-        {
-          onUploadProgress: ({loaded, total}) => {
-          const percent = Math.round((loaded/total) * 100);
+      const { data: response } = await axios.post("/reimbursement", formData, {
+        onUploadProgress: ({ loaded, total }) => {
+          const percent = Math.round((loaded / total) * 100);
           setProgress(percent);
-        }},
-      );
+        },
+      });
       setShowProgressBar(false);
-    } catch ({response}) {
+    } catch ({ response }) {
       console.log(response);
     }
   };
 
-  const fetchTable = async(api, setState) => {
+  const fetchTable = async (api, setState) => {
     return new Promise((resolve, reject) => {
       axios
         .get(api)
-        .then(({data: res}) => {
+        .then(({ data: res }) => {
           mappingData(res.data, setState);
           resolve(`fetch ${api} success`);
         })
@@ -80,7 +78,7 @@ const UserReimburse = () => {
     let [icons, link] = [[], []];
 
     const mappedData = data?.map((reimburse) => {
-      const temp = 
+      const temp =
         reimburse.status === "Pending" ? (
           <span className="requested">
             <RequestedIcon />
@@ -94,11 +92,11 @@ const UserReimburse = () => {
             <DeclinedIcon />
           </span>
         );
-      
+
       icons.push(temp);
       link.push(`/reimbursement/${reimburse.id}`);
       return {
-        kebutuhan : reimburse.kebutuhan,
+        kebutuhan: reimburse.kebutuhan,
       };
     });
 
@@ -116,12 +114,11 @@ const UserReimburse = () => {
         fetchTable("/reimbursement/history", setHisTable),
       ]);
       setLoading(false);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
-    };
+    }
   };
 
-  
   // const listRequested = [
   //   Object.keys(reqTable).map((items, i) => {
   //     return {
@@ -202,7 +199,6 @@ const UserReimburse = () => {
     },
   ];
 
-  
   useEffect(() => {
     fetchData();
     document.title = "Pengajuan Reimbursement - Dashboard";
@@ -262,11 +258,13 @@ const UserReimburse = () => {
                 </div>
                 {showProgressBar ? (
                   <>
-                  <div>
-                    <p>{progress}</p>
-                  </div>
+                    <div>
+                      <p>{progress}</p>
+                    </div>
                   </>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
                 <button type="submit" className={style.submitForm}>
                   Ajukan
                 </button>

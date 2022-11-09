@@ -49,24 +49,6 @@
   align-items: center;
 }
 
-.left .camera {
-  margin-top: 1rem;
-  width: 95%;
-  height: 350px;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: var(--secondary-200);
-}
-
-.left .camera img {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 5px;
-}
-
 .buttons {
   margin-top: 2rem;
 }
@@ -96,4 +78,11 @@
 
 .buttons .savePhoto:hover {
   box-shadow: 1px 1px 10px var(--primary-400);
+}
+
+.camera {
+  width: 630px;
+  height: 470px;
+  border-radius: 10px;
+  overflow: hidden;
 }

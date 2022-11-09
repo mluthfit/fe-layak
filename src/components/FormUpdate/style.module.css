@@ -80,3 +80,10 @@
 .buttons .back:hover {
   box-shadow: 1px 1px 10px var(--request-100);
 }
+
+.flash {
+  margin-top: -0.5rem;
+  margin-bottom: -1rem;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+}

@@ -1,177 +1,279 @@
 .main {
-    height: 2700px;
-    background-color: var(--secondary-200);
+  background-color: var(--secondary-200);
+}
+
+.jumbotron {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.curve {
+  height: 100vh;
+  width: 900px;
+  position: absolute;
+  right: 0;
 }
 
 .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    background-color: var(--secondary-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.5rem;
+  position: relative;
 }
 
-.topbar img {
-    margin: 0.5rem 0rem 1rem 1rem;
-    width : 4rem;
+.topbarLeft {
+  display: flex;
+  align-items: center;
 }
 
-.topbar h1 {
-    font-size: 2rem;
-    font-weight: 900;
-    margin: 0rem 0.5rem;
+.topbarLeft img {
+  width: 10%;
 }
 
-.topbarright {
-    font-size: 1.2rem;
-    display: flex;
-    margin-left: auto;
-    gap: 20px;
-    padding-right: 3rem;
+.topbarLeft span {
+  font-size: 1.5rem;
+  font-weight: bolder;
+  margin: 0rem 0.5rem;
+}
+
+.topbarRight {
+  font-size: 1rem;
+  display: flex;
+  gap: 3rem;
+}
+
+.topbarRight button {
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  font-size: 1rem;
 }
 
 .pages {
-    text-decoration: none;
-    color: var(--primary-400);
-    font-weight: bold;
+  text-decoration: none;
+  color: var(--secondary-100);
+  font-weight: bold;
 }
 
-.bluepages {
-    text-decoration: none;
-    font-weight: bold;
-    padding: 0.5rem 1.2rem;
-    color: var(--primary-100);
-    background-color: var(--primary-300);
-    border-radius: 5px;
+.bluePages {
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1.2rem;
+  color: var(--primary-100);
+  background-color: var(--primary-300);
+  border-radius: 5px;
 }
 
 .home {
-    display: flex;
-    padding-top: 5rem;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  padding: 2rem;
 }
 
-.hometext {
-    width: 40%;
-    flex: 1;
-    padding: 9rem 4rem;
+.home img {
+  width: 40%;
 }
 
-.hometext h1 {
-    font-size: 4.5rem;
-    margin: 0.5rem 0rem;
+.homeText {
+  width: 40%;
+  padding: 2rem;
 }
 
-.hometext p, .features p {
-    font-size: 1.2rem;
+.homeText h1 {
+  font-size: 4.5rem;
+  margin: 0.5rem 0rem;
 }
 
-.hometext .bluebold {
-    color: var(--primary-400);
-    font-weight: bold;
-    font-style: italic;
+.homeText p,
+.features p {
+  font-size: 1.2rem;
 }
 
-.humanpics {
-    width: 60%;
-    text-align: center;
+.homeText .blueBold {
+  color: var(--primary-400);
+  font-weight: bold;
+  font-style: italic;
 }
 
-.humanpics img {
-    width: 60rem;
-    padding-left: 2rem;
+.joinButton {
+  font-weight: bold;
+  border: none;
+  font-size: 1rem;
+  border-radius: 5px;
+  margin-top: 0.8rem;
+  padding: 0.5rem 1rem;
+  color: var(--primary-100);
+  background-color: var(--primary-300);
 }
 
-.joinbutton {
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    margin-top: 0.8rem;
-    padding: 0.6rem 0.7rem;
-    color: var(--primary-100);
-    background-color: var(--primary-300);
+.joinButton:hover {
+  box-shadow: 3px 3px 10px var(--primary-300);
 }
 
 .features {
-    margin-top: 3rem;
+  margin-top: 3rem;
 }
 
-.features h1, .testimoni h1{
-    font-size: 3rem;
+.marBot {
+  margin-top: 5rem;
 }
 
-.features h1, .features p{
-    text-align: center;
+.features h1,
+.testimoni h1 {
+  font-size: 2.5rem;
+}
+
+.features h1,
+.features p {
+  text-align: center;
 }
 
 .listFitur {
-    margin: auto;
-    padding-top: 1em;
-    align-items: center;
-    width: 45em;
+  margin: auto;
+  padding-top: 1em;
+  align-items: center;
+  width: 45em;
 }
 
 .listFitur .statusToday > div {
-    display: flex;
-    margin: 1rem 0;
-    align-items: center;
+  display: flex;
+  margin: 1rem 0;
+  align-items: center;
 }
 
 .listFitur .statusToday > div > .absenIn {
-    margin-left: 1.5rem;
+  margin-left: 1.5rem;
 }
 
 .sisaCuti {
-    padding-top: 1.5rem;
+  padding-top: 1.5rem;
 }
 
 .sisaCuti .label {
-    color: var(--secondary-300);
-    font-size: 1.1rem;
+  color: var(--secondary-300);
+  font-size: 1.1rem;
 }
-  
+
 .sisaCuti .value {
-    padding: 0.5rem 1rem;
-    background-color: var(--primary-300);
-    color: var(--secondary-100);
-    margin-left: 2rem;
-    border-radius: 5px;
-    display: inline-block;
-    font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-300);
+  color: var(--secondary-100);
+  margin-left: 2rem;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 1.1rem;
 }
 
 .more {
-    padding-top: 1.5rem;
-    text-align: center;
+  padding-top: 1.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .testimoni {
-    padding-top: 3rem;
-    text-align: center;
+  padding-top: 3rem;
+  text-align: center;
 }
 
 .testimoni .listTestimoni {
-    padding: 2rem 5rem;
-    margin: 1rem auto;
-    width: 55em;
-    color: var(--primary-100);
-    background-color: var(--primary-300);
-    border-radius: 10px;
+  padding: 2rem 5rem;
+  margin: 1rem auto;
+  width: 55em;
+  color: var(--primary-100);
+  background-color: var(--primary-300);
+  border-radius: 10px;
 }
 
-.listTestimoni h2{
-    font-size: 2rem;
+.listTestimoni h2 {
+  font-size: 2rem;
 }
 
 .listTestimoni .reviewer {
-    padding-top: 2rem;
-    color: black;
-    font-style: italic;
-    font-size: 1.4rem;
+  padding-top: 2rem;
+  color: black;
+  font-style: italic;
+  font-size: 1.4rem;
 }
 
 .icon {
-    display: flex;
-    padding: 0.5rem;
-    border-radius: 5px;
+  display: flex;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.registerModal {
+  position: absolute;
+  padding: 3rem 4rem;
+  background-color: var(--secondary-100);
+  top: 50%;
+  left: 50%;
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  width: 90%;
+  max-width: 700px;
+}
+
+.registerModal h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.contacts > span {
+  color: var(--secondary-300);
+}
+
+.contact {
+  background-color: var(--primary-100);
+  padding: 0.8rem 1.7rem;
+  margin-top: 0.5rem;
+  display: flex;
+  border-radius: 5px;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+}
+
+.contact:hover {
+  background-color: var(--primary-400);
+}
+
+.contact svg {
+  width: 40px;
+  height: 40px;
+}
+
+.contact span {
+  margin-left: 2rem;
+}
+
+.contact:hover svg,
+.contact:hover span {
+  color: var(--secondary-100);
+  fill: var(--secondary-100);
+}
+
+.back {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.back button {
+  border: none;
+  outline: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.back button:hover {
+  background-color: var(--primary-200);
+  color: var(--secondary-100);
 }

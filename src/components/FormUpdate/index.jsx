@@ -5,6 +5,7 @@ const FormUpdate = ({
   title,
   formInputs,
   formError,
+  errorMsg,
   submitHandle,
   backHandle,
 }) => {
@@ -29,6 +30,7 @@ const FormUpdate = ({
             )}
           </div>
         ))}
+        {errorMsg && <div className={`${style.flash} danger`}>{errorMsg}</div>}
         <div className={style.buttons}>
           <button type="submit" className={style.save}>
             Simpan

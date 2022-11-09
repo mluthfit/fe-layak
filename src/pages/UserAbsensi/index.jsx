@@ -1,40 +1,63 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import Webcam from "react-webcam";
 import { ReactComponent as ClockInIcon } from "../../assets/icons/arrow-up-right.svg";
 import { ReactComponent as ClockOutIcon } from "../../assets/icons/arrow-down-left.svg";
 import ListAbsensi from "../../components/ListAbsensi";
 import Spinner from "../../components/Spinner";
 import style from "./style.module.css";
+import { toImageFile } from "../../scripts/string";
+import axios from "axios";
 
+const videoConstraints = {
+  facingMode: "user",
+};
+
+// const WebcamComponent = () => <Webcam />;
 const UserAbsensi = () => {
   const [loading, setLoading] = useState(true);
-  const [captured, setCaptured] = useState(true);
-  const [clockedIn, setClockedIn] = useState(true);
-  const [clockedOut, setClockedOut] = useState(true);
+  const [imgBase64, setImgBase64] = useState("");
+  const [captured, setCaptured] = useState(false);
+  const [presence, setPresence] = useState({
+    clockIn: "",
+    clockOut: "",
+    photoUrl: "",
+  });
+
+  const fillPresence = (presence) => {
+    setPresence({
+      clockIn: presence.clock_in,
+      clockOut: presence.clock_out,
+      photoUrl: presence.foto,
+    });
+  };
+
+  const webcamRef = useRef(null);
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setCaptured(true);
+    setImgBase64(imageSrc);
+  }, [webcamRef]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-      setCaptured(false);
-      setClockedIn(false);
-      setClockedOut(false);
-    }, 1000);
+    setLoading(false);
     document.title = "Absensi - Dashboard";
   }, []);
 
-  const takePhoto = () => {
-    setCaptured(true);
+  const onClockIn = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("foto", toImageFile(imgBase64, "foto.jpeg"));
+
+      const data = await axios.post("/presences/clock-in", formData);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const retakePhoto = () => {
     setCaptured(false);
-  };
-
-  const clockIn = () => {
-    setClockedIn(true);
-  };
-
-  const clockOut = () => {
-    setClockedOut(true);
+    setImgBase64("");
   };
 
   const listAbsensi = [
@@ -94,59 +117,53 @@ const UserAbsensi = () => {
           <div className={style.mainAbsensi}>
             <div className={style.left}>
               <div className={style.camera}>
-                <img
-                  src="https://talentclick.com/wp-content/uploads/2021/08/placeholder-image.png"
-                  alt="Camera"
-                />
+                {presence.clockIn ? (
+                  <img src="" alt="presence captured" />
+                ) : imgBase64 ? (
+                  <img src={imgBase64} alt="screnshoot" />
+                ) : (
+                  <Webcam
+                    audio={false}
+                    height={470}
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                    videoConstraints={videoConstraints}
+                  />
+                )}
               </div>
               <div className={style.buttons}>
-                {clockedOut ? (
-                  <>Anda sudah melakukan absensi masuk dan pulang hari ini</>
-                ) : (
+                {presence.clockIn && presence.clockOut ? (
+                  "Anda sudah melakukan absensi masuk dan pulang hari ini"
+                ) : captured ? (
                   <>
-                    {clockedIn ? (
-                      <>
-                        <button
-                          type="button"
-                          className={style.takePhoto}
-                          onClick={clockOut}
-                        >
-                          Absen Pulang
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        {captured ? (
-                          <>
-                            <button
-                              type="button"
-                              className={style.takePhoto}
-                              onClick={retakePhoto}
-                            >
-                              Ambil Ulang Foto
-                            </button>
-                            <button
-                              type="button"
-                              className={style.savePhoto}
-                              onClick={clockIn}
-                            >
-                              Absen
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button
-                              type="button"
-                              className={style.takePhoto}
-                              onClick={takePhoto}
-                            >
-                              Ambil Foto
-                            </button>
-                          </>
-                        )}
-                      </>
-                    )}
+                    <button
+                      type="button"
+                      className={style.takePhoto}
+                      onClick={retakePhoto}
+                    >
+                      Ambil Ulang Foto
+                    </button>
+                    <button
+                      type="button"
+                      className={style.savePhoto}
+                      onClick={onClockIn}
+                    >
+                      Absen
+                    </button>
                   </>
+                ) : (
+                  <button
+                    type="button"
+                    className={style.takePhoto}
+                    onClick={capture}
+                  >
+                    Ambil Foto
+                  </button>
+                )}
+                {presence.clockIn && !presence.clockOut && (
+                  <button type="button" className={style.takePhoto}>
+                    Absen Pulang
+                  </button>
                 )}
               </div>
             </div>
@@ -158,42 +175,20 @@ const UserAbsensi = () => {
                 additionalContent={
                   <div className={style.statusToday}>
                     <div>
-                      {clockedIn ? (
-                        <>
-                          <span className={`${style.icon} success`}>
-                            <ClockInIcon />
-                          </span>
-                          <span className={style.absenIn}>08.00</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className={`${style.icon} danger`}>
-                            <ClockInIcon />
-                          </span>
-                          <span className={`${style.absenIn} gray`}>
-                            Belum melakukan absensi masuk
-                          </span>
-                        </>
-                      )}
+                      <span className={`${style.icon} danger`}>
+                        <ClockInIcon />
+                      </span>
+                      <span className={`${style.absenIn} gray`}>
+                        Belum melakukan absensi masuk
+                      </span>
                     </div>
                     <div>
-                      {clockedOut ? (
-                        <>
-                          <span className={`${style.icon} success`}>
-                            <ClockOutIcon />
-                          </span>
-                          <span className={style.absenIn}>16.00</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className={`${style.icon} danger`}>
-                            <ClockOutIcon />
-                          </span>
-                          <span className={`${style.absenIn} gray`}>
-                            Belum melakukan absensi pulang
-                          </span>
-                        </>
-                      )}
+                      <span className={`${style.icon} danger`}>
+                        <ClockOutIcon />
+                      </span>
+                      <span className={`${style.absenIn} gray`}>
+                        Belum melakukan absensi pulang
+                      </span>
                     </div>
                   </div>
                 }
