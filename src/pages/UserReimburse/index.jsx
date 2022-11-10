@@ -11,7 +11,7 @@ import style from "./style.module.css";
 const UserReimburse = () => {
   const [loading, setLoading] = useState(true);
   const [proofPhoto, setProofPhoto] = useState(null);
-  const [showProgressBar, setShowProgressBar] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
   const [progress, setProgress] = useState(0);
   const [data, setData] = useState({
     kebutuhan: "",
@@ -19,23 +19,25 @@ const UserReimburse = () => {
     date: "",
     proof: "",
   });
-  const [reqTable, setReqTable] = useState({
-    link: [],
-    title: [],
-    icons: [],
+
+  const [listReimburse, setListReimburse] = useState({
+    requested: [],
+    history: [],
   });
 
-  const [hisTable, setHisTable] = useState({
-    link: [],
-    title: [],
-    icons: [],
-  });
+  const onResetFormCreate = (setState) => {
+    setState({
+      kebutuhan: "",
+      dana: "",
+      date: "",
+      proof: "",
+    });
+  };
 
   const inputHandle = (e) => {
     const newData = { ...data };
     newData[e.target.id] = e.target.value;
     setData(newData);
-    console.log(newData);
   };
 
   const submitHandle = async (e) => {
@@ -47,26 +49,34 @@ const UserReimburse = () => {
       formData.append("jumlah_uang", data.dana);
       formData.append("tanggal_pembayaran", data.date);
 
-      setShowProgressBar(true);
+      setShowProgress(true);
       const { data: response } = await axios.post("/reimbursement", formData, {
         onUploadProgress: ({ loaded, total }) => {
           const percent = Math.round((loaded / total) * 100);
           setProgress(percent);
         },
       });
-      setShowProgressBar(false);
+      setShowProgress(false);
+
+      onResetFormCreate(setData);
+      setLoading(true);
+      fetchData();
     } catch ({ response }) {
       console.log(response);
     }
   };
 
-  const fetchTable = async (api, setState) => {
+  const fetchList = async (api, key) => {
     return new Promise((resolve, reject) => {
       axios
         .get(api)
-        .then(({ data: res }) => {
-          mappingData(res.data, setState);
-          resolve(`fetch ${api} success`);
+        .then(({ data: {data: list} }) => {
+          const mapped = mappingList(list);
+          setListReimburse((current) => ({
+            ...current,
+            [key]: mapped,
+          }));
+          resolve();
         })
         .catch((err) => {
           reject(err);
@@ -74,16 +84,16 @@ const UserReimburse = () => {
     });
   };
 
-  const mappingData = (data, setState) => {
-    let [icons, link] = [[], []];
-
-    const mappedData = data?.map((reimburse) => {
-      const temp =
-        reimburse.status === "Pending" ? (
+  const mappingList = (data, setState) => {
+      const mapped = data.map((item) => ({
+        link : `/dashboard/reimbursement/${item.id}`,
+        title: `${item.kebutuhan}`,
+        icons: 
+        item.status === "Pending" ? (
           <span className="requested">
             <RequestedIcon />
           </span>
-        ) : reimburse.status === "Approved" ? (
+        ) : item.status === "Approved" ? (
           <span className="success">
             <ApprovedIcon />
           </span>
@@ -91,41 +101,23 @@ const UserReimburse = () => {
           <span className="danger">
             <DeclinedIcon />
           </span>
-        );
+        ),
+      }));
 
-      icons.push(temp);
-      link.push(`/reimbursement/${reimburse.id}`);
-      return {
-        kebutuhan: reimburse.kebutuhan,
-      };
-    });
-
-    setState({
-      title: mappedData,
-      icons,
-      link,
-    });
-  };
+      return mapped;
+    };
 
   const fetchData = async () => {
     try {
       await Promise.all([
-        fetchTable("/reimbursement", setReqTable),
-        fetchTable("/reimbursement/history", setHisTable),
+        fetchList("/reimbursement", "requested"),
+        fetchList("/reimbursement/history", "history"),
       ]);
       setLoading(false);
     } catch (err) {
       console.log(err);
     }
   };
-
-  // const listRequested = [
-  //   Object.keys(reqTable).map((items, i) => {
-  //     return {
-  //       link: reqTable[items],
-  //     }
-  //   })
-  // ];
 
   const listRequested = [
     {
@@ -256,10 +248,10 @@ const UserReimburse = () => {
                     className={style.uploadProof}
                   />
                 </div>
-                {showProgressBar ? (
+                {showProgress ? (
                   <>
                     <div>
-                      <p>{progress}</p>
+                      <p>Uploading : {progress} %</p>
                     </div>
                   </>
                 ) : (
@@ -273,8 +265,8 @@ const UserReimburse = () => {
             <div className={style.listReimburse}>
               <ListRequest
                 title="List Pengajuan Reimbursement"
-                listRequested={listRequested}
-                listHistory={listHistory}
+                listRequested={listReimburse.requested}
+                listHistory={listReimburse.history}
               />
             </div>
           </div>
