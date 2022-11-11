@@ -221,6 +221,7 @@ const AdminEmployees = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    resetFormCreateError();
 
     try {
       const {
@@ -232,7 +233,6 @@ const AdminEmployees = () => {
       });
 
       resetFormCreate();
-      resetFormCreateError();
       setShowCreateAcc(true);
       setLoading(true);
       setSearch("");

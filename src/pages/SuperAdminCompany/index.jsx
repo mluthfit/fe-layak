@@ -263,6 +263,7 @@ const SuperAdminCompany = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    resetFormCreateError();
 
     try {
       const {
@@ -279,7 +280,6 @@ const SuperAdminCompany = () => {
 
       setShowCreateAlert(true);
       resetFormCreate();
-      resetFormCreateError();
       setLoading(true);
       setSearch("");
       fetchData("/super-admin/companies");

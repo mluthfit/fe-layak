@@ -210,6 +210,7 @@ const SuperAdminAdmin = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    onResetFormCreateError();
 
     try {
       const {
@@ -221,7 +222,6 @@ const SuperAdminAdmin = () => {
       });
 
       onResetFormCreate();
-      onResetFormCreateError();
       setShowCreateAcc(true);
       setLoading(true);
       setSearch("");
