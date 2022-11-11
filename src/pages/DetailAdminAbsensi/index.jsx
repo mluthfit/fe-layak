@@ -22,7 +22,6 @@ const DetailAdminAbsensi = () => {
     clockIn: "",
     clockOut: "",
     photoUrl: "",
-    // history: [],
   });
 
   const fetchDetail = async () => {
@@ -50,37 +49,6 @@ const DetailAdminAbsensi = () => {
       console.log(error);
     }
   };
-
-  // const listBar = [
-  //   {
-  //     link: "/admin/absensi/1",
-  //     title: "06 Januari 2021",
-  //     icons: (
-  //       <>
-  //         <span className="success">
-  //           <ClockInIcon />
-  //         </span>
-  //         <span className="danger">
-  //           <ClockOutIcon />
-  //         </span>
-  //       </>
-  //     ),
-  //   },
-  //   {
-  //     link: "/admin/absensi/2",
-  //     title: "05 Januari 2021",
-  //     icons: (
-  //       <>
-  //         <span className="success">
-  //           <ClockInIcon />
-  //         </span>
-  //         <span className="danger">
-  //           <ClockOutIcon />
-  //         </span>
-  //       </>
-  //     ),
-  //   },
-  // ];
 
   const lists = [
     {
@@ -118,12 +86,6 @@ const DetailAdminAbsensi = () => {
       value: detail.photoUrl,
       type: "image",
     },
-    // {
-    //   title: "Riwayat Absensi",
-    //   type: "listBar",
-    //   blank: "Belum ada riwayat absensi",
-    //   listBar,
-    // },
   ];
 
   useEffect(() => {

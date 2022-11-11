@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import axios from "axios";
 import Webcam from "react-webcam";
 import { ReactComponent as ClockInIcon } from "../../assets/icons/arrow-up-right.svg";
 import { ReactComponent as ClockOutIcon } from "../../assets/icons/arrow-down-left.svg";
 import ListAbsensi from "../../components/ListAbsensi";
 import Spinner from "../../components/Spinner";
+import { toDateFormat, toTimeFormat, toImageFile } from "../../scripts/string";
 import style from "./style.module.css";
-import { toDateFormat, toImageFile } from "../../scripts/string";
-import axios from "axios";
 
 const videoConstraints = {
   facingMode: "user",
@@ -27,10 +27,14 @@ const UserAbsensi = () => {
   const storageUrl = process.env.REACT_APP_STORAGE_URL;
   const fillPresence = (presence) => {
     setPresence({
-      clockIn: presence.clock_in,
-      clockOut: presence.clock_out,
+      clockIn: presence.clock_in && toTimeFormat(presence.clock_in),
+      clockOut: presence.clock_out && toTimeFormat(presence.clock_out),
       photoUrl: presence.foto,
     });
+
+    if (presence.foto) {
+      setCaptured(true);
+    }
   };
 
   const webcamRef = useRef(null);
@@ -46,6 +50,16 @@ const UserAbsensi = () => {
       formData.append("foto", toImageFile(imgBase64, "foto.jpeg"));
 
       await axios.post("/presences/clock-in", formData);
+      setLoading(true);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onClockOut = async () => {
+    try {
+      await axios.post("/presences/clock-out");
       setLoading(true);
       fetchData();
     } catch (error) {
@@ -79,7 +93,7 @@ const UserAbsensi = () => {
                 <span className={presence.clock_in ? "success" : "danger"}>
                   <ClockInIcon />
                 </span>
-                <span className={presence.clock_in ? "success" : "danger"}>
+                <span className={presence.clock_out ? "success" : "danger"}>
                   <ClockOutIcon />
                 </span>
               </>
@@ -141,9 +155,10 @@ const UserAbsensi = () => {
                 )}
               </div>
               <div className={style.buttons}>
-                {presence.clockIn && presence.clockOut ? (
-                  "Anda sudah melakukan absensi masuk dan pulang hari ini"
-                ) : captured ? (
+                {presence.clockIn &&
+                  presence.clockOut &&
+                  "Anda sudah melakukan absensi masuk dan pulang hari ini"}
+                {captured && !presence.photoUrl && (
                   <>
                     <button
                       type="button"
@@ -160,7 +175,8 @@ const UserAbsensi = () => {
                       Absen
                     </button>
                   </>
-                ) : (
+                )}
+                {!captured && (
                   <button
                     type="button"
                     className={style.takePhoto}
@@ -170,7 +186,11 @@ const UserAbsensi = () => {
                   </button>
                 )}
                 {presence.clockIn && !presence.clockOut && (
-                  <button type="button" className={style.takePhoto}>
+                  <button
+                    type="button"
+                    className={style.takePhoto}
+                    onClick={onClockOut}
+                  >
                     Absen Pulang
                   </button>
                 )}
