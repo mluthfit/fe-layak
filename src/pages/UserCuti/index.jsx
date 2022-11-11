@@ -12,10 +12,22 @@ import { toDateFormat } from "../../scripts/string";
 import style from "./style.module.css";
 
 const UserCuti = () => {
-  const [loading, setLoading] = useState(true);
   const checkedColor = getStyle("--primary-300");
   const notCheckedColor = getStyle("--secondary-300");
   const storageUrl = process.env.REACT_APP_STORAGE_URL;
+
+  const [loading, setLoading] = useState(true);
+  const [showProgressBar, setShowProgressBar] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const [startDate, setStartDate] = useState({
+    min: new Date().toISOString().split("T")[0],
+    max: "",
+  });
+
+  const [endDate, setEndDate] = useState({
+    min: new Date().toISOString().split("T")[0],
+  });
 
   const [formCreate, setFormCreate] = useState({
     tipe_cuti: "",
@@ -92,15 +104,30 @@ const UserCuti = () => {
       Object.keys(formCreate).forEach((key) =>
         formData.append(key, formCreate[key])
       );
-      await axios.post("/leaves", formData);
-      onResetFormCreate(setFormCreate);
 
+      setShowProgressBar(true);
+      await axios.post("/leaves", formData, {
+        onUploadProgress: ({ loaded, total }) => {
+          const percent = Math.round((loaded / total) * 100);
+          setProgress(percent);
+        },
+      });
+      setShowProgressBar(false);
+      onResetFormCreate(setFormCreate);
       setLoading(true);
       fetchData();
     } catch ({ response }) {
       console.log(response);
+      setShowProgressBar(false);
       if (Array.isArray(response.data)) {
         onFormError(response.data, setFormCreateError);
+      }
+
+      if (response.data?.messages) {
+        setFormCreateError((current) => ({
+          ...current,
+          surat_cuti: response.data.messages,
+        }));
       }
     }
   };
@@ -221,7 +248,6 @@ const UserCuti = () => {
                     <div
                       className={style.radioContainer}
                       onClick={radioContainerHandle}
-                      onChange={(e) => console.log(e.target.value)}
                     >
                       <input type="radio" value="Sakit" name="radioCategory" />
                       <span>Sakit</span>
@@ -271,27 +297,32 @@ const UserCuti = () => {
                   <div id="time" className={style.time}>
                     <input
                       type="date"
+                      min={startDate.min}
+                      max={startDate.max}
                       value={formCreate.start_date}
-                      onChange={(e) =>
+                      onChange={(e) => {
                         onChangeHandler(
                           setFormCreate,
                           "start_date",
                           e.target.value
-                        )
-                      }
+                        );
+                        onChangeHandler(setEndDate, "min", e.target.value);
+                      }}
                     />
 
                     <ArrowIcon />
                     <input
                       type="date"
                       value={formCreate.end_date}
-                      onChange={(e) =>
+                      min={endDate.min}
+                      onChange={(e) => {
                         onChangeHandler(
                           setFormCreate,
                           "end_date",
                           e.target.value
-                        )
-                      }
+                        );
+                        onChangeHandler(setStartDate, "max", e.target.value);
+                      }}
                     />
                   </div>
                   {formCreateError.start_date && (
@@ -328,6 +359,14 @@ const UserCuti = () => {
                 </div>
                 <div className={style.formGroup}>
                   <label htmlFor="uploadDocument">Unggah Dokumen Cuti</label>
+                  {showProgressBar && (
+                    <div className={style.uploadBar}>
+                      <div
+                        className={style.progress}
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                  )}
                   <input
                     type="file"
                     id="uploadDocument"

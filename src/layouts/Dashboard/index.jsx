@@ -14,10 +14,11 @@ import { ReactComponent as CompanyIcon } from "../../assets/icons/organization.s
 import { ReactComponent as AdminIcon } from "../../assets/icons/person-add.svg";
 import { getStyle, setStyle } from "../../scripts/rootStyle";
 import { getLocalStorage, setLocalStorage } from "../../scripts/localStorage";
-import TypeRole from "../../scripts/role";
+import TypeRole, { getRole } from "../../scripts/role";
 import style from "./style.module.css";
 
-const Dashboard = ({ type, role }) => {
+const Dashboard = ({ type }) => {
+  const role = getRole();
   const location = useLocation();
   const page = location.pathname.split("/")[2] ?? "overview";
   const [sidebarMode, setSidebarMode] = useState(

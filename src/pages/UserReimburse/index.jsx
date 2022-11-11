@@ -10,14 +10,13 @@ import style from "./style.module.css";
 
 const UserReimburse = () => {
   const [loading, setLoading] = useState(true);
-  const [proofPhoto, setProofPhoto] = useState(null);
   const [showProgress, setShowProgress] = useState(false);
   const [progress, setProgress] = useState(0);
   const [data, setData] = useState({
     kebutuhan: "",
-    dana: "",
-    date: "",
-    proof: "",
+    jumlah_uang: "",
+    tanggal_pembayaran: "",
+    bukti_pembayaran: "",
   });
 
   const [listReimburse, setListReimburse] = useState({
@@ -28,11 +27,18 @@ const UserReimburse = () => {
   const onResetFormCreate = (setState) => {
     setState({
       kebutuhan: "",
-      dana: "",
-      date: "",
-      proof: "",
+      jumlah_uang: "",
+      tanggal_pembayaran: "",
+      bukti_pembayaran: "",
     });
   };
+
+  const [formCreateError, setFormCreateError] = useState({
+    kebutuhan: "",
+    jumlah_uang: "",
+    tanggal_pembayaran: "",
+    bukti_pembayaran: "",
+  });
 
   const inputHandle = (e) => {
     const newData = { ...data };
@@ -40,29 +46,50 @@ const UserReimburse = () => {
     setData(newData);
   };
 
+  const onFormError = (error, setState) => {
+    error.forEach(({ field, message }) => {
+      setState((current) => ({
+        ...current,
+        [field]: message,
+      }));
+    });
+  };
+
   const submitHandle = async (e) => {
     e.preventDefault();
+    onResetFormCreate(setFormCreateError);
+
     try {
       const formData = new FormData();
-      formData.append("bukti_pembayaran", proofPhoto);
+      formData.append("bukti_pembayaran", data.bukti_pembayaran);
       formData.append("kebutuhan", data.kebutuhan);
-      formData.append("jumlah_uang", data.dana);
-      formData.append("tanggal_pembayaran", data.date);
+      formData.append("jumlah_uang", data.jumlah_uang);
+      formData.append("tanggal_pembayaran", data.tanggal_pembayaran);
 
       setShowProgress(true);
-      const { data: response } = await axios.post("/reimbursement", formData, {
+      await axios.post("/reimbursement", formData, {
         onUploadProgress: ({ loaded, total }) => {
           const percent = Math.round((loaded / total) * 100);
           setProgress(percent);
         },
       });
       setShowProgress(false);
-
       onResetFormCreate(setData);
       setLoading(true);
       fetchData();
     } catch ({ response }) {
       console.log(response);
+      setShowProgress(false);
+      if (Array.isArray(response.data)) {
+        onFormError(response.data, setFormCreateError);
+      }
+
+      if (response.data?.messages) {
+        setFormCreateError((current) => ({
+          ...current,
+          bukti_pembayaran: response.data.messages,
+        }));
+      }
     }
   };
 
@@ -70,7 +97,7 @@ const UserReimburse = () => {
     return new Promise((resolve, reject) => {
       axios
         .get(api)
-        .then(({ data: {data: list} }) => {
+        .then(({ data: { data: list } }) => {
           const mapped = mappingList(list);
           setListReimburse((current) => ({
             ...current,
@@ -84,11 +111,11 @@ const UserReimburse = () => {
     });
   };
 
-  const mappingList = (data, setState) => {
-      const mapped = data.map((item) => ({
-        link : `/dashboard/reimbursement/${item.id}`,
-        title: `${item.kebutuhan}`,
-        icons: 
+  const mappingList = (data) => {
+    const mapped = data.map((item) => ({
+      link: `/dashboard/reimbursement/${item.id}`,
+      title: `${item.kebutuhan}`,
+      icons:
         item.status === "Pending" ? (
           <span className="requested">
             <RequestedIcon />
@@ -102,10 +129,10 @@ const UserReimburse = () => {
             <DeclinedIcon />
           </span>
         ),
-      }));
+    }));
 
-      return mapped;
-    };
+    return mapped;
+  };
 
   const fetchData = async () => {
     try {
@@ -118,78 +145,6 @@ const UserReimburse = () => {
       console.log(err);
     }
   };
-
-  const listRequested = [
-    {
-      link: "/dashboard/reimbursement/6",
-      title: "Makan Siang",
-      icons: (
-        <>
-          <span className="requested">
-            <RequestedIcon />
-          </span>
-        </>
-      ),
-    },
-    {
-      link: "/dashboard/reimbursement/7",
-      title: "Makan Siang",
-      icons: (
-        <>
-          <span className="requested">
-            <RequestedIcon />
-          </span>
-        </>
-      ),
-    },
-    {
-      link: "/dashboard/reimbursement/8",
-      title: "Makan Siang",
-      icons: (
-        <>
-          <span className="requested">
-            <RequestedIcon />
-          </span>
-        </>
-      ),
-    },
-  ];
-
-  const listHistory = [
-    {
-      link: "/dashboard/reimbursement/5",
-      title: "Makan Siang",
-      icons: (
-        <>
-          <span className="danger">
-            <DeclinedIcon />
-          </span>
-        </>
-      ),
-    },
-    {
-      link: "/dashboard/reimbursement/2",
-      title: "Makan Siang",
-      icons: (
-        <>
-          <span className="danger">
-            <DeclinedIcon />
-          </span>
-        </>
-      ),
-    },
-    {
-      link: "/dashboard/reimbursement/3",
-      title: "Makan Siang",
-      icons: (
-        <>
-          <span className="success">
-            <ApprovedIcon />
-          </span>
-        </>
-      ),
-    },
-  ];
 
   useEffect(() => {
     fetchData();
@@ -217,6 +172,11 @@ const UserReimburse = () => {
                     className={style.need}
                     placeholder="Masukkan kebutuhan pembelian"
                   ></textarea>
+                  {formCreateError.kebutuhan && (
+                    <div className={`${style.flash} danger`}>
+                      {formCreateError.kebutuhan}
+                    </div>
+                  )}
                 </div>
                 <div className={style.formGroup}>
                   <label htmlFor="dana">Jumlah Dana</label>
@@ -225,28 +185,56 @@ const UserReimburse = () => {
                     <input
                       onChange={(e) => inputHandle(e)}
                       type="number"
-                      id="dana"
+                      id="jumlah_uang"
                       className={style.fundInput}
                     />
                   </div>
+                  {formCreateError.jumlah_uang && (
+                    <div className={`${style.flash} danger`}>
+                      {formCreateError.jumlah_uang}
+                    </div>
+                  )}
                 </div>
                 <div className={style.formGroup}>
                   <label htmlFor="date">Tanggal Pembayaran</label>
                   <input
                     onChange={(e) => inputHandle(e)}
                     type="date"
-                    id="date"
+                    id="tanggal_pembayaran"
                     className={style.paymentDate}
                   />
+                  {formCreateError.tanggal_pembayaran && (
+                    <div className={`${style.flash} danger`}>
+                      {formCreateError.tanggal_pembayaran}
+                    </div>
+                  )}
                 </div>
                 <div className={style.formGroup}>
                   <label htmlFor="proof">Unggah Bukti</label>
+                  {showProgress && (
+                    <div className={style.uploadBar}>
+                      <div
+                        className={style.progress}
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                  )}
                   <input
-                    onChange={(e) => setProofPhoto(e.target.files[0])}
+                    onChange={(e) =>
+                      setData({
+                        ...data,
+                        bukti_pembayaran: e.target.files[0],
+                      })
+                    }
                     type="file"
-                    id="proof"
+                    id="bukti_pembayaran"
                     className={style.uploadProof}
                   />
+                  {formCreateError.bukti_pembayaran && (
+                    <div className={`${style.flash} danger`}>
+                      {formCreateError.bukti_pembayaran}
+                    </div>
+                  )}
                 </div>
                 {showProgress ? (
                   <>

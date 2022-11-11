@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
 import { ReactComponent as ClockInIcon } from "../../assets/icons/arrow-up-right.svg";
@@ -5,7 +6,7 @@ import { ReactComponent as ClockOutIcon } from "../../assets/icons/arrow-down-le
 import ListAbsensi from "../../components/ListAbsensi";
 import Spinner from "../../components/Spinner";
 import style from "./style.module.css";
-import { toImageFile } from "../../scripts/string";
+import { toDateFormat, toImageFile } from "../../scripts/string";
 import axios from "axios";
 
 const videoConstraints = {
@@ -18,11 +19,12 @@ const UserAbsensi = () => {
   const [imgBase64, setImgBase64] = useState("");
   const [captured, setCaptured] = useState(false);
   const [presence, setPresence] = useState({
-    clockIn: "",
-    clockOut: "",
-    photoUrl: "",
+    clockIn: null,
+    clockOut: null,
+    photoUrl: null,
   });
 
+  const storageUrl = process.env.REACT_APP_STORAGE_URL;
   const fillPresence = (presence) => {
     setPresence({
       clockIn: presence.clock_in,
@@ -38,18 +40,62 @@ const UserAbsensi = () => {
     setImgBase64(imageSrc);
   }, [webcamRef]);
 
-  useEffect(() => {
-    setLoading(false);
-    document.title = "Absensi - Dashboard";
-  }, []);
-
   const onClockIn = async () => {
     try {
       const formData = new FormData();
       formData.append("foto", toImageFile(imgBase64, "foto.jpeg"));
 
-      const data = await axios.post("/presences/clock-in", formData);
-      console.log(data);
+      await axios.post("/presences/clock-in", formData);
+      setLoading(true);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchToday = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("/presences/today")
+        .then(({ data: { data: presence } }) => {
+          fillPresence(presence[0]);
+          resolve();
+        })
+        .catch((error) => reject(error));
+    });
+  };
+
+  const [list, setList] = useState([]);
+  const fetchAllList = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("/presences")
+        .then(({ data: { data: presences } }) => {
+          const mapped = presences.map((presence) => ({
+            link: `/dashboard/absensi/${presence.id}`,
+            title: toDateFormat(presence.createdAt),
+            icons: (
+              <>
+                <span className={presence.clock_in ? "success" : "danger"}>
+                  <ClockInIcon />
+                </span>
+                <span className={presence.clock_in ? "success" : "danger"}>
+                  <ClockOutIcon />
+                </span>
+              </>
+            ),
+          }));
+          setList(mapped);
+          resolve();
+        })
+        .catch((error) => reject(error));
+    });
+  };
+
+  const fetchData = async () => {
+    try {
+      await Promise.all([fetchToday(), fetchAllList()]);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -60,50 +106,10 @@ const UserAbsensi = () => {
     setImgBase64("");
   };
 
-  const listAbsensi = [
-    {
-      link: "/dashboard/absensi/1",
-      title: "06 Oktober 2022",
-      icons: (
-        <>
-          <span className="success">
-            <ClockInIcon />
-          </span>
-          <span className="danger">
-            <ClockOutIcon />
-          </span>
-        </>
-      ),
-    },
-    {
-      link: "/dashboard/absensi/2",
-      title: "05 Oktober 2022",
-      icons: (
-        <>
-          <span className="success">
-            <ClockInIcon />
-          </span>
-          <span className="success">
-            <ClockOutIcon />
-          </span>
-        </>
-      ),
-    },
-    {
-      link: "/dashboard/absensi/3",
-      title: "04 Oktober 2022",
-      icons: (
-        <>
-          <span className="danger">
-            <ClockInIcon />
-          </span>
-          <span className="danger">
-            <ClockOutIcon />
-          </span>
-        </>
-      ),
-    },
-  ];
+  useEffect(() => {
+    fetchData();
+    document.title = "Absensi - Dashboard";
+  }, []);
 
   return (
     <div className={loading ? "center" : ""}>
@@ -118,7 +124,10 @@ const UserAbsensi = () => {
             <div className={style.left}>
               <div className={style.camera}>
                 {presence.clockIn ? (
-                  <img src="" alt="presence captured" />
+                  <img
+                    src={`${storageUrl}/${presence.photoUrl}`}
+                    alt="presence captured"
+                  />
                 ) : imgBase64 ? (
                   <img src={imgBase64} alt="screnshoot" />
                 ) : (
@@ -171,23 +180,39 @@ const UserAbsensi = () => {
               <ListAbsensi
                 title="Status Hari Ini"
                 blank="Data absensi tidak dapat ditemukan"
-                listBar={listAbsensi}
+                listBar={list}
                 additionalContent={
                   <div className={style.statusToday}>
                     <div>
-                      <span className={`${style.icon} danger`}>
+                      <span
+                        className={`${style.icon} ${
+                          presence.clockIn ? "success" : "danger"
+                        }`}
+                      >
                         <ClockInIcon />
                       </span>
-                      <span className={`${style.absenIn} gray`}>
-                        Belum melakukan absensi masuk
+                      <span
+                        className={`${style.absenIn} ${
+                          presence.clockIn || "gray"
+                        }`}
+                      >
+                        {presence.clockIn || "Belum melakukan absensi masuk"}
                       </span>
                     </div>
                     <div>
-                      <span className={`${style.icon} danger`}>
+                      <span
+                        className={`${style.icon} ${
+                          presence.clockOut ? "success" : "danger"
+                        }`}
+                      >
                         <ClockOutIcon />
                       </span>
-                      <span className={`${style.absenIn} gray`}>
-                        Belum melakukan absensi pulang
+                      <span
+                        className={`${style.absenIn} ${
+                          presence.clockOut || "gray"
+                        }`}
+                      >
+                        {presence.clockOut || "Belum melakukan absensi pulang"}
                       </span>
                     </div>
                   </div>

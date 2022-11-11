@@ -19,9 +19,11 @@ import {
 import curve from "../../assets/images/curve.png";
 import humanPics from "../../assets/images/human-pics.png";
 import ListOverview from "../../components/ListOverview";
+import { getRole } from "../../scripts/role";
 import style from "./style.module.css";
 
 const LandingPage = () => {
+  const role = getRole();
   const listAbsensi = [
     {
       link: "",
@@ -110,15 +112,30 @@ const LandingPage = () => {
           <h2>AYO DAFTARKAN PERUSAHAAN ANDA</h2>
           <div className={style.contacts}>
             <span>Hubungi Kami</span>
-            <a href="mail" className={style.contact}>
+            <a
+              href="mailto:cs@layak.co.id"
+              className={style.contact}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <EmailIcon />
               <span>cs@layak.co.id</span>
             </a>
-            <a href="wa" className={style.contact}>
+            <a
+              href="https://wa.me/62888888888"
+              className={style.contact}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <WhatsappIcon />
               <span>+62 812 1904 1270</span>
             </a>
-            <a href="ig" className={style.contact}>
+            <a
+              href="https://www.instagram.com/layak.id/"
+              className={style.contact}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <InstagramIcon />
               <span>layak.id</span>
             </a>
@@ -159,9 +176,15 @@ const LandingPage = () => {
               </button>
             </span>
             <span>
-              <Link className={style.bluePages} to="/auth/login">
-                Login
-              </Link>
+              {role === "" ? (
+                <Link className={style.bluePages} to="/auth/login">
+                  Login
+                </Link>
+              ) : (
+                <Link className={style.bluePages} to="/dashboard">
+                  Dashboard
+                </Link>
+              )}
             </span>
           </div>
         </div>
