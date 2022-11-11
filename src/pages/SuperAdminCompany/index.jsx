@@ -450,12 +450,10 @@ const SuperAdminCompany = () => {
                   id="maxCuti"
                   value={formCreate.jatah_cuti}
                   onChange={(e) =>
-                    onChangeHandler(
-                      formCreate,
-                      setFormCreate,
-                      "jatah_cuti",
-                      e.target.value
-                    )
+                    setFormCreate({
+                      ...formCreate,
+                      jatah_cuti: parseInt(e.target.value),
+                    })
                   }
                   required
                 />
