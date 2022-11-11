@@ -76,6 +76,7 @@ const DetailAdminReimburse = () => {
       setLoading(true);
       fetchDetail();
     } catch (error) {
+      setShowProgressBar(false);
       navigate("/admin/reimbursement", {
         replace: true,
         state: { type: "danger", message: error },

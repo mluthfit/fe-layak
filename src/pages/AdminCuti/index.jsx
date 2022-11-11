@@ -85,6 +85,7 @@ const AdminCuti = () => {
 
       await fetchTemplate();
     } catch (error) {
+      setShowProgressBar(false);
       console.log(error);
     }
   };

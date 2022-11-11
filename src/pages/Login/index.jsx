@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { setLocalStorage } from "../../scripts/localStorage";
+import { saveRole } from "../../scripts/role";
 import style from "./style.module.css";
 
 const Login = () => {
@@ -19,14 +20,14 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const { data: response } = await axios.post("/auth/login", {
+      const { data: res } = await axios.post("/auth/login", {
         email,
         password,
       });
 
-      const { token } = response;
-      setLocalStorage("token", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      setLocalStorage("token", res.token);
+      saveRole(res.data.role);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${res.token}`;
 
       onResetInput();
       navigate("/dashboard");

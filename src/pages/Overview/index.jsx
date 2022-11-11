@@ -206,32 +206,20 @@ const Overview = () => {
   };
 
   const mapAbsensi = (presences) => {
-    const nowDate = toDateFormat(new Date());
-    const mapped = presences.map((presence) => {
-      const presenceDate = toDateFormat(presence.createdAt);
-      if (nowDate === presenceDate) {
-        setProfile((current) => ({
-          ...current,
-          clockIn: presence.clock_in && toTimeFormat(presence.clock_in),
-          clockOut: presence.clock_out && toTimeFormat(presence.clock_out),
-        }));
-      }
-
-      return {
-        link: `/dashboard/absensi/${presence.id}`,
-        title: presenceDate,
-        icons: (
-          <>
-            <span className={presence.clock_in ? "success" : "danger"}>
-              <ClockInIcon />
-            </span>
-            <span className={presence.clock_out ? "success" : "danger"}>
-              <ClockOutIcon />
-            </span>
-          </>
-        ),
-      };
-    });
+    const mapped = presences.map((presence) => ({
+      link: `/dashboard/absensi/${presence.id}`,
+      title: toDateFormat(presence.createdAt),
+      icons: (
+        <>
+          <span className={presence.clock_in ? "success" : "danger"}>
+            <ClockInIcon />
+          </span>
+          <span className={presence.clock_out ? "success" : "danger"}>
+            <ClockOutIcon />
+          </span>
+        </>
+      ),
+    }));
 
     setAbsensi(mapped);
   };
@@ -284,18 +272,41 @@ const Overview = () => {
     setReimburse(mapped);
   };
 
+  const fetchToday = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("/presences/today")
+        .then(({ data: { data: presence } }) => {
+          setProfile((current) => ({
+            ...current,
+            clockIn: presence[0].clock_in && toTimeFormat(presence[0].clock_in),
+            clockOut:
+              presence[0].clock_out && toTimeFormat(presence[0].clock_out),
+          }));
+          resolve();
+        })
+        .catch((error) => reject(error));
+    });
+  };
+
+  const fetchOverview = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("/dashboard")
+        .then(({ data: { data: user } }) => {
+          mapUser(user);
+          mapAbsensi(user.presences);
+          mapCuti(user.leaves);
+          mapReimburse(user.reimbursements);
+          resolve();
+        })
+        .catch((error) => reject(error));
+    });
+  };
+
   const fetchData = async () => {
     try {
-      const {
-        data: { data: user },
-      } = await axios.get("/dashboard");
-
-      console.log(user);
-      mapUser(user);
-      mapAbsensi(user.presences);
-      mapCuti(user.leaves);
-      mapReimburse(user.reimbursements);
-
+      await Promise.all([fetchToday(), fetchOverview()]);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -319,6 +330,7 @@ const Overview = () => {
       setLoading(true);
       fetchData();
     } catch (error) {
+      setShowProgressBar(false);
       console.log(error);
     }
   };

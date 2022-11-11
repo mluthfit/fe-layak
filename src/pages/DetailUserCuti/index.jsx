@@ -91,7 +91,7 @@ const DetailUserCuti = () => {
       const { data: response } = await axios.get(`/leaves/${cutiId}`);
 
       if (response.success === "false") {
-        navigate("/admin/cuti");
+        navigate("/dashboard/cuti");
         throw response.messages;
       }
 

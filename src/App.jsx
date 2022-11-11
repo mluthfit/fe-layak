@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./layouts/Dashboard";
 import Auth from "./layouts/Auth";
@@ -24,13 +25,39 @@ import SuperAdminCompany from "./pages/SuperAdminCompany";
 import DetailUserAbsensi from "./pages/DetailUserAbsensi";
 import UserAbsensi from "./pages/UserAbsensi";
 import Logout from "./pages/Logout";
+import UserRoute from "./middlewares/UserRoute";
+import { saveRole } from "./scripts/role";
+import AdminRoute from "./middlewares/AdminRoute";
+import SuperAdminRoute from "./middlewares/SuperAdminRoute";
+import NoAuthRoute from "./middlewares/NoAuthRoute";
 
 const App = () => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: res } = await axios.get(
+          "/leaves/download-template-surat-cuti"
+        );
+
+        saveRole(res.data.role);
+      } catch (error) {
+        saveRole("");
+        console.log(error);
+      }
+    })();
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Navigate replace to="/auth/login" />} />
-      <Route path="/dashboard" element={<Dashboard type="user" role="User" />}>
+      <Route
+        path="/dashboard"
+        element={
+          <UserRoute>
+            <Dashboard type="user" />
+          </UserRoute>
+        }
+      >
         <Route index element={<Overview />} />
         <Route path="absensi" element={<UserAbsensi />} />
         <Route path="absensi/:absensiId" element={<DetailUserAbsensi />} />
@@ -42,7 +69,14 @@ const App = () => {
           element={<DetailUserReimburse />}
         />
       </Route>
-      <Route path="/admin" element={<Dashboard type="admin" role="Admin" />}>
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <Dashboard type="admin" />
+          </AdminRoute>
+        }
+      >
         <Route index element={<Navigate replace to="absensi" />} />
         <Route path="absensi" element={<AdminAbsensi />} />
         <Route path="absensi/:absensiId" element={<DetailAdminAbsensi />} />
@@ -57,13 +91,24 @@ const App = () => {
       </Route>
       <Route
         path="/super-admin"
-        element={<Dashboard type="admin" role="Super Admin" />}
+        element={
+          <SuperAdminRoute>
+            <Dashboard type="admin" />
+          </SuperAdminRoute>
+        }
       >
         <Route index element={<Navigate replace to="perusahaan" />} />
         <Route path="perusahaan" element={<SuperAdminCompany />} />
         <Route path="administator" element={<SuperAdminAdmin />} />
       </Route>
-      <Route path="/auth" element={<Auth />}>
+      <Route
+        path="/auth"
+        element={
+          <NoAuthRoute>
+            <Auth />
+          </NoAuthRoute>
+        }
+      >
         <Route index element={<Navigate replace to="login" />} />
         <Route path="login" element={<Login />} />
         <Route path="forgot-password" element={<ForgotPassword />}></Route>

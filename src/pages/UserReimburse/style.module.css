@@ -126,3 +126,20 @@
 .form button:hover {
   box-shadow: 1px 1px 10px var(--primary-300);
 }
+
+.uploadBar {
+  margin: 0.5rem 0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.uploadBar .progress {
+  height: 3px;
+  background-color: var(--primary-400);
+}
+
+.flash {
+  border-radius: 5px;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+}
