@@ -441,7 +441,7 @@ const Overview = () => {
           <div className={style.right}>
             <ListOverview
               title="Absensi"
-              blank="Data absensi tidak ditemukan"
+              blank="Belum ada data pengajuan absensi"
               href="/dashboard/absensi"
               Icon={AbsensiIcon}
               listBar={absensi}
@@ -480,7 +480,7 @@ const Overview = () => {
             />
             <ListOverview
               title="Pengajuan Cuti"
-              blank="Data pengajuan cuti tidak ditemukan"
+              blank="Belum ada data pengajuan cuti"
               href="/dashboard/cuti"
               Icon={CalendarIcon}
               listBar={cuti}
@@ -493,7 +493,7 @@ const Overview = () => {
             />
             <ListOverview
               title="Reimbursement"
-              blank="Data pengajuan reimbursement tidak ditemukan"
+              blank="Belum ada data pengajuan reimbursement"
               href="/dashboard/reimbursement"
               Icon={CalculatorIcon}
               listBar={reimburse}

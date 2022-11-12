@@ -106,28 +106,43 @@ const UserCuti = () => {
       );
 
       setShowProgressBar(true);
-      await axios.post("/leaves", formData, {
+      const { data: res } = await axios.post("/leaves", formData, {
         onUploadProgress: ({ loaded, total }) => {
           const percent = Math.round((loaded / total) * 100);
           setProgress(percent);
         },
       });
       setShowProgressBar(false);
+
+      if (res.success === "false") {
+        throw res.message;
+      }
+
       onResetFormCreate(setFormCreate);
       setLoading(true);
       fetchData();
-    } catch ({ response }) {
-      console.log(response);
+    } catch (err) {
       setShowProgressBar(false);
-      if (Array.isArray(response.data)) {
-        onFormError(response.data, setFormCreateError);
+      if (typeof err === "string") {
+        setFormCreateError((current) => ({
+          ...current,
+          end_date: err,
+        }));
+        return;
       }
 
-      if (response.data?.messages) {
+      const { response } = err;
+      if (Array.isArray(response?.data)) {
+        onFormError(response?.data, setFormCreateError);
+        return;
+      }
+
+      if (response?.data?.messages) {
         setFormCreateError((current) => ({
           ...current,
           surat_cuti: response.data.messages,
         }));
+        return;
       }
     }
   };

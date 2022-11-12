@@ -10,9 +10,7 @@ const ListRequest = ({ title, listRequested, listHistory }) => {
         <span>Diajukan</span>
         <div className={style.listBar}>
           {!listRequested?.length && (
-            <div className={style.blank}>
-              Data yang diajukan tidak ditemukan
-            </div>
+            <div className={style.blank}>Belum ada data pengajuan terbaru</div>
           )}
           {listRequested?.map((bar, index) => (
             <Bar
@@ -28,7 +26,7 @@ const ListRequest = ({ title, listRequested, listHistory }) => {
         <span>Riwayat</span>
         <div className={style.listBar}>
           {!listHistory?.length && (
-            <div className={style.blank}>Data riwayat tidak ditemukan</div>
+            <div className={style.blank}>Belum ada data riwayat pengajuan</div>
           )}
           {listHistory?.map((bar, index) => (
             <Bar
