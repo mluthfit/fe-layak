@@ -29,6 +29,17 @@ const UserCuti = () => {
     min: new Date().toISOString().split("T")[0],
   });
 
+  const setInputDateDefault = () => {
+    setStartDate({
+      min: new Date().toISOString().split("T")[0],
+      max: "",
+    });
+
+    setEndDate({
+      min: new Date().toISOString().split("T")[0],
+    });
+  };
+
   const [formCreate, setFormCreate] = useState({
     tipe_cuti: "",
     start_date: "",
@@ -119,6 +130,7 @@ const UserCuti = () => {
       }
 
       onResetFormCreate(setFormCreate);
+      setInputDateDefault();
       setLoading(true);
       fetchData();
     } catch (err) {

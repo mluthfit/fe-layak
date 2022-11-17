@@ -201,6 +201,7 @@ const UserReimburse = () => {
                     onChange={(e) => inputHandle(e)}
                     type="date"
                     id="tanggal_pembayaran"
+                    max={new Date().toISOString().split("T")[0]}
                     className={style.paymentDate}
                   />
                   {formCreateError.tanggal_pembayaran && (
