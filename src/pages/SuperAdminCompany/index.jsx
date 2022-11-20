@@ -464,7 +464,7 @@ const SuperAdminCompany = () => {
                 )}
               </div>
             </div>
-            <button type="submit">Buat Akun</button>
+            <button type="submit">Tambah Data</button>
           </form>
         </div>
       </div>
@@ -507,7 +507,7 @@ const SuperAdminCompany = () => {
       </div>
       {showPopup && (
         <FormUpdate
-          title="Ubah Data Administator"
+          title="Ubah Data Perusahaan"
           formInputs={inputsUpdate}
           formError={formUpdateError}
           submitHandle={submitUpdateHandler}
