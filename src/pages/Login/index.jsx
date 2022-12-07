@@ -66,9 +66,9 @@ const Login = () => {
           />
         </div>
         {error && <div className={`${style.alert} danger`}>{error}</div>}
-        <p>
+        {/* <p>
           <Link to="/auth/forgot-password">Lupa Password?</Link>
-        </p>
+        </p> */}
         <div className={style.buttons}>
           <button type="submit" className={style.loginButton}>
             Login

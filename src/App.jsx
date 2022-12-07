@@ -111,10 +111,11 @@ const App = () => {
       >
         <Route index element={<Navigate replace to="login" />} />
         <Route path="login" element={<Login />} />
-        <Route path="forgot-password" element={<ForgotPassword />}></Route>
-        <Route path="reset-password" element={<ResetPassword />}></Route>
+        {/* <Route path="forgot-password" element={<ForgotPassword />}></Route>
+        <Route path="reset-password" element={<ResetPassword />}></Route> */}
       </Route>
       <Route path="/auth/logout" element={<Logout />} />
+      <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
   );
 };
