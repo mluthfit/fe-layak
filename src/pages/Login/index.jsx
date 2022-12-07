@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { setLocalStorage } from "../../scripts/localStorage";
 import { saveRole } from "../../scripts/role";
 import style from "./style.module.css";
