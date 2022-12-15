@@ -36,8 +36,18 @@ const toTimeFormat = (stringTime) => {
     return null;
   }
 
-  const [hour, minute] = stringTime.split(":");
+  const timeZone = process.env.REACT_APP_TIME_IN_GMT || "";
+  const stringDate = `Sat, 15 Jan 2021 ${stringTime} GMT${timeZone}`;
+  const newDate = new Date(stringDate);
+
+  const hour = paddingTime(newDate.getHours());
+  const minute = paddingTime(newDate.getMinutes());
+
   return `${hour}:${minute}`;
+};
+
+const paddingTime = (time) => {
+  return time.toString().padStart(2, "0");
 };
 
 function toImageFile(base64, fileName) {
